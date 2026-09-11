@@ -1,0 +1,22 @@
+# AYT Ride
+
+AYT Ride is a private Antalya transfer booking site for Antalya Airport, hotel, VIP, golf and city rides.
+
+Primary pages:
+- https://aytride.com/
+- https://aytride.com/de/
+- https://aytride.com/ru/
+- https://aytride.com/pl/
+- https://aytride.com/nl/
+- https://aytride.com/antalya-airport-to-lara-transfer/
+- https://aytride.com/antalya-airport-to-belek-transfer/
+- https://aytride.com/antalya-airport-to-side-transfer/
+- https://aytride.com/antalya-airport-to-alanya-transfer/
+- https://aytride.com/blog/
+
+Contact:
+- WhatsApp: +1 683 850 2742
+- Email: info@shramworld.com
+
+Payment: cash after the ride.
+Operator infrastructure: SHRAMWORLD.

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AYT Ride Admin</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">AYT</span>
+        <span><strong>AYT Ride</strong><small>SHRAMWORLD infrastructure</small></span>
+      </a>
+      <nav class="nav-links">
+        <a href="/">Booking</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-section">
+    <div class="shell admin-grid" id="adminApp">
+      <aside class="admin-card">
+        <p class="mini-label">Operator</p>
+        <h2>Admin panel</h2>
+        <p class="admin-note">Use this panel for route price, driver cost and fee planning. Saved values are published through the settings API and used by the booking page for all visitors.</p>
+      </aside>
+
+      <section class="admin-card">
+        <form id="adminLogin">
+          <label>
+            <span>Admin PIN</span>
+            <input id="adminPin" type="password" placeholder="Enter admin PIN" autocomplete="off">
+          </label>
+          <button class="primary-btn" type="submit">Open admin</button>
+        </form>
+
+        <div id="adminPanel" class="hidden">
+          <div class="form-grid two">
+            <label>
+              <span>Business WhatsApp</span>
+              <input id="businessWhatsapp" inputmode="numeric">
+            </label>
+            <label>
+              <span>Booking email</span>
+              <input id="businessEmail" type="email">
+            </label>
+          </div>
+
+          <div class="form-grid two">
+            <label>
+              <span>Night fee EUR</span>
+              <input id="nightFee" type="number" min="0">
+            </label>
+            <label>
+              <span>Child seat fee EUR</span>
+              <input id="childSeatFee" type="number" min="0">
+            </label>
+          </div>
+
+          <h3>Routes and operator costs</h3>
+          <div class="admin-table" id="adminTable"></div>
+
+          <div class="admin-actions">
+            <button class="primary-btn" id="saveAdmin" type="button">Save</button>
+            <button class="admin-btn" id="exportAdmin" type="button">Copy settings</button>
+            <button class="secondary-btn" id="resetAdmin" type="button">Reset defaults</button>
+          </div>
+          <p class="admin-note">Booking emails include both customer price and operator vehicle cost, so you can see the amount you should pay for the vehicle.</p>
+          <pre id="adminOutput"></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-grid">
+      <div>
+        <strong>AYT Ride Admin</strong>
+        <p>Private transfer operations for Antalya.</p>
+        <p class="footer-badge">Powered by SHRAMWORLD infrastructure.</p>
+      </div>
+      <div>
+        <a href="mailto:info@shramworld.com">info@shramworld.com</a>
+        <a href="/">Booking page</a>
+      </div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
