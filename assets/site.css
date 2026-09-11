@@ -1,8 +1,8 @@
 :root {
   --blue: #0b66c3;
   --blue-2: #064b93;
-  --orange: #ff7a1a;
-  --orange-2: #e7640b;
+  --green: #12805c;
+  --green-2: #0b6948;
   --navy: #111827;
   --ink: #1f2937;
   --muted: #667085;
@@ -28,7 +28,7 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 4%, rgba(255, 122, 26, .13), transparent 22rem),
+    radial-gradient(circle at 12% 4%, rgba(18, 128, 92, .12), transparent 22rem),
     radial-gradient(circle at 86% 7%, rgba(11, 102, 195, .15), transparent 24rem),
     var(--soft);
   font-size: 16px;
@@ -89,7 +89,7 @@ a {
   border-radius: var(--radius);
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--blue), var(--orange));
+  background: linear-gradient(135deg, var(--blue), var(--green));
   color: #fff;
   font-weight: 900;
   letter-spacing: 0;
@@ -271,8 +271,8 @@ h1 {
   align-items: center;
   border-radius: 999px;
   padding: 0 12px;
-  background: #fff1e7;
-  color: var(--orange-2);
+  background: #e8f7ef;
+  color: var(--green-2);
   font-size: .83rem;
   font-weight: 900;
 }
@@ -490,7 +490,7 @@ textarea:focus {
 
 .vehicle-price {
   margin-top: auto;
-  color: var(--orange-2);
+  color: var(--green-2);
   font-size: 1.06rem;
   font-weight: 900;
 }
@@ -509,7 +509,7 @@ textarea:focus {
 }
 
 .quote-box div + div {
-  background: linear-gradient(135deg, #ff7a1a, #d95706);
+  background: linear-gradient(135deg, #12805c, #0b6948);
 }
 
 .quote-box span,
@@ -546,15 +546,26 @@ textarea:focus {
   padding: 0 16px;
   cursor: pointer;
   font-weight: 900;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
 }
 
 .primary-btn {
-  background: var(--orange);
-  color: #1f1308;
+  position: relative;
+  background: linear-gradient(135deg, #12805c, #0b6948);
+  color: #fff;
+  border: 1px solid rgba(6, 95, 70, .42);
+  box-shadow: 0 12px 28px rgba(18, 128, 92, .22);
+  letter-spacing: 0;
 }
 
 .primary-btn:hover {
-  background: var(--orange-2);
+  background: linear-gradient(135deg, #14966b, #09583d);
+  box-shadow: 0 16px 34px rgba(18, 128, 92, .28);
+  transform: translateY(-1px);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
 }
 
 .secondary-btn,
@@ -691,7 +702,7 @@ textarea:focus {
 
 .route-card b,
 .post-card span {
-  color: var(--orange-2);
+  color: var(--green-2);
   font-weight: 900;
   font-size: .88rem;
 }
@@ -797,7 +808,7 @@ details p {
 }
 
 .page-hero {
-  background: linear-gradient(135deg, #e9f4ff, #fff4ea);
+  background: linear-gradient(135deg, #e9f4ff, #effaf3);
 }
 
 .page-hero h1 {
@@ -1005,7 +1016,8 @@ pre {
   }
 
   .mobile-book-bar a:first-child {
-    background: var(--orange);
+    background: linear-gradient(135deg, #12805c, #0b6948);
+    color: #fff;
   }
 
   .mobile-book-bar a:last-child {
