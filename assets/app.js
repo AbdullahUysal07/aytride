@@ -1,39 +1,6 @@
 (function () {
   const storageKey = "aytRideSettings";
 
-  const icons = {
-    sedan: `
-      <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
-        <path d="M21 77c0-9 6-17 15-20l27-8 19-23c6-8 15-12 25-12h48c11 0 21 5 27 14l16 23 22 7c8 3 13 10 13 19v5H21v-5Z" fill="#050505"/>
-        <path d="M79 48l15-18c3-4 8-6 13-6h16v24H79Z" fill="#fff"/>
-        <path d="M132 24h19c6 0 11 3 15 8l11 16h-45V24Z" fill="#fff"/>
-        <rect x="87" y="57" width="14" height="4" rx="2" fill="#fff"/>
-        <circle cx="67" cy="82" r="20" fill="#050505"/>
-        <circle cx="67" cy="82" r="14" fill="#fff"/>
-        <circle cx="67" cy="82" r="8" fill="#050505"/>
-        <circle cx="182" cy="82" r="20" fill="#050505"/>
-        <circle cx="182" cy="82" r="14" fill="#fff"/>
-        <circle cx="182" cy="82" r="8" fill="#050505"/>
-      </svg>
-    `,
-    van: `
-      <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
-        <path d="M24 80V58c0-7 5-13 11-15l17-5 19-18c5-5 12-8 20-8h106c13 0 22 9 22 22v46H24Z" fill="#050505"/>
-        <path d="M68 31c-5 0-10 2-14 6L42 49h37V31H68Z" fill="#fff"/>
-        <rect x="88" y="28" width="100" height="27" rx="5" fill="#fff"/>
-        <rect x="83" y="25" width="7" height="36" fill="#050505"/>
-        <rect x="190" y="28" width="7" height="30" fill="#050505"/>
-        <rect x="86" y="62" width="14" height="4" rx="2" fill="#fff"/>
-        <circle cx="66" cy="82" r="20" fill="#050505"/>
-        <circle cx="66" cy="82" r="14" fill="#fff"/>
-        <circle cx="66" cy="82" r="8" fill="#050505"/>
-        <circle cx="183" cy="82" r="20" fill="#050505"/>
-        <circle cx="183" cy="82" r="14" fill="#fff"/>
-        <circle cx="183" cy="82" r="8" fill="#050505"/>
-      </svg>
-    `
-  };
-
   const defaults = {
     business: {
       whatsapp: "16838502742",
@@ -47,8 +14,26 @@
       returnDiscount: 0.9
     },
     vehicles: [
-      { id: "comfort", name: "Comfort Sedan", icon: "sedan", passengers: 3, luggage: 3, multiplier: 1, costMultiplier: 1 },
-      { id: "vip", name: "VIP Van", icon: "van", passengers: 6, luggage: 6, multiplier: 1.32, costMultiplier: 1.2 }
+      {
+        id: "comfort",
+        name: "Comfort Sedan",
+        image: "/assets/comfort-sedan-transfer.jpg",
+        imageAlt: "Black comfort sedan for private Antalya airport transfer",
+        passengers: 3,
+        luggage: 3,
+        multiplier: 1,
+        costMultiplier: 1
+      },
+      {
+        id: "vip",
+        name: "VIP Van",
+        image: "/assets/ayt-ride-transfer.jpg",
+        imageAlt: "Black VIP van for private Antalya airport transfer",
+        passengers: 6,
+        luggage: 6,
+        multiplier: 1.32,
+        costMultiplier: 1.2
+      }
     ],
     routes: [
       { id: "lara", from: "Antalya Airport (AYT)", to: "Lara / Kundu", km: 14, min: 20, price: 30, cost: 20 },
@@ -76,7 +61,10 @@
 
   function mergeSettings(saved) {
     if (!saved || !Array.isArray(saved.routes) || !Array.isArray(saved.vehicles)) return structuredClone(defaults);
-    const vehicles = saved.vehicles.filter((vehicle) => ["comfort", "vip"].includes(vehicle.id));
+    const defaultVehicles = new Map(defaults.vehicles.map((vehicle) => [vehicle.id, vehicle]));
+    const vehicles = saved.vehicles
+      .filter((vehicle) => ["comfort", "vip"].includes(vehicle.id))
+      .map((vehicle) => ({ ...defaultVehicles.get(vehicle.id), ...vehicle }));
     return {
       ...structuredClone(defaults),
       ...saved,
@@ -365,13 +353,19 @@
     els.vehicleGrid.innerHTML = settings.vehicles.map((vehicle) => {
       const quote = calculate(settings, { vehicle: vehicle.id });
       const disabled = vehicle.passengers < state.passengers || vehicle.luggage < state.luggage;
+      const image = vehicle.image || defaults.vehicles.find((item) => item.id === vehicle.id)?.image || "/assets/ayt-ride-transfer.jpg";
+      const imageAlt = vehicle.imageAlt || `${vehicle.name} private transfer vehicle`;
       return `
         <button type="button" class="vehicle-card ${vehicle.id === state.vehicle ? "active" : ""}" data-vehicle="${vehicle.id}" aria-pressed="${vehicle.id === state.vehicle}" ${disabled ? "disabled" : ""}>
-          ${icons[vehicle.icon] || icons.van}
-          <strong>${vehicle.name}</strong>
-          <small>${vehicle.passengers} passengers, ${vehicle.luggage} suitcases</small>
-          <small>${disabled ? "Choose a larger vehicle" : "Private door-to-door ride"}</small>
-          <span class="vehicle-price">${money(quote.total)}</span>
+          <span class="vehicle-media">
+            <img src="${image}" alt="${imageAlt}" loading="lazy">
+          </span>
+          <span class="vehicle-card-body">
+            <strong>${vehicle.name}</strong>
+            <small>${vehicle.passengers} passengers, ${vehicle.luggage} suitcases</small>
+            <small>${disabled ? "Choose a larger vehicle" : "Private door-to-door ride"}</small>
+            <span class="vehicle-price">${money(quote.total)}</span>
+          </span>
         </button>
       `;
     }).join("");
