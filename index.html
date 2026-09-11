@@ -25,7 +25,7 @@
   <link rel="alternate" hreflang="nl-NL" href="https://aytride.com/nl/">
   <link rel="alternate" hreflang="x-default" href="https://aytride.com/">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b66c3'/%3E%3Cpath d='M13 42c10-12 21-18 39-20' fill='none' stroke='%2312805c' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M16 47h31' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Ctext x='32' y='30' text-anchor='middle' font-family='Arial,sans-serif' font-size='16' font-weight='800' fill='%23fff'%3EAYT%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/assets/site.css?v=20260911-10">
+  <link rel="stylesheet" href="/assets/site.css?v=20260911-11">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -355,9 +355,17 @@
 
     <section class="routes-section" id="routes">
       <div class="shell">
-        <div class="section-head">
-          <p class="mini-label">Popular routes</p>
-          <h2>Routes visitors search before landing in Antalya.</h2>
+        <div class="section-head route-head">
+          <div>
+            <p class="mini-label">Popular airport routes</p>
+            <h2>Fast private transfer prices from Antalya Airport.</h2>
+          </div>
+          <p class="section-copy">Clear route estimates for the destinations tourists search most before landing in Antalya.</p>
+        </div>
+        <div class="route-toolbar" aria-label="Route booking highlights">
+          <span>From Antalya Airport (AYT)</span>
+          <span>VIP van estimate shown</span>
+          <span>WhatsApp confirmation</span>
         </div>
         <div class="route-grid" id="routeGrid"></div>
       </div>
@@ -366,25 +374,30 @@
     <section class="blog-preview">
       <div class="shell">
         <div class="section-head compact">
-          <p class="mini-label">Travel guides</p>
-          <h2>Useful Antalya transfer articles for search traffic.</h2>
-          <a href="/blog/">View blog</a>
+          <div>
+            <p class="mini-label">Travel guides</p>
+            <h2>Guides that answer booking questions before guests arrive.</h2>
+          </div>
+          <a class="section-link" href="/blog/">View blog</a>
         </div>
         <div class="post-grid">
           <a class="post-card" href="/blog/antalya-airport-transfer-guide/">
-            <span>Airport transfer guide</span>
+            <span class="post-kicker">Airport transfer guide</span>
             <strong>Antalya Airport to Lara, Belek, Side and Alanya</strong>
             <small>Pickup tips, route times and payment expectations.</small>
+            <span class="post-meta">AYT arrivals guide</span>
           </a>
           <a class="post-card" href="/blog/private-transfer-vs-taxi-antalya/">
-            <span>Private ride vs taxi</span>
+            <span class="post-kicker">Private ride vs taxi</span>
             <strong>When private transfer makes more sense in Antalya</strong>
             <small>Best fit for families, golf groups and late arrivals.</small>
+            <span class="post-meta">Trust comparison</span>
           </a>
           <a class="post-card" href="/blog/belek-golf-transfer/">
-            <span>Golf resorts</span>
+            <span class="post-kicker">Golf resorts</span>
             <strong>Belek and Kadriye golf transfer checklist</strong>
             <small>Planning airport, hotel and golf bag transfers.</small>
+            <span class="post-meta">Belek route guide</span>
           </a>
         </div>
       </div>
@@ -439,6 +452,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260911-10"></script>
+  <script src="/assets/app.js?v=20260911-11"></script>
 </body>
 </html>

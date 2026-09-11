@@ -486,11 +486,20 @@
 
     els.routeGrid.innerHTML = settings.routes.filter((route) => route.from === "Antalya Airport (AYT)").map((route) => {
       const quote = calculate(settings, { pickup: route.from, dropoff: route.to, vehicle: "vip" });
+      const destination = route.to.replace(" / ", " + ");
       return `
-        <button class="route-card" type="button" data-from="${route.from}" data-to="${route.to}">
-          <strong>${route.to.replace(" / ", " + ")}</strong>
-          <small>${route.km} km / ${route.min} min from AYT</small>
-          <b>From ${money(quote.total)}</b>
+        <button class="route-card" type="button" data-from="${route.from}" data-to="${route.to}" aria-label="Select ${destination} transfer from ${money(quote.total)}">
+          <span class="route-card-top">
+            <span class="route-code">AYT</span>
+            <span class="route-price">From ${money(quote.total)}</span>
+          </span>
+          <strong>${destination}</strong>
+          <span class="route-stats">
+            <small>${route.km} km</small>
+            <small>${route.min} min</small>
+            <small>Private ride</small>
+          </span>
+          <span class="route-card-action">Select route &rarr;</span>
         </button>
       `;
     }).join("");

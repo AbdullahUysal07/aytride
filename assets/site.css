@@ -675,6 +675,15 @@ textarea:focus {
 .page-hero,
 .admin-section {
   padding: 44px 0;
+  scroll-margin-top: 92px;
+}
+
+.routes-section {
+  padding-top: 52px;
+}
+
+.blog-preview {
+  padding-top: 58px;
 }
 
 .image-grid {
@@ -747,6 +756,14 @@ textarea:focus {
   margin-bottom: 18px;
 }
 
+.route-head {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+  align-items: end;
+  gap: 22px;
+}
+
 .section-head.compact {
   max-width: none;
   display: flex;
@@ -759,9 +776,54 @@ textarea:focus {
   font-size: clamp(1.75rem, 3vw, 2.55rem);
 }
 
-.section-head a {
+.blog-preview .section-head h2 {
+  max-width: 840px;
+  font-size: clamp(1.65rem, 2.6vw, 2.25rem);
+}
+
+.section-copy {
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.section-head a,
+.section-link {
   color: var(--blue);
   font-weight: 900;
+}
+
+.section-link {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #c6ddf7;
+  border-radius: var(--radius);
+  padding: 0 14px;
+  background: #fff;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(17, 24, 39, .05);
+}
+
+.route-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -2px 0 16px;
+}
+
+.route-toolbar span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #cfe7df;
+  border-radius: var(--radius);
+  padding: 6px 11px;
+  background: #f0fbf6;
+  color: var(--green-2);
+  font-size: .86rem;
+  font-weight: 850;
 }
 
 .route-grid,
@@ -771,28 +833,115 @@ textarea:focus {
 
 .route-card,
 .post-card {
-  min-height: 148px;
+  position: relative;
+  min-height: 170px;
   display: grid;
-  gap: 10px;
-  padding: 16px;
+  gap: 12px;
+  padding: 18px;
   cursor: pointer;
+  overflow: hidden;
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
 }
 
 .route-card {
   text-align: left;
+  grid-template-rows: auto auto 1fr auto;
 }
 
-.route-card b,
-.post-card span {
+.route-card::before,
+.post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  opacity: .86;
+}
+
+.route-card-top,
+.route-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-card-top {
+  justify-content: space-between;
+}
+
+.route-code,
+.route-price {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius);
+  padding: 6px 9px;
+  font-size: .82rem;
+  font-weight: 900;
+}
+
+.route-code {
+  background: var(--navy);
+  color: #fff;
+}
+
+.route-price {
+  background: #e8f8f1;
+  color: var(--green-2);
+}
+
+.route-stats {
+  flex-wrap: wrap;
+}
+
+.route-stats small {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  background: #f8fbff;
+}
+
+.route-card-action {
+  color: var(--blue-2);
+  font-size: .9rem;
+  font-weight: 900;
+}
+
+.post-kicker {
   color: var(--green-2);
   font-weight: 900;
   font-size: .88rem;
+  text-transform: uppercase;
 }
 
 .post-card:hover,
 .route-card:hover {
+  transform: translateY(-2px);
   border-color: var(--blue);
   box-shadow: 0 16px 42px rgba(17, 24, 39, .11);
+}
+
+.post-card {
+  grid-template-rows: auto auto 1fr auto;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(244, 248, 252, .86)),
+    #fff;
+}
+
+.post-meta {
+  width: fit-content;
+  min-height: 31px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius);
+  padding: 5px 9px;
+  background: var(--sky);
+  color: var(--blue-2);
+  font-size: .82rem;
+  font-weight: 850;
 }
 
 .faq-section {
@@ -997,7 +1146,8 @@ pre {
 @media (max-width: 1020px) {
   .hero-grid,
   .image-grid,
-  .admin-grid {
+  .admin-grid,
+  .route-head {
     grid-template-columns: 1fr;
   }
 
@@ -1054,6 +1204,19 @@ pre {
     margin-bottom: 8px;
   }
 
+  .section-head.compact {
+    display: grid;
+    align-items: start;
+  }
+
+  .section-copy {
+    margin-bottom: 0;
+  }
+
+  .route-toolbar span {
+    flex: 1 1 100%;
+  }
+
   .route-fields,
   .form-grid.two,
   .form-grid.three,
@@ -1068,6 +1231,11 @@ pre {
   .footer-grid,
   .admin-row {
     grid-template-columns: 1fr;
+  }
+
+  .route-card,
+  .post-card {
+    min-height: 154px;
   }
 
   .reserve-btn {
