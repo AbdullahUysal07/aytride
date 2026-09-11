@@ -4,35 +4,32 @@
   const icons = {
     sedan: `
       <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
-        <ellipse cx="121" cy="88" rx="88" ry="7" fill="#d8e2ee"/>
-        <path d="M27 70c0-9 6-17 15-20l22-7 17-21c5-6 12-9 20-9h52c9 0 17 4 22 11l18 22 24 6c8 2 14 10 14 18v10H27V70Z" fill="#0b101a"/>
-        <path d="M83 44l12-15c2-3 6-5 10-5h19v20H83Z" fill="#f8fbff"/>
-        <path d="M130 24h20c5 0 9 2 12 6l11 14h-43V24Z" fill="#f8fbff"/>
-        <path d="M82 53h96" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".18"/>
-        <path d="M45 64h36" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>
-        <path d="M178 62h24" stroke="#0b66c3" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="67" cy="79" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
-        <circle cx="67" cy="79" r="7" fill="#0b66c3"/>
-        <circle cx="178" cy="79" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
-        <circle cx="178" cy="79" r="7" fill="#0b66c3"/>
-        <path d="M36 57h10M210 62h11" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M21 77c0-9 6-17 15-20l27-8 19-23c6-8 15-12 25-12h48c11 0 21 5 27 14l16 23 22 7c8 3 13 10 13 19v5H21v-5Z" fill="#050505"/>
+        <path d="M79 48l15-18c3-4 8-6 13-6h16v24H79Z" fill="#fff"/>
+        <path d="M132 24h19c6 0 11 3 15 8l11 16h-45V24Z" fill="#fff"/>
+        <rect x="87" y="57" width="14" height="4" rx="2" fill="#fff"/>
+        <circle cx="67" cy="82" r="20" fill="#050505"/>
+        <circle cx="67" cy="82" r="14" fill="#fff"/>
+        <circle cx="67" cy="82" r="8" fill="#050505"/>
+        <circle cx="182" cy="82" r="20" fill="#050505"/>
+        <circle cx="182" cy="82" r="14" fill="#fff"/>
+        <circle cx="182" cy="82" r="8" fill="#050505"/>
       </svg>
     `,
     van: `
       <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
-        <ellipse cx="122" cy="89" rx="95" ry="7" fill="#d8e2ee"/>
-        <path d="M25 80V38c0-12 9-21 21-21h124c15 0 27 9 32 23l9 24h5c8 0 14 6 14 14v2H25Z" fill="#0b101a"/>
-        <path d="M47 28h39v28H47V28Z" fill="#f8fbff"/>
-        <path d="M94 28h42v28H94V28Z" fill="#f8fbff"/>
-        <path d="M144 28h21c9 0 17 6 20 14l5 14h-46V28Z" fill="#f8fbff"/>
-        <path d="M89 27v30M139 27v30" stroke="#0b101a" stroke-width="6"/>
-        <path d="M36 64h136" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>
-        <path d="M174 64h34" stroke="#0b66c3" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="68" cy="81" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
-        <circle cx="68" cy="81" r="7" fill="#0b66c3"/>
-        <circle cx="184" cy="81" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
-        <circle cx="184" cy="81" r="7" fill="#0b66c3"/>
-        <path d="M36 41h7M214 58h10" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M24 80V58c0-7 5-13 11-15l17-5 19-18c5-5 12-8 20-8h106c13 0 22 9 22 22v46H24Z" fill="#050505"/>
+        <path d="M68 31c-5 0-10 2-14 6L42 49h37V31H68Z" fill="#fff"/>
+        <rect x="88" y="28" width="100" height="27" rx="5" fill="#fff"/>
+        <rect x="83" y="25" width="7" height="36" fill="#050505"/>
+        <rect x="190" y="28" width="7" height="30" fill="#050505"/>
+        <rect x="86" y="62" width="14" height="4" rx="2" fill="#fff"/>
+        <circle cx="66" cy="82" r="20" fill="#050505"/>
+        <circle cx="66" cy="82" r="14" fill="#fff"/>
+        <circle cx="66" cy="82" r="8" fill="#050505"/>
+        <circle cx="183" cy="82" r="20" fill="#050505"/>
+        <circle cx="183" cy="82" r="14" fill="#fff"/>
+        <circle cx="183" cy="82" r="8" fill="#050505"/>
       </svg>
     `
   };
