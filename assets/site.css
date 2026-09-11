@@ -568,6 +568,62 @@ textarea:focus {
   transform: translateY(0);
 }
 
+.reserve-btn {
+  min-height: 62px;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 14px 8px 10px;
+  text-align: left;
+}
+
+.reserve-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .16);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
+}
+
+.reserve-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.reserve-copy {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+  flex: 1 1 auto;
+}
+
+.reserve-copy strong,
+.reserve-copy small {
+  display: block;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.reserve-copy strong {
+  font-size: .98rem;
+}
+
+.reserve-copy small {
+  color: rgba(255, 255, 255, .78);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.reserve-arrow {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  color: rgba(255, 255, 255, .9);
+}
+
 .secondary-btn,
 .admin-btn {
   background: #e9f4ff;
@@ -986,6 +1042,15 @@ pre {
   .footer-grid,
   .admin-row {
     grid-template-columns: 1fr;
+  }
+
+  .reserve-btn {
+    width: 100%;
+    min-height: 60px;
+  }
+
+  .reserve-copy strong {
+    font-size: .95rem;
   }
 
   .mobile-book-bar {
