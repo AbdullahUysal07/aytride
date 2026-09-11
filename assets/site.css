@@ -464,9 +464,10 @@ textarea:focus {
 }
 
 .vehicle-icon {
-  width: 100%;
-  height: 72px;
-  color: var(--blue);
+  width: min(100%, 214px);
+  height: 76px;
+  justify-self: center;
+  display: block;
 }
 
 .mobile-book-bar {

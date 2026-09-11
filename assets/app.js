@@ -2,8 +2,39 @@
   const storageKey = "aytRideSettings";
 
   const icons = {
-    sedan: '<svg class="vehicle-icon" viewBox="0 0 220 100" fill="none" aria-hidden="true"><path d="M27 67h166c4 0 7-3 7-7v-5c0-5-4-9-9-9h-15l-13-22c-3-5-8-8-14-8H78c-7 0-13 3-17 9L48 46H35c-9 0-16 7-16 16v5h8Z" fill="#0b66c3" stroke="#064b93" stroke-width="3" stroke-linejoin="round"/><path d="M70 43l12-19c2-3 5-5 9-5h48c4 0 8 2 10 6l11 18H70Z" fill="#cfeaff" stroke="#064b93" stroke-width="3" stroke-linejoin="round"/><path d="M119 20v22M83 43h75" stroke="#064b93" stroke-width="3"/><path d="M43 51h27M162 51h19" stroke="#ff7a1a" stroke-width="4" stroke-linecap="round"/><path d="M46 68h128" stroke="#ffb36e" stroke-width="3" stroke-linecap="round"/><circle cx="62" cy="70" r="15" fill="#111827" stroke="#fff" stroke-width="4"/><circle cx="62" cy="70" r="6" fill="#94a3b8"/><circle cx="163" cy="70" r="15" fill="#111827" stroke="#fff" stroke-width="4"/><circle cx="163" cy="70" r="6" fill="#94a3b8"/><path d="M30 55h10M188 55h8" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>',
-    van: '<svg class="vehicle-icon" viewBox="0 0 220 100" fill="none" aria-hidden="true"><path d="M22 68V27c0-6 5-11 11-11h107c11 0 20 6 25 16l13 25h13c5 0 9 4 9 9v2H22Z" fill="#064b93" stroke="#04396f" stroke-width="3" stroke-linejoin="round"/><path d="M40 24h45v33H40zM90 24h42v33H90zM137 25h7c6 0 11 3 14 9l10 23h-31V25Z" fill="#cfeaff" stroke="#0b66c3" stroke-width="3" stroke-linejoin="round"/><path d="M87 24v33M135 24v33" stroke="#0b66c3" stroke-width="3"/><path d="M27 61h157" stroke="#ff7a1a" stroke-width="5" stroke-linecap="round"/><path d="M28 68h156" stroke="#ffb36e" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="71" r="15" fill="#111827" stroke="#fff" stroke-width="4"/><circle cx="60" cy="71" r="6" fill="#94a3b8"/><circle cx="166" cy="71" r="15" fill="#111827" stroke="#fff" stroke-width="4"/><circle cx="166" cy="71" r="6" fill="#94a3b8"/><path d="M30 42h8M190 52h7" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>'
+    sedan: `
+      <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
+        <ellipse cx="121" cy="88" rx="88" ry="7" fill="#d8e2ee"/>
+        <path d="M27 70c0-9 6-17 15-20l22-7 17-21c5-6 12-9 20-9h52c9 0 17 4 22 11l18 22 24 6c8 2 14 10 14 18v10H27V70Z" fill="#0b101a"/>
+        <path d="M83 44l12-15c2-3 6-5 10-5h19v20H83Z" fill="#f8fbff"/>
+        <path d="M130 24h20c5 0 9 2 12 6l11 14h-43V24Z" fill="#f8fbff"/>
+        <path d="M82 53h96" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".18"/>
+        <path d="M45 64h36" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>
+        <path d="M178 62h24" stroke="#0b66c3" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="67" cy="79" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
+        <circle cx="67" cy="79" r="7" fill="#0b66c3"/>
+        <circle cx="178" cy="79" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
+        <circle cx="178" cy="79" r="7" fill="#0b66c3"/>
+        <path d="M36 57h10M210 62h11" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    `,
+    van: `
+      <svg class="vehicle-icon" viewBox="0 0 240 112" fill="none" aria-hidden="true">
+        <ellipse cx="122" cy="89" rx="95" ry="7" fill="#d8e2ee"/>
+        <path d="M25 80V38c0-12 9-21 21-21h124c15 0 27 9 32 23l9 24h5c8 0 14 6 14 14v2H25Z" fill="#0b101a"/>
+        <path d="M47 28h39v28H47V28Z" fill="#f8fbff"/>
+        <path d="M94 28h42v28H94V28Z" fill="#f8fbff"/>
+        <path d="M144 28h21c9 0 17 6 20 14l5 14h-46V28Z" fill="#f8fbff"/>
+        <path d="M89 27v30M139 27v30" stroke="#0b101a" stroke-width="6"/>
+        <path d="M36 64h136" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>
+        <path d="M174 64h34" stroke="#0b66c3" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="68" cy="81" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
+        <circle cx="68" cy="81" r="7" fill="#0b66c3"/>
+        <circle cx="184" cy="81" r="18" fill="#05070b" stroke="#ffffff" stroke-width="6"/>
+        <circle cx="184" cy="81" r="7" fill="#0b66c3"/>
+        <path d="M36 41h7M214 58h10" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    `
   };
 
   const defaults = {
