@@ -17,8 +17,8 @@
       {
         id: "comfort",
         name: "Comfort Sedan",
-        image: "/assets/comfort-sedan-transfer.jpg",
-        imageAlt: "Black comfort sedan for private Antalya airport transfer",
+        image: "/assets/comfort-sedan-egea.jpg",
+        imageAlt: "White mid-segment comfort sedan for Antalya airport transfer",
         passengers: 3,
         luggage: 3,
         multiplier: 1,
