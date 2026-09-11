@@ -203,6 +203,13 @@
     return `${readablePlace(els.pickup.value, els.pickupDetail.value)} -> ${readablePlace(els.dropoff.value, els.dropoffDetail.value)}`;
   }
 
+  function bookingReference(els) {
+    const date = (els.pickupDate.value || "nodate").replace(/\D/g, "") || "nodate";
+    const time = (els.pickupTime.value || "notime").replace(/\D/g, "") || "notime";
+    const routeCode = `${els.pickup.value}-${els.dropoff.value}`.replace(/[^a-z0-9]+/gi, "").slice(0, 8).toUpperCase() || "TRANSFER";
+    return `AYT-${date}-${time}-${routeCode}`;
+  }
+
   function setField(id, value) {
     const field = document.querySelector(`#${id}`);
     if (field) field.value = value ?? "";
@@ -213,45 +220,54 @@
     const tripLabel = state.tripType === "return" ? "Return transfer" : "One-way transfer";
     const returnLine = state.tripType === "return" ? `Return: ${formatDateTime(els.returnDate.value, els.returnTime.value)}` : "";
     const notes = text(els.notes.value) || "No extra notes";
+    const reference = bookingReference(els);
     const lines = [
-      "AYT RIDE | NEW TRANSFER REQUEST",
+      "*AYT RIDE TRANSFER REQUEST*",
+      `Reference: ${reference}`,
       "",
-      "Guest details",
+      "*Guest*",
       `Name: ${text(els.guestName.value) || "Not provided"}`,
       `WhatsApp: ${text(els.guestPhone.value) || "Not provided"}`,
       `Email: ${text(els.guestEmail.value) || "Not provided"}`,
       "",
-      "Transfer details",
-      `Trip type: ${tripLabel}`,
-      `Route: ${requestRoute(els)}`,
+      "*Journey*",
+      `Type: ${tripLabel}`,
+      `From: ${readablePlace(els.pickup.value, els.pickupDetail.value)}`,
+      `To: ${readablePlace(els.dropoff.value, els.dropoffDetail.value)}`,
       `Pickup: ${formatDateTime(els.pickupDate.value, els.pickupTime.value)}`,
       returnLine,
       `Flight: ${text(els.flightNumber.value) || "Not provided"}`,
-      `Vehicle request: ${quote.vehicle.name}`,
+      "",
+      "*Vehicle*",
+      `Requested vehicle: ${quote.vehicle.name}`,
       `Passengers: ${state.passengers}`,
       `Suitcases: ${state.luggage}`,
       `Child seats: ${state.childSeats}`,
       "",
-      "Price and payment",
-      `Estimated guest price: ${money(quote.total)}`,
-      "Payment method: Cash after ride",
-      "Online payment: Not collected",
+      "*Price & payment*",
+      `Guest total: *${money(quote.total)}*`,
+      "Payment: Cash after ride",
+      "Online payment: Not required",
       "",
-      "Notes",
+      "*Notes*",
       notes,
       "",
-      "Action needed",
-      "Please confirm vehicle availability, exact pickup point and final price."
+      "*Please confirm*",
+      "1. Vehicle availability",
+      "2. Exact meeting point",
+      "3. Final price"
     ];
     return lines.filter(Boolean).join("\n");
   }
 
   function ownerSummary(settings, quote) {
     const publicMessage = bookingMessage(settings, quote);
+    const els = bookingEls();
     return [
       publicMessage,
       "",
       "OPERATOR VIEW",
+      `Booking reference: ${bookingReference(els)}`,
       `Vehicle cost to pay: ${money(quote.cost)}`,
       `Estimated margin: ${money(quote.margin)}`,
       `Route distance: ${quote.route.km} km`,
@@ -263,11 +279,13 @@
   function customerConfirmation(settings, quote) {
     const els = bookingEls();
     const name = text(els.guestName.value);
+    const reference = bookingReference(els);
     return [
       `Hello${name ? ` ${name}` : ""},`,
       "",
       "Thank you for your AYT Ride transfer request. We received your details and will confirm availability, exact pickup point and final price by WhatsApp.",
       "",
+      `Reference: ${reference}`,
       `Route: ${requestRoute(els)}`,
       `Pickup: ${formatDateTime(els.pickupDate.value, els.pickupTime.value)}`,
       `Vehicle: ${quote.vehicle.name}`,
@@ -370,6 +388,7 @@
     const sameRoute = quote.same;
     const routeText = requestRoute(els);
     const tripLabel = state.tripType === "return" ? "Return transfer" : "One-way transfer";
+    const reference = bookingReference(els);
 
     els.customRouteFields.classList.toggle("hidden", els.pickup.value !== "Other hotel or address" && els.dropoff.value !== "Other hotel or address");
     els.returnFields.classList.toggle("hidden", state.tripType !== "return");
@@ -378,9 +397,10 @@
     els.capacityStatus.textContent = sameRoute ? "Route needed" : "Vehicle fits";
     els.topWhatsapp.href = waUrl(settings, "Hello AYT Ride, I would like to book a private transfer in Antalya.");
 
-    setField("formSubject", `AYT Ride booking - ${routeText} - ${money(quote.total)}`);
+    setField("formSubject", `AYT Ride ${reference} - ${routeText} - ${money(quote.total)}`);
     setField("formReplyTo", text(els.guestEmail.value));
     setField("formAutoresponse", customerConfirmation(settings, quote));
+    setField("mailReference", reference);
     setField("mailTripType", tripLabel);
     setField("mailRoute", routeText);
     setField("mailPickupDateTime", formatDateTime(els.pickupDate.value, els.pickupTime.value));
@@ -392,6 +412,7 @@
     setField("mailKm", String(quote.route.km || ""));
     setField("mailMin", String(quote.route.min || ""));
     document.querySelector("#mailSummary").value = summary;
+    document.querySelector("#mailMessage").value = summary;
     document.querySelector("#mailWhatsapp").value = message;
     document.querySelector("#mailTotal").value = String(quote.total);
     document.querySelector("#mailCost").value = String(quote.cost);
@@ -449,7 +470,7 @@
       const message = bookingMessage(settings, quote);
       updateBooking(settings);
       window.open(waUrl(settings, message), "_blank", "noopener");
-      showToast("WhatsApp opened. The email copy will open in a new tab.");
+      showToast("WhatsApp opened. Email request is being submitted.");
     });
 
     els.vehicleGrid.addEventListener("click", (event) => {

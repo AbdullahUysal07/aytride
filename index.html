@@ -152,7 +152,7 @@
             <span class="live-pill" id="capacityStatus">Vehicle fits</span>
           </div>
 
-          <form id="bookingForm" action="https://formsubmit.co/info@shramworld.com" method="POST" target="_blank">
+          <form id="bookingForm" action="https://formsubmit.co/info@shramworld.com" method="POST" target="_blank" accept-charset="UTF-8">
             <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off">
             <input type="hidden" name="_subject" id="formSubject" value="New AYT Ride booking request">
             <input type="hidden" name="_replyto" id="formReplyTo">
@@ -160,6 +160,7 @@
             <input type="hidden" name="_autoresponse" id="formAutoresponse" value="Thank you for your AYT Ride request. We received your transfer details and will confirm vehicle availability, pickup point and final price by WhatsApp. Payment is collected in cash after the ride is completed.">
             <input type="hidden" name="_next" id="formNext">
             <input type="hidden" name="request_source" value="aytride.com booking form">
+            <input type="hidden" name="booking_reference" id="mailReference">
             <input type="hidden" name="trip_type" id="mailTripType">
             <input type="hidden" name="route" id="mailRoute">
             <input type="hidden" name="pickup_datetime" id="mailPickupDateTime">
@@ -171,6 +172,7 @@
             <input type="hidden" name="route_distance_km" id="mailKm">
             <input type="hidden" name="estimated_duration_min" id="mailMin">
             <input type="hidden" name="booking_summary" id="mailSummary">
+            <input type="hidden" name="message" id="mailMessage">
             <input type="hidden" name="whatsapp_message" id="mailWhatsapp">
             <input type="hidden" name="estimated_total_eur" id="mailTotal">
             <input type="hidden" name="operator_vehicle_cost_eur" id="mailCost">
@@ -423,6 +425,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260911-6"></script>
+  <script src="/assets/app.js?v=20260911-8"></script>
 </body>
 </html>
