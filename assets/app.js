@@ -515,7 +515,7 @@
   function renderRoutes() {
     const e = els();
     if (!e.routeGrid) return;
-    e.routeGrid.innerHTML = catalog.routes.filter((route) => route.available && !route.quoteOnly).map((route) => {
+    e.routeGrid.innerHTML = catalog.routes.filter((route) => route.available && !route.quoteOnly).slice(0, 6).map((route) => {
       const sedan = route.prices["standard-sedan"];
       const vip = route.prices["vip-van"];
       const slug = route.slugs?.en || "";

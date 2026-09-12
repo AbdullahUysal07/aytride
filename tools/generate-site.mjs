@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260912-production";
+const buildStamp = "20260912-layout";
 
 const languages = {
   en: {
@@ -312,6 +312,12 @@ function money(value) {
   return `€${Number(value).toFixed(0)}`;
 }
 
+function heroTitleMarkup(title) {
+  const [main, sub] = String(title).split("—").map((part) => part.trim());
+  if (!sub) return escapeHtml(title);
+  return `<span class="hero-title-main">${escapeHtml(main)}</span><span class="hero-title-sub">${escapeHtml(sub)}</span>`;
+}
+
 function routePath(route, language) {
   const slug = route.slugs?.[language];
   if (!slug) return null;
@@ -615,7 +621,7 @@ ${header(language)}
       <div class="shell hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">${l.eyebrow}</p>
-          <h1>${l.h1}</h1>
+          <h1 class="hero-title">${heroTitleMarkup(l.h1)}</h1>
           <p class="lead">${l.lead}</p>
           <div class="trust-strip" aria-label="Service highlights">
             ${l.trust.map((item) => `<span>${item}</span>`).join("")}
@@ -623,7 +629,7 @@ ${header(language)}
           <div class="hero-proof" aria-label="Why guests choose AYT Ride">
             <article><span>€</span><strong>${l.trust[0]}</strong><small>${l.perVehicle}</small></article>
             <article><span>24/7</span><strong>${l.trust[3]}</strong><small>Fast confirmation before pickup</small></article>
-            <article><span>0</span><strong>${l.paymentTitle}</strong><small>No online checkout</small></article>
+            <article><span>PAY</span><strong>${l.paymentTitle}</strong><small>No online checkout</small></article>
           </div>
         </div>
         ${bookingForm(language)}
@@ -637,10 +643,10 @@ ${header(language)}
           <img src="/assets/ayt-ride-transfer.jpg" alt="Private van waiting near Antalya coast and airport route">
         </picture>
         <div class="promise-grid">
-          <article><span class="icon-dot">01</span><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></article>
-          <article><span class="icon-dot">02</span><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></article>
-          <article><span class="icon-dot">03</span><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></article>
-          <article><span class="icon-dot">04</span><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></article>
+          <article><span class="icon-dot">WA</span><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></article>
+          <article><span class="icon-dot">FLT</span><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></article>
+          <article><span class="icon-dot">PAY</span><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></article>
+          <article><span class="icon-dot">€</span><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></article>
         </div>
       </div>
     </section>
