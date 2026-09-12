@@ -634,6 +634,8 @@ input,
 select,
 textarea {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 46px;
   border: 1px solid #cbd5e1;
   border-radius: var(--radius);
@@ -642,6 +644,21 @@ textarea {
   padding: 10px 12px;
   outline: none;
   transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+input[type="date"],
+input[type="time"] {
+  display: block;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value {
+  width: 100%;
+  margin: 0;
+  text-align: left;
 }
 
 textarea {
@@ -1678,11 +1695,37 @@ pre {
   }
 
   body {
-    padding-bottom: 72px;
+    padding-bottom: 0;
+  }
+
+  .topbar {
+    position: relative;
   }
 
   .nav {
-    min-height: 64px;
+    min-height: 56px;
+    gap: 10px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    font-size: .92rem;
+  }
+
+  .brand strong {
+    font-size: .98rem;
+  }
+
+  .nav-cta {
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: .9rem;
   }
 
   .brand small,
@@ -1777,39 +1820,7 @@ pre {
   }
 
   .mobile-book-bar {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    z-index: 40;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 8px;
-    border: 1px solid rgba(255, 255, 255, .7);
-    border-radius: var(--radius);
-    background: rgba(17, 24, 39, .94);
-    box-shadow: 0 12px 32px rgba(17, 24, 39, .25);
-    backdrop-filter: blur(16px);
-  }
-
-  .mobile-book-bar a {
-    min-height: 44px;
-    display: grid;
-    place-items: center;
-    border-radius: 6px;
-    color: #fff;
-    font-weight: 900;
-    text-decoration: none;
-  }
-
-  .mobile-book-bar a:first-child {
-    background: linear-gradient(135deg, #12805c, #0b6948);
-    color: #fff;
-  }
-
-  .mobile-book-bar a:last-child {
-    background: #16a05d;
+    display: none !important;
   }
 
   .swap-btn {
@@ -2046,30 +2057,37 @@ form {
 
 @media (max-width: 720px) {
   .hero {
-    padding: 18px 0 14px;
+    padding: 14px 0 12px;
   }
 
   .hero-title {
-    font-size: clamp(2.15rem, 10.5vw, 3.15rem);
-    line-height: 1.02;
+    font-size: clamp(2rem, 8.8vw, 2.65rem);
+    line-height: 1.05;
+    margin-bottom: 12px;
   }
 
   .hero-title-sub {
-    font-size: .72em;
+    font-size: .78em;
   }
 
   .lead {
-    font-size: .98rem;
+    margin-bottom: 14px;
+    font-size: .94rem;
+    line-height: 1.45;
+  }
+
+  .trust-strip {
+    gap: 7px;
   }
 
   .trust-strip span {
-    min-height: 34px;
-    padding: 0 11px;
-    font-size: .9rem;
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: .82rem;
   }
 
   .hero-proof {
-    grid-template-columns: 1fr;
+    display: none;
   }
 
   .promise-grid article {
@@ -2088,6 +2106,23 @@ form {
   .route-fields,
   .form-grid.two {
     gap: 9px;
+  }
+
+  label,
+  .route-fields,
+  .form-grid,
+  .custom-route,
+  .counter-row,
+  .booking-card,
+  .booking-step {
+    min-width: 0;
+  }
+
+  input,
+  select,
+  textarea {
+    min-width: 0;
+    font-size: 16px;
   }
 
   .route-card > button {

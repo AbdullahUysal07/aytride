@@ -684,7 +684,6 @@ ${header(language)}
     </section>
   </main>
 ${footer(language)}
-  <div class="mobile-book-bar"><a id="stickyBook" href="#booking">${l.navBook}</a><a id="stickyWhatsapp" target="_blank" rel="noopener">WhatsApp</a></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="/assets/app.js?v=${buildStamp}"></script>
 </body>
@@ -864,7 +863,6 @@ ${header(language)}
     </section>
   </main>
 ${footer(language)}
-  <div class="mobile-book-bar"><a href="#booking">${l.navBook}</a><a id="stickyWhatsapp" target="_blank" rel="noopener">WhatsApp</a></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="/assets/app.js?v=${buildStamp}"></script>
 </body>

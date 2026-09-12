@@ -104,6 +104,16 @@ MAIL_FROM = "AYT Ride <booking@aytride.com>"
 ADMIN_EMAILS = "admin@aytride.com"
 ```
 
+## Admin Login
+
+The production admin email placeholder is:
+
+```text
+admin@aytride.com
+```
+
+There is no hardcoded production password in the repository. Choose the real admin password during Cloudflare setup, generate `ADMIN_PASSWORD_SALT` and `ADMIN_PASSWORD_SHA256`, then save both as Cloudflare secrets. The same plain password you chose is the password for `/admin/`.
+
 ## Production Placeholders
 
 Before paid ads, replace these placeholder values in `data/public-catalog.json` or production secrets:
