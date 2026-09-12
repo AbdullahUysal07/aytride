@@ -696,7 +696,8 @@
         const saved = await submitBooking(payload);
         const finalReference = saved.reference || reference;
         const message = bookingMessage(finalReference, q);
-        sessionStorage.setItem(confirmationKey, JSON.stringify({ ...payload, reference: finalReference }));
+        const persisted = Boolean(saved.ok && !saved.developmentOnly);
+        sessionStorage.setItem(confirmationKey, JSON.stringify({ ...payload, reference: finalReference, persisted }));
         window.open(whatsappUrl(message), "_blank", "noopener");
         aytEvent("whatsapp_clicked", { language: lang(), route: payload.routeId, trip_type: payload.tripType, vehicle: payload.vehicleId });
         showToast(t("whatsappOpened"));
@@ -735,6 +736,8 @@
       page.querySelector("[data-confirmation-route]").textContent = `${saved.pickup} -> ${saved.dropoff}`;
       page.querySelector("[data-confirmation-vehicle]").textContent = vehicle(saved.vehicleId).name;
       page.querySelector("[data-confirmation-price]").textContent = saved.quoteOnly ? t("quoteOnly") : money(saved.publicTotalEur);
+    }
+    if (saved?.persisted) {
       aytEvent("booking_confirmed", {
         language: saved.language,
         route: saved.routeId,

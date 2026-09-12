@@ -49,12 +49,26 @@ test("applies return discount without trusting client totals", () => {
   assert.equal(result.payload.publicTotalEur, 54);
 });
 
-test("adds child seat and night fees server-side", () => {
+test("keeps fixed price unchanged for night pickup and child seats", () => {
   const quote = calculatePublicQuote(catalog, basePayload({
     pickupTime: "23:30",
     childSeats: 1
   }));
-  assert.equal(quote.total, 45);
+  assert.equal(quote.total, 30);
+});
+
+test("keeps Belek sedan fixed price unchanged after step two extras", () => {
+  const result = validateBookingPayload(catalog, basePayload({
+    reference: "AYT-20260913-2330-BELEK",
+    routeId: "belek",
+    pickup: "Antalya Airport (AYT)",
+    dropoff: "Belek / Kadriye",
+    pickupTime: "23:30",
+    vehicleId: "standard-sedan",
+    childSeats: 1
+  }), { today: "2026-09-12" });
+  assert.equal(result.ok, true);
+  assert.equal(result.payload.publicTotalEur, 45);
 });
 
 test("rejects sedan requests that exceed vehicle capacity", () => {

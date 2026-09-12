@@ -10,13 +10,21 @@ routes = [
 [[d1_databases]]
 binding = "DB"
 database_name = "ayt-ride-bookings"
-database_id = "replace-with-cloudflare-d1-id"
+database_id = "00000000-0000-0000-0000-000000000000"
 
 [vars]
 ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io"
-BOOKING_EMAIL = "info@shramworld.com"
+BOOKING_EMAIL = "booking@aytride.com"
 MAIL_FROM = "AYT Ride <booking@aytride.com>"
 ADMIN_EMAILS = "admin@aytride.com"
+
+# Replace these placeholders in data/public-catalog.json before paid ads:
+# business.whatsapp = "90XXXXXXXXXX"
+# business.displayWhatsapp = "+90 XXX XXX XX XX"
+# analytics.gtmId = "GTM-XXXXXXX"
+# analytics.ga4MeasurementId = "G-XXXXXXXXXX"
+# analytics.googleAdsId = "AW-XXXXXXXXXX"
+# analytics.googleAdsBookingLabel = "XXXXXXXXXX"
 
 # Set these as Cloudflare secrets, not plaintext vars:
 # RESEND_API_KEY

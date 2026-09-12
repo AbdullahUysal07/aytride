@@ -4,7 +4,7 @@ AYT Ride is a private Antalya airport transfer booking website.
 
 - Website: https://aytride.com
 - WhatsApp: +1 683 850 2742
-- Email: info@shramworld.com
+- Email: booking@aytride.com
 - Main routes: Lara / Kundu, Belek / Kadriye, Kemer, Side / Manavgat, Alanya
 - Payment promise: pay on arrival after the ride unless otherwise confirmed
 - Vehicle options: Standard Sedan and VIP Van

@@ -19,6 +19,10 @@ export default {
         return json(publicCatalog, 200, cors);
       }
 
+      if (url.pathname === "/api/health" && request.method === "GET") {
+        return json(healthStatus(env), 200, cors);
+      }
+
       if (url.pathname === "/api/bookings" && request.method === "POST") {
         return await createBooking(request, env, cors);
       }
@@ -68,6 +72,22 @@ function json(data, status = 200, extraHeaders = {}) {
   });
 }
 
+function healthStatus(env) {
+  const adminConfigured = Boolean(
+    env.ADMIN_EMAILS &&
+    env.ADMIN_PASSWORD_SHA256 &&
+    env.ADMIN_PASSWORD_SALT &&
+    env.ADMIN_SESSION_SECRET
+  );
+  return {
+    ok: true,
+    version: publicCatalog.version,
+    dbConfigured: Boolean(env.DB),
+    emailConfigured: Boolean(env.RESEND_API_KEY && env.MAIL_FROM && (env.BOOKING_EMAIL || publicCatalog.business.bookingEmail)),
+    adminConfigured
+  };
+}
+
 async function readJson(request) {
   const text = await request.text();
   if (!text || text.length > 20000) throw new Error("Invalid request body.");
@@ -95,7 +115,7 @@ async function createBooking(request, env, cors) {
     .first();
 
   if (existing) {
-    return json({ ok: true, reference: record.reference, duplicate: true }, 200, cors);
+    return json({ ok: true, reference: record.reference, duplicate: true, emailStatus: "not_sent_duplicate" }, 200, cors);
   }
 
   await env.DB.prepare(`
@@ -133,13 +153,14 @@ async function createBooking(request, env, cors) {
     record.createdAt
   ).run();
 
-  await sendBookingEmails(env, record);
+  const emailStatus = await sendBookingEmails(env, record);
 
   return json({
     ok: true,
     reference: record.reference,
     publicTotalEur: record.publicTotalEur,
-    quoteOnly: record.quoteOnly
+    quoteOnly: record.quoteOnly,
+    emailStatus
   }, 201, cors);
 }
 
@@ -152,25 +173,31 @@ function parsePrivatePricing(env) {
 }
 
 async function sendBookingEmails(env, record) {
-  if (!env.RESEND_API_KEY || !env.MAIL_FROM) return;
+  if (!env.RESEND_API_KEY || !env.MAIL_FROM) return "skipped_not_configured";
   const ownerEmail = env.BOOKING_EMAIL || publicCatalog.business.bookingEmail;
   const subject = `AYT Ride booking ${record.reference}`;
   const ownerText = ownerEmailText(record);
-  await sendEmail(env, {
-    to: ownerEmail,
-    subject,
-    text: ownerText,
-    html: `<pre style="font:14px/1.5 system-ui,sans-serif;white-space:pre-wrap">${escapeHtml(ownerText)}</pre>`
-  });
-
-  if (record.guestEmail) {
-    const guestText = guestEmailText(record);
+  try {
     await sendEmail(env, {
-      to: record.guestEmail,
-      subject: `AYT Ride received your transfer request ${record.reference}`,
-      text: guestText,
-      html: `<pre style="font:14px/1.5 system-ui,sans-serif;white-space:pre-wrap">${escapeHtml(guestText)}</pre>`
+      to: ownerEmail,
+      subject,
+      text: ownerText,
+      html: `<pre style="font:14px/1.5 system-ui,sans-serif;white-space:pre-wrap">${escapeHtml(ownerText)}</pre>`
     });
+
+    if (record.guestEmail) {
+      const guestText = guestEmailText(record);
+      await sendEmail(env, {
+        to: record.guestEmail,
+        subject: `AYT Ride received your transfer request ${record.reference}`,
+        text: guestText,
+        html: `<pre style="font:14px/1.5 system-ui,sans-serif;white-space:pre-wrap">${escapeHtml(guestText)}</pre>`
+      });
+    }
+    return "sent";
+  } catch (error) {
+    console.error("Booking was saved, but email delivery failed.", error);
+    return "failed";
   }
 }
 

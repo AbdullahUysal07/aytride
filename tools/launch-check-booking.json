@@ -1,0 +1,28 @@
+{
+  "reference": "AYT-LAUNCH-CHECK-BELEK-001",
+  "language": "en",
+  "routeId": "belek",
+  "tripType": "oneway",
+  "pickup": "Antalya Airport (AYT)",
+  "dropoff": "Belek / Kadriye",
+  "pickupDate": "2026-09-13",
+  "pickupTime": "23:30",
+  "returnDate": "",
+  "returnTime": "",
+  "flightNumber": "TK2420",
+  "hotelAddress": "Belek launch check hotel",
+  "vehicleId": "standard-sedan",
+  "passengers": 2,
+  "luggage": 2,
+  "childSeats": 1,
+  "guestName": "Launch Check Guest",
+  "guestPhone": "+905000000000",
+  "guestEmail": "booking@aytride.com",
+  "notes": "Production launch check: night flight and child seat should not increase the fixed price.",
+  "publicTotalEur": 999,
+  "quoteOnly": false,
+  "attribution": {
+    "utm_source": "launch-check",
+    "utm_medium": "qa"
+  }
+}

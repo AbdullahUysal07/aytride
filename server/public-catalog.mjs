@@ -6,7 +6,7 @@ export const publicCatalog = {
   "business": {
     "brand": "AYT Ride",
     "tagline": "Private Transfers in Antalya",
-    "bookingEmail": "info@shramworld.com",
+    "bookingEmail": "booking@aytride.com",
     "emailOptions": [
       "booking@aytride.com",
       "hello@aytride.com",
@@ -22,9 +22,18 @@ export const publicCatalog = {
     "googleAdsId": "",
     "googleAdsBookingLabel": ""
   },
+  "productionPlaceholders": {
+    "bookingEmail": "booking@aytride.com",
+    "turkishWhatsapp": "90XXXXXXXXXX",
+    "displayTurkishWhatsapp": "+90 XXX XXX XX XX",
+    "gtmId": "GTM-XXXXXXX",
+    "ga4MeasurementId": "G-XXXXXXXXXX",
+    "googleAdsId": "AW-XXXXXXXXXX",
+    "googleAdsBookingLabel": "XXXXXXXXXX"
+  },
   "fees": {
-    "nightFeeEur": 10,
-    "childSeatFeeEur": 5,
+    "nightFeeEur": 0,
+    "childSeatFeeEur": 0,
     "returnDiscount": 0.9
   },
   "vehicles": [
