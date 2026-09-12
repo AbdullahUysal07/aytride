@@ -76,10 +76,15 @@
           costMultiplier: Number(vehicle.costMultiplier ?? base.costMultiplier)
         };
       });
+    const business = { ...defaults.business, ...(saved.business || {}) };
+    business.whatsapp = String(business.whatsapp || defaults.business.whatsapp).replace(/\D/g, "");
+    business.email = String(business.email || defaults.business.email).trim();
+    business.brand = String(business.brand || defaults.business.brand).trim();
+    business.operator = String(business.operator || defaults.business.operator).trim();
     return {
       ...structuredClone(defaults),
       ...saved,
-      business: { ...defaults.business, ...(saved.business || {}) },
+      business,
       fees: { ...defaults.fees, ...(saved.fees || {}) },
       vehicles: vehicles.length ? vehicles : structuredClone(defaults.vehicles)
     };
@@ -512,6 +517,10 @@
     const routeText = requestRoute(els);
     const tripLabel = state.tripType === "return" ? "Return transfer" : "One-way transfer";
     const reference = bookingReference(els);
+    const bookingForm = document.querySelector("#bookingForm");
+    if (bookingForm) {
+      bookingForm.action = `https://formsubmit.co/${settings.business.email || defaults.business.email}`;
+    }
 
     els.customRouteFields.classList.toggle("hidden", els.pickup.value !== "Other hotel or address" && els.dropoff.value !== "Other hotel or address");
     els.returnFields.classList.toggle("hidden", state.tripType !== "return");
