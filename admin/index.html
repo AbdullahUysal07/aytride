@@ -4,15 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AYT Ride Yönetim Paneli</title>
-  <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="/assets/site.css?v=20260912-2">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="/assets/site.css?v=20260912-production">
+  <script src="/assets/catalog.js?v=20260912-production"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="shell nav">
       <a class="brand" href="/">
         <span class="brand-mark" aria-hidden="true">AYT</span>
-        <span><strong>AYT Ride</strong><small>SHRAMWORLD altyapısı</small></span>
+        <span><strong>AYT Ride</strong><small>Operasyon paneli</small></span>
       </a>
       <nav class="nav-links">
         <a href="/">Rezervasyon</a>
@@ -25,18 +26,22 @@
     <div class="shell admin-grid" id="adminApp">
       <aside class="admin-card">
         <p class="mini-label">Operasyon</p>
-        <h2>Yönetim paneli</h2>
-        <p class="admin-note">Rota fiyatlarını, araç maliyetlerini ve gelen rezervasyon taleplerini buradan takip edebilirsin.</p>
-        <p class="admin-note">Not: GitHub Pages statik çalıştığı için bu liste şu an bu tarayıcıda oluşturulan talepleri gösterir. Tüm müşterilerden merkezi kayıt toplamak için backend gerekir.</p>
+        <h1>Yönetim paneli</h1>
+        <p class="admin-note">Bu panel üretimde gerçek backend oturumu ister. Arama motorundan gizlemek güvenlik değildir; rezervasyon ve maliyet alanları sadece giriş yapılınca API üzerinden gelir.</p>
+        <p class="admin-note">Backend kurulana kadar canlı sitede kullanıcılar WhatsApp ile talep gönderebilir, fakat merkezi rezervasyon arşivi ve mail otomasyonu aktif olmaz.</p>
       </aside>
 
       <section class="admin-card">
         <form id="adminLogin">
           <label>
-            <span>Admin PIN</span>
-            <input id="adminPin" type="password" placeholder="Admin PIN gir" autocomplete="off">
+            <span>Admin e-posta</span>
+            <input id="adminEmail" type="email" autocomplete="username" placeholder="admin@aytride.com" required>
           </label>
-          <button class="primary-btn" type="submit">Paneli aç</button>
+          <label>
+            <span>Şifre</span>
+            <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Şifre" required>
+          </label>
+          <button class="primary-btn" type="submit">Giriş yap</button>
         </form>
 
         <div id="adminPanel" class="hidden">
@@ -44,61 +49,24 @@
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Rezervasyonlar</p>
-                <h3>Oluşturulan talepler</h3>
+                <h2>Oluşturulan talepler</h2>
               </div>
               <span id="bookingCount" class="admin-count">0 kayıt</span>
             </div>
             <div class="booking-list" id="adminBookings"></div>
             <div class="admin-actions">
-              <button class="admin-btn" id="exportBookings" type="button">Rezervasyonları kopyala</button>
-              <button class="secondary-btn" id="clearBookings" type="button">Listeyi temizle</button>
-            </div>
-            <div class="admin-archive">
-              <label>
-                <span>FormSubmit API anahtarı</span>
-                <input id="formsubmitApiKey" type="password" placeholder="Mail arşiv anahtarı">
-              </label>
-              <div class="admin-actions compact">
-                <button class="admin-btn" id="fetchFormsubmitBookings" type="button">Mail arşivini çek</button>
-                <button class="secondary-btn" id="requestFormsubmitKey" type="button">API anahtarı iste</button>
-              </div>
-              <p class="admin-note">Tüm cihazlardan gelen mail kayıtlarını görmek için FormSubmit API anahtarını buraya gir.</p>
+              <button class="admin-btn" id="refreshBookings" type="button">Rezervasyonları yenile</button>
+              <button class="secondary-btn" id="logoutAdmin" type="button">Çıkış yap</button>
             </div>
           </section>
 
-          <div class="form-grid two">
-            <label>
-              <span>İşletme WhatsApp</span>
-              <input id="businessWhatsapp" inputmode="numeric">
-            </label>
-            <label>
-              <span>Rezervasyon e-posta</span>
-              <input id="businessEmail" type="email">
-            </label>
-          </div>
-
-          <div class="form-grid two">
-            <label>
-              <span>Gece ücreti EUR</span>
-              <input id="nightFee" type="number" min="0">
-            </label>
-            <label>
-              <span>Çocuk koltuğu ücreti EUR</span>
-              <input id="childSeatFee" type="number" min="0">
-            </label>
-          </div>
-
-          <h3>Rotalar ve araç maliyetleri</h3>
-          <div class="admin-table" id="adminTable"></div>
-
-          <div class="admin-actions">
-            <button class="primary-btn" id="saveAdmin" type="button">Kaydet</button>
-            <button class="admin-btn" id="exportAdmin" type="button">Ayarları kopyala</button>
-            <button class="secondary-btn" id="resetAdmin" type="button">Varsayılanlara dön</button>
-          </div>
-          <p class="admin-note">Rezervasyon e-postalarında müşteri fiyatı ve araç maliyeti birlikte yer alır.</p>
-          <pre id="adminOutput"></pre>
+          <section class="admin-archive">
+            <h2>Fiyat ve maliyet yönetimi</h2>
+            <p class="admin-note">Satış fiyatları public katalogdan okunur. Araç maliyeti ve kâr hesabı üretimde sadece backend veritabanında tutulmalıdır.</p>
+            <p class="admin-note">Fiyat güncelleme API’si bağlandığında burada rota fiyatlarını düzenleme alanı açılabilir.</p>
+          </section>
         </div>
+        <pre id="adminOutput"></pre>
       </section>
     </div>
   </main>
@@ -107,8 +75,7 @@
     <div class="shell footer-grid">
       <div>
         <strong>AYT Ride Yönetim</strong>
-        <p>Antalya özel transfer operasyonu.</p>
-        <p class="footer-badge">SHRAMWORLD altyapısı ile çalışır.</p>
+        <p>Antalya özel transfer operasyon paneli.</p>
       </div>
       <div>
         <a href="mailto:info@shramworld.com">info@shramworld.com</a>
@@ -117,6 +84,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260912-2"></script>
+  <script src="/assets/app.js?v=20260912-production"></script>
 </body>
 </html>

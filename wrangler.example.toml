@@ -1,0 +1,26 @@
+name = "ayt-ride-api"
+main = "server/worker.mjs"
+compatibility_date = "2026-09-12"
+
+routes = [
+  { pattern = "aytride.com/api/*", zone_name = "aytride.com" },
+  { pattern = "www.aytride.com/api/*", zone_name = "aytride.com" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ayt-ride-bookings"
+database_id = "replace-with-cloudflare-d1-id"
+
+[vars]
+ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io"
+BOOKING_EMAIL = "info@shramworld.com"
+MAIL_FROM = "AYT Ride <booking@aytride.com>"
+ADMIN_EMAILS = "admin@aytride.com"
+
+# Set these as Cloudflare secrets, not plaintext vars:
+# RESEND_API_KEY
+# ADMIN_PASSWORD_SALT
+# ADMIN_PASSWORD_SHA256
+# ADMIN_SESSION_SECRET
+# PRIVATE_PRICING_JSON
