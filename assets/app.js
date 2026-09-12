@@ -113,15 +113,20 @@
 
   async function saveSettings(settings, pin) {
     localStorage.setItem(storageKey, JSON.stringify(settings));
-    const response = await fetch("/api/settings", {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-        "x-admin-pin": pin || ""
-      },
-      body: JSON.stringify(settings)
-    });
-    if (!response.ok) throw new Error(await response.text());
+    try {
+      const response = await fetch("/api/settings", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          "x-admin-pin": pin || ""
+        },
+        body: JSON.stringify(settings)
+      });
+      if (!response.ok) throw new Error(await response.text());
+      return { remote: true };
+    } catch {
+      return { remote: false };
+    }
   }
 
   function money(value) {
@@ -796,14 +801,11 @@
     });
 
     document.querySelector("#saveAdmin").addEventListener("click", async () => {
-      try {
-        await saveSettings(settings, pin.value.trim());
-        output.textContent = JSON.stringify(settings, null, 2);
-        showToast("Ayarlar kaydedildi.");
-      } catch (error) {
-        output.textContent = error instanceof Error ? error.message : String(error);
-        showToast("Ayarlar kaydedilemedi.");
-      }
+      const result = await saveSettings(settings, pin.value.trim());
+      output.textContent = result.remote
+        ? JSON.stringify(settings, null, 2)
+        : "Ayarlar bu tarayıcıya kaydedildi. GitHub Pages statik olduğu için tüm ziyaretçilere kalıcı yayın için dosya güncellemesi gerekir.";
+      showToast(result.remote ? "Ayarlar kaydedildi." : "Ayarlar bu tarayıcıya kaydedildi.");
     });
 
     document.querySelector("#exportAdmin").addEventListener("click", async () => {
@@ -868,15 +870,12 @@
 
     document.querySelector("#resetAdmin").addEventListener("click", async () => {
       settings = structuredClone(defaults);
-      try {
-        await saveSettings(settings, pin.value.trim());
-        render();
-        output.textContent = "Varsayılan fiyatlar geri yüklendi.";
-      } catch (error) {
-        render();
-        output.textContent = error instanceof Error ? error.message : String(error);
-        showToast("Varsayılan ayarlar kaydedilemedi.");
-      }
+      const result = await saveSettings(settings, pin.value.trim());
+      render();
+      output.textContent = result.remote
+        ? "Varsayılan fiyatlar geri yüklendi."
+        : "Varsayılan fiyatlar bu tarayıcıya geri yüklendi. Canlı site geneli için dosya güncellemesi gerekir.";
+      showToast(result.remote ? "Varsayılan fiyatlar geri yüklendi." : "Varsayılanlar bu tarayıcıya yüklendi.");
     });
 
     window.addEventListener("ayt-reservations-updated", renderReservations);
