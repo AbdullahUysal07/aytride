@@ -1,5 +1,7 @@
 (function () {
   const storageKey = "aytRideSettings";
+  const reservationsKey = "aytRideReservations";
+  const formsubmitApiKeyStorage = "aytRideFormsubmitApiKey";
 
   const defaults = {
     business: {
@@ -16,7 +18,7 @@
     vehicles: [
       {
         id: "comfort",
-        name: "Comfort Sedan",
+        name: "Standard Sedan",
         image: "/assets/comfort-sedan-egea.jpg",
         imageAlt: "White mid-segment comfort sedan for Antalya airport transfer",
         passengers: 3,
@@ -53,7 +55,7 @@
 
   const state = {
     tripType: "oneway",
-    vehicle: "vip",
+    vehicle: "comfort",
     passengers: 2,
     luggage: 2,
     childSeats: 0
@@ -64,7 +66,16 @@
     const defaultVehicles = new Map(defaults.vehicles.map((vehicle) => [vehicle.id, vehicle]));
     const vehicles = saved.vehicles
       .filter((vehicle) => ["comfort", "vip"].includes(vehicle.id))
-      .map((vehicle) => ({ ...defaultVehicles.get(vehicle.id), ...vehicle }));
+      .map((vehicle) => {
+        const base = defaultVehicles.get(vehicle.id);
+        return {
+          ...base,
+          passengers: Number(vehicle.passengers ?? base.passengers),
+          luggage: Number(vehicle.luggage ?? base.luggage),
+          multiplier: Number(vehicle.multiplier ?? base.multiplier),
+          costMultiplier: Number(vehicle.costMultiplier ?? base.costMultiplier)
+        };
+      });
     return {
       ...structuredClone(defaults),
       ...saved,
@@ -165,6 +176,29 @@
     return String(value || "").trim();
   }
 
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function formatAdminDate(value) {
+    try {
+      return new Intl.DateTimeFormat("tr-TR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new Date(value));
+    } catch {
+      return value || "";
+    }
+  }
+
   function readablePlace(place, detail) {
     return place === "Other hotel or address" && text(detail) ? text(detail) : place;
   }
@@ -206,46 +240,141 @@
   function bookingMessage(settings, quote) {
     const els = bookingEls();
     const tripLabel = state.tripType === "return" ? "Return transfer" : "One-way transfer";
-    const returnLine = state.tripType === "return" ? `Return: ${formatDateTime(els.returnDate.value, els.returnTime.value)}` : "";
+    const returnLine = state.tripType === "return" ? `🔁 Return: ${formatDateTime(els.returnDate.value, els.returnTime.value)}` : "";
     const notes = text(els.notes.value) || "No extra notes";
     const reference = bookingReference(els);
     const lines = [
-      "*AYT RIDE TRANSFER REQUEST*",
-      `Reference: ${reference}`,
+      "🚘 *AYT RIDE | NEW TRANSFER REQUEST*",
+      `🧾 Reference: ${reference}`,
       "",
-      "*Guest*",
+      "👤 *Guest details*",
       `Name: ${text(els.guestName.value) || "Not provided"}`,
-      `WhatsApp: ${text(els.guestPhone.value) || "Not provided"}`,
-      `Email: ${text(els.guestEmail.value) || "Not provided"}`,
+      `📱 WhatsApp: ${text(els.guestPhone.value) || "Not provided"}`,
+      `✉️ Email: ${text(els.guestEmail.value) || "Not provided"}`,
       "",
-      "*Journey*",
-      `Type: ${tripLabel}`,
-      `From: ${readablePlace(els.pickup.value, els.pickupDetail.value)}`,
-      `To: ${readablePlace(els.dropoff.value, els.dropoffDetail.value)}`,
-      `Pickup: ${formatDateTime(els.pickupDate.value, els.pickupTime.value)}`,
+      "🛣️ *Trip details*",
+      `↔️ Type: ${tripLabel}`,
+      `📍 Pickup: ${readablePlace(els.pickup.value, els.pickupDetail.value)}`,
+      `🏁 Drop-off: ${readablePlace(els.dropoff.value, els.dropoffDetail.value)}`,
+      `🗓️ Pickup time: ${formatDateTime(els.pickupDate.value, els.pickupTime.value)}`,
       returnLine,
-      `Flight: ${text(els.flightNumber.value) || "Not provided"}`,
+      `✈️ Flight: ${text(els.flightNumber.value) || "Not provided"}`,
       "",
-      "*Vehicle*",
+      "🚗 *Vehicle & luggage*",
       `Requested vehicle: ${quote.vehicle.name}`,
-      `Passengers: ${state.passengers}`,
-      `Suitcases: ${state.luggage}`,
-      `Child seats: ${state.childSeats}`,
+      `👥 Passengers: ${state.passengers}`,
+      `🧳 Suitcases: ${state.luggage}`,
+      `👶 Child seats: ${state.childSeats}`,
       "",
-      "*Price & payment*",
-      `Guest total: *${money(quote.total)}*`,
-      "Payment: Cash after ride",
-      "Online payment: Not required",
+      "💶 *Price & payment*",
+      `Estimated guest total: *${money(quote.total)}*`,
+      "🤝 Payment: Cash after ride",
+      "🔒 Online payment: Not required",
       "",
-      "*Notes*",
+      "📝 *Guest notes*",
       notes,
       "",
-      "*Please confirm*",
-      "1. Vehicle availability",
-      "2. Exact meeting point",
-      "3. Final price"
+      "📌 *Please confirm*",
+      "✅ Vehicle availability",
+      "📍 Exact meeting point",
+      "💶 Final price"
     ];
     return lines.filter(Boolean).join("\n");
+  }
+
+  function readReservations() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(reservationsKey) || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function numberValue(value) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function bookingRecord(settings, quote) {
+    const els = bookingEls();
+    const reference = bookingReference(els);
+    return {
+      reference,
+      createdAt: new Date().toISOString(),
+      status: "WhatsApp ve e-posta denendi",
+      guestName: text(els.guestName.value) || "Not provided",
+      guestPhone: text(els.guestPhone.value) || "Not provided",
+      guestEmail: text(els.guestEmail.value) || "Not provided",
+      tripType: state.tripType === "return" ? "Return transfer" : "One-way transfer",
+      route: requestRoute(els),
+      pickupDateTime: formatDateTime(els.pickupDate.value, els.pickupTime.value),
+      returnDateTime: state.tripType === "return" ? formatDateTime(els.returnDate.value, els.returnTime.value) : "",
+      flightNumber: text(els.flightNumber.value) || "Not provided",
+      vehicle: quote.vehicle.name,
+      passengers: state.passengers,
+      suitcases: state.luggage,
+      childSeats: state.childSeats,
+      total: quote.total,
+      cost: quote.cost,
+      margin: quote.margin,
+      notes: text(els.notes.value) || "No extra notes",
+      operator: settings.business.operator
+    };
+  }
+
+  function saveReservation(record) {
+    const saved = readReservations().filter((item) => item.reference !== record.reference);
+    saved.unshift(record);
+    return writeReservations(saved);
+  }
+
+  function writeReservations(records) {
+    localStorage.setItem(reservationsKey, JSON.stringify(records.slice(0, 150)));
+    window.dispatchEvent(new CustomEvent("ayt-reservations-updated"));
+    return records;
+  }
+
+  function mergeReservations(records) {
+    const combined = [...records, ...readReservations()];
+    const seen = new Set();
+    const unique = combined.filter((record) => {
+      const key = record.reference || `${record.guestPhone}-${record.createdAt}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    unique.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    return writeReservations(unique);
+  }
+
+  function formSubmitRecord(entry) {
+    const data = entry.form_data || entry.formData || entry.data || {};
+    if (!Object.keys(data).length) return null;
+    const submitted = entry.submitted_at?.date || entry.submitted_at || entry.created_at || new Date().toISOString();
+    const createdAt = new Date(String(submitted).replace(" ", "T"));
+    return {
+      reference: text(data.booking_reference) || `MAIL-${Date.now()}`,
+      createdAt: Number.isNaN(createdAt.getTime()) ? new Date().toISOString() : createdAt.toISOString(),
+      status: "Mail arşivinden alındı",
+      guestName: text(data.name) || "Not provided",
+      guestPhone: text(data.phone) || "Not provided",
+      guestEmail: text(data.email) || "Not provided",
+      tripType: text(data.trip_type) || "Transfer",
+      route: text(data.route) || "Route not provided",
+      pickupDateTime: text(data.pickup_datetime) || "Date not provided",
+      returnDateTime: text(data.return_datetime),
+      flightNumber: text(data.flight_number) || "Not provided",
+      vehicle: text(data.selected_vehicle) || "Vehicle not provided",
+      passengers: numberValue(data.passenger_count),
+      suitcases: numberValue(data.suitcase_count),
+      childSeats: numberValue(data.child_seat_count),
+      total: numberValue(data.estimated_total_eur),
+      cost: numberValue(data.operator_vehicle_cost_eur),
+      margin: numberValue(data.estimated_margin_eur),
+      notes: text(data.notes) || "No extra notes",
+      operator: "SHRAMWORLD"
+    };
   }
 
   function ownerSummary(settings, quote) {
@@ -452,9 +581,22 @@
       updateBooking(settings);
     });
 
-    document.querySelector("#bookingForm").addEventListener("input", () => updateBooking(settings));
-    document.querySelector("#bookingForm").addEventListener("change", () => updateBooking(settings));
-    document.querySelector("#bookingForm").addEventListener("submit", (event) => {
+    const bookingForm = document.querySelector("#bookingForm");
+    const mailSink = document.querySelector("iframe[name='mailSink']");
+    let mailSubmitStarted = false;
+
+    if (mailSink) {
+      mailSink.addEventListener("load", () => {
+        if (!mailSubmitStarted) return;
+        mailSubmitStarted = false;
+        showToast("Email request submitted to AYT Ride.");
+      });
+    }
+
+    bookingForm.addEventListener("input", () => updateBooking(settings));
+    bookingForm.addEventListener("change", () => updateBooking(settings));
+    bookingForm.addEventListener("submit", (event) => {
+      updateBooking(settings);
       const quote = calculate(settings);
       if (quote.same) {
         event.preventDefault();
@@ -462,9 +604,10 @@
         return;
       }
       const message = bookingMessage(settings, quote);
-      updateBooking(settings);
+      saveReservation(bookingRecord(settings, quote));
+      mailSubmitStarted = true;
       window.open(waUrl(settings, message), "_blank", "noopener");
-      showToast("WhatsApp opened. Email request is being submitted.");
+      showToast("WhatsApp opened. Email copy is being submitted.");
     });
 
     els.vehicleGrid.addEventListener("click", (event) => {
@@ -485,15 +628,20 @@
     });
 
     els.routeGrid.innerHTML = settings.routes.filter((route) => route.from === "Antalya Airport (AYT)").map((route) => {
-      const quote = calculate(settings, { pickup: route.from, dropoff: route.to, vehicle: "vip" });
+      const sedanQuote = calculate(settings, { pickup: route.from, dropoff: route.to, vehicle: "comfort" });
+      const vipQuote = calculate(settings, { pickup: route.from, dropoff: route.to, vehicle: "vip" });
       const destination = route.to.replace(" / ", " + ");
       return `
-        <button class="route-card" type="button" data-from="${route.from}" data-to="${route.to}" aria-label="Select ${destination} transfer from ${money(quote.total)}">
+        <button class="route-card" type="button" data-from="${route.from}" data-to="${route.to}" aria-label="Select ${destination} transfer from ${money(sedanQuote.total)}">
           <span class="route-card-top">
             <span class="route-code">AYT</span>
-            <span class="route-price">From ${money(quote.total)}</span>
+            <span class="route-price">From ${money(sedanQuote.total)}</span>
           </span>
           <strong>${destination}</strong>
+          <span class="route-fares">
+            <span><small>Standard Sedan</small><b>${money(sedanQuote.total)}</b></span>
+            <span><small>VIP Van</small><b>${money(vipQuote.total)}</b></span>
+          </span>
           <span class="route-stats">
             <small>${route.km} km</small>
             <small>${route.min} min</small>
@@ -526,11 +674,77 @@
     const panel = document.querySelector("#adminPanel");
     const table = document.querySelector("#adminTable");
     const output = document.querySelector("#adminOutput");
+    const bookings = document.querySelector("#adminBookings");
+    const bookingCount = document.querySelector("#bookingCount");
+    const formsubmitApiKey = document.querySelector("#formsubmitApiKey");
+    const fetchFormsubmitBookings = document.querySelector("#fetchFormsubmitBookings");
+    const requestFormsubmitKey = document.querySelector("#requestFormsubmitKey");
+    if (formsubmitApiKey) {
+      formsubmitApiKey.value = localStorage.getItem(formsubmitApiKeyStorage) || "";
+    }
+
+    function reservationText(record) {
+      return [
+        `Referans: ${record.reference}`,
+        `Tarih: ${formatAdminDate(record.createdAt)}`,
+        `Misafir: ${record.guestName}`,
+        `WhatsApp: ${record.guestPhone}`,
+        `E-posta: ${record.guestEmail}`,
+        `Rota: ${record.route}`,
+        `Alış: ${record.pickupDateTime}`,
+        record.returnDateTime ? `Dönüş: ${record.returnDateTime}` : "",
+        `Uçuş: ${record.flightNumber}`,
+        `Araç: ${record.vehicle}`,
+        `Yolcu: ${record.passengers}`,
+        `Valiz: ${record.suitcases}`,
+        `Çocuk koltuğu: ${record.childSeats}`,
+        `Müşteri fiyatı: ${money(record.total)}`,
+        `Araç maliyeti: ${money(record.cost)}`,
+        `Tahmini kâr: ${money(record.margin)}`,
+        `Not: ${record.notes}`
+      ].filter(Boolean).join("\n");
+    }
+
+    function renderReservations() {
+      const records = readReservations();
+      bookingCount.textContent = `${records.length} kayıt`;
+      if (!records.length) {
+        bookings.innerHTML = `
+          <div class="booking-empty">
+            <strong>Henüz rezervasyon kaydı yok.</strong>
+            <p>Bu tarayıcıdan gönderilen talepler burada listelenecek.</p>
+          </div>
+        `;
+        return;
+      }
+      bookings.innerHTML = records.map((record) => `
+        <article class="booking-item">
+          <div class="booking-item-head">
+            <div>
+              <strong>${escapeHtml(record.guestName)}</strong>
+              <small>${escapeHtml(record.reference)} • ${escapeHtml(formatAdminDate(record.createdAt))}</small>
+            </div>
+            <span>${escapeHtml(money(record.total))}</span>
+          </div>
+          <div class="booking-item-grid">
+            <p><b>Rota</b>${escapeHtml(record.route)}</p>
+            <p><b>Alış</b>${escapeHtml(record.pickupDateTime)}</p>
+            <p><b>Araç</b>${escapeHtml(record.vehicle)}</p>
+            <p><b>Telefon</b>${escapeHtml(record.guestPhone)}</p>
+            <p><b>Maliyet</b>${escapeHtml(money(record.cost))}</p>
+            <p><b>Tahmini kâr</b>${escapeHtml(money(record.margin))}</p>
+          </div>
+          <p class="booking-note"><b>Not:</b> ${escapeHtml(record.notes)}</p>
+          <p class="booking-note"><b>Durum:</b> ${escapeHtml(record.status || "Kayıt oluşturuldu")}</p>
+        </article>
+      `).join("");
+    }
 
     function render() {
+      renderReservations();
       table.innerHTML = `
         <div class="admin-row header">
-          <span>Route</span><span>Sell EUR</span><span>Cost EUR</span><span>KM</span><span>Min</span>
+          <span>Rota</span><span>Satış EUR</span><span>Maliyet EUR</span><span>KM</span><span>Dk</span>
         </div>
         ${settings.routes.map((route, index) => `
           <div class="admin-row">
@@ -551,7 +765,7 @@
     login.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!pin.value.trim()) {
-        showToast("Enter admin PIN.");
+        showToast("Admin PIN gir.");
         return;
       }
       login.classList.add("hidden");
@@ -576,10 +790,10 @@
       try {
         await saveSettings(settings, pin.value.trim());
         output.textContent = JSON.stringify(settings, null, 2);
-        showToast("Settings saved for all visitors.");
+        showToast("Ayarlar kaydedildi.");
       } catch (error) {
         output.textContent = error instanceof Error ? error.message : String(error);
-        showToast("Settings could not be saved.");
+        showToast("Ayarlar kaydedilemedi.");
       }
     });
 
@@ -588,10 +802,59 @@
       output.textContent = data;
       try {
         await navigator.clipboard.writeText(data);
-        showToast("Settings copied.");
+        showToast("Ayarlar kopyalandı.");
       } catch {
-        showToast("Settings shown below.");
+        showToast("Ayarlar aşağıda gösterildi.");
       }
+    });
+
+    document.querySelector("#exportBookings").addEventListener("click", async () => {
+      const records = readReservations();
+      const data = records.map(reservationText).join("\n\n---\n\n") || "Henüz rezervasyon kaydı yok.";
+      output.textContent = data;
+      try {
+        await navigator.clipboard.writeText(data);
+        showToast("Rezervasyonlar kopyalandı.");
+      } catch {
+        showToast("Rezervasyonlar aşağıda gösterildi.");
+      }
+    });
+
+    requestFormsubmitKey.addEventListener("click", () => {
+      const email = settings.business.email || defaults.business.email;
+      window.open(`https://formsubmit.co/api/get-apikey/${encodeURIComponent(email)}`, "_blank", "noopener");
+      showToast("FormSubmit API anahtarı e-postana gönderilecek.");
+    });
+
+    fetchFormsubmitBookings.addEventListener("click", async () => {
+      const key = formsubmitApiKey.value.trim();
+      if (!key) {
+        showToast("Önce FormSubmit API anahtarını gir.");
+        return;
+      }
+      localStorage.setItem(formsubmitApiKeyStorage, key);
+      output.textContent = "Mail arşivi çekiliyor...";
+      try {
+        const response = await fetch(`https://formsubmit.co/api/get-submissions/${encodeURIComponent(key)}`, {
+          headers: { accept: "application/json" }
+        });
+        if (!response.ok) throw new Error(await response.text());
+        const data = await response.json();
+        const records = (data.submissions || []).map(formSubmitRecord).filter(Boolean);
+        mergeReservations(records);
+        output.textContent = `${records.length} mail kaydı içe aktarıldı.`;
+        showToast(`${records.length} mail kaydı içe aktarıldı.`);
+      } catch (error) {
+        output.textContent = error instanceof Error ? error.message : String(error);
+        showToast("Mail arşivi çekilemedi.");
+      }
+    });
+
+    document.querySelector("#clearBookings").addEventListener("click", () => {
+      localStorage.removeItem(reservationsKey);
+      renderReservations();
+      output.textContent = "Rezervasyon listesi temizlendi.";
+      showToast("Rezervasyon listesi temizlendi.");
     });
 
     document.querySelector("#resetAdmin").addEventListener("click", async () => {
@@ -599,16 +862,18 @@
       try {
         await saveSettings(settings, pin.value.trim());
         render();
-        output.textContent = "Default prices restored for all visitors.";
+        output.textContent = "Varsayılan fiyatlar geri yüklendi.";
       } catch (error) {
         render();
         output.textContent = error instanceof Error ? error.message : String(error);
-        showToast("Default settings could not be saved.");
+        showToast("Varsayılan ayarlar kaydedilemedi.");
       }
     });
+
+    window.addEventListener("ayt-reservations-updated", renderReservations);
   }
 
-  window.AYTRide = { defaults, readSettings, loadSettings, saveSettings, calculate };
+  window.AYTRide = { defaults, readSettings, loadSettings, saveSettings, calculate, readReservations };
   initBooking();
   initAdmin();
 }());

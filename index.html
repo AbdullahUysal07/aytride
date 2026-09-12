@@ -25,7 +25,7 @@
   <link rel="alternate" hreflang="nl-NL" href="https://aytride.com/nl/">
   <link rel="alternate" hreflang="x-default" href="https://aytride.com/">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b66c3'/%3E%3Cpath d='M13 42c10-12 21-18 39-20' fill='none' stroke='%2312805c' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M16 47h31' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Ctext x='32' y='30' text-anchor='middle' font-family='Arial,sans-serif' font-size='16' font-weight='800' fill='%23fff'%3EAYT%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/assets/site.css?v=20260911-11">
+  <link rel="stylesheet" href="/assets/site.css?v=20260912-2">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -133,13 +133,31 @@
         <div class="hero-copy">
           <p class="eyebrow">Antalya's trusted private transfer team</p>
           <h1>Book your Antalya ride in one minute.</h1>
-          <p class="lead">Choose a route, get an instant estimate, send the request on WhatsApp, and pay in cash after the ride is completed. Backed by 10 years of local Antalya transfer experience.</p>
+          <p class="lead">Choose a route, get an instant estimate, send the request directly to our Antalya transfer team on WhatsApp, and pay in cash after the ride is completed. Backed by 10 years of local route experience.</p>
           <div class="trust-strip" aria-label="Service highlights">
+            <span>Direct local operator</span>
             <span>24/7 pickup</span>
             <span>Private vehicle</span>
             <span>Pay after ride</span>
             <span>10 years local experience</span>
             <span>EN / DE / RU / PL / NL</span>
+          </div>
+          <div class="hero-proof" aria-label="Why guests choose AYT Ride">
+            <article>
+              <span>10+</span>
+              <strong>Years local know-how</strong>
+              <small>Local Antalya route experience</small>
+            </article>
+            <article>
+              <span>24/7</span>
+              <strong>WhatsApp confirmation</strong>
+              <small>Fast confirmation before pickup</small>
+            </article>
+            <article>
+              <span>0 EUR</span>
+              <strong>No online payment</strong>
+              <small>Cash to driver, no online payment</small>
+            </article>
           </div>
         </div>
 
@@ -152,11 +170,12 @@
             <span class="live-pill" id="capacityStatus">Vehicle fits</span>
           </div>
 
-          <form id="bookingForm" action="https://formsubmit.co/info@shramworld.com" method="POST" target="_blank" accept-charset="UTF-8">
+          <form id="bookingForm" action="https://formsubmit.co/info@shramworld.com" method="POST" target="mailSink" accept-charset="UTF-8">
             <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off">
             <input type="hidden" name="_subject" id="formSubject" value="New AYT Ride booking request">
             <input type="hidden" name="_replyto" id="formReplyTo">
             <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_autoresponse" id="formAutoresponse" value="Thank you for your AYT Ride request. We received your transfer details and will confirm vehicle availability, pickup point and final price by WhatsApp. Payment is collected in cash after the ride is completed.">
             <input type="hidden" name="_next" id="formNext">
             <input type="hidden" name="request_source" value="aytride.com booking form">
@@ -288,8 +307,8 @@
             <div class="quote-box" aria-label="Quote summary">
               <div>
                 <span>Estimated total</span>
-                <strong id="quoteTotal">EUR 40</strong>
-                <small id="quoteNote">VIP Van for 2 passengers</small>
+                <strong id="quoteTotal">EUR 30</strong>
+                <small id="quoteNote">Standard Sedan for 2 passengers</small>
               </div>
               <div>
                 <span>Payment</span>
@@ -301,14 +320,14 @@
             <div class="actions">
               <button class="primary-btn reserve-btn" type="submit">
                 <span class="reserve-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M20 11.5a8 8 0 0 1-11.8 7l-3.7 1 1-3.6A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="m8.8 11.7 2.1 2.1 4.6-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg viewBox="0 0 32 32" fill="none">
+                    <path d="M26.8 15.5a10.7 10.7 0 0 1-16 9.3L5.4 26l1.3-5.2A10.7 10.7 0 1 1 26.8 15.5Z" fill="currentColor"/>
+                    <path d="M11.7 10.8c.2-.5.4-.6.8-.6h.6c.2 0 .5.1.7.5l.9 2.1c.1.4 0 .6-.2.8l-.6.7c-.2.2-.2.4-.1.7.4.8 1 1.5 1.8 2.1.8.6 1.6 1 2.2 1.2.3.1.5.1.7-.1l.9-1c.2-.2.5-.3.8-.2l2.2 1c.3.2.5.4.5.7 0 .6-.4 1.6-1.2 2.1-.7.5-1.6.7-2.8.4-1.3-.3-2.9-.9-4.5-2.2-1.7-1.3-3-2.9-3.7-4.5-.7-1.6-.7-2.7-.4-3.4Z" fill="#fff"/>
                   </svg>
                 </span>
                 <span class="reserve-copy">
-                  <strong>Reserve your transfer</strong>
-                  <small>WhatsApp confirmation</small>
+                  <strong>Reserve on WhatsApp</strong>
+                  <small>Email copy sent to AYT Ride</small>
                 </span>
                 <svg class="reserve-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M5 12h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -318,6 +337,7 @@
             </div>
             <p class="form-note">No online payment now. Your driver and exact pickup point are confirmed before the booking is final.</p>
           </form>
+          <iframe class="mail-sink" name="mailSink" title="Email submission status"></iframe>
         </section>
       </div>
     </section>
@@ -360,11 +380,11 @@
             <p class="mini-label">Popular airport routes</p>
             <h2>Fast private transfer prices from Antalya Airport.</h2>
           </div>
-          <p class="section-copy">Clear route estimates for the destinations tourists search most before landing in Antalya.</p>
+          <p class="section-copy">Compare Standard Sedan and VIP Van estimates for the destinations tourists search most before landing in Antalya.</p>
         </div>
         <div class="route-toolbar" aria-label="Route booking highlights">
           <span>From Antalya Airport (AYT)</span>
-          <span>VIP van estimate shown</span>
+          <span>Sedan and VIP Van prices</span>
           <span>WhatsApp confirmation</span>
         </div>
         <div class="route-grid" id="routeGrid"></div>
@@ -452,6 +472,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260911-12"></script>
+  <script src="/assets/app.js?v=20260912-2"></script>
 </body>
 </html>

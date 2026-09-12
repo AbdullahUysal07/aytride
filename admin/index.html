@@ -1,21 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AYT Ride Admin</title>
+  <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css?v=20260912-2">
 </head>
 <body>
   <header class="topbar">
     <div class="shell nav">
       <a class="brand" href="/">
         <span class="brand-mark" aria-hidden="true">AYT</span>
-        <span><strong>AYT Ride</strong><small>SHRAMWORLD infrastructure</small></span>
+        <span><strong>AYT Ride</strong><small>SHRAMWORLD altyapısı</small></span>
       </a>
       <nav class="nav-links">
-        <a href="/">Booking</a>
+        <a href="/">Rezervasyon</a>
         <a href="/blog/">Blog</a>
       </nav>
     </div>
@@ -24,52 +24,79 @@
   <main class="admin-section">
     <div class="shell admin-grid" id="adminApp">
       <aside class="admin-card">
-        <p class="mini-label">Operator</p>
-        <h2>Admin panel</h2>
-        <p class="admin-note">Use this panel for route price, driver cost and fee planning. Saved values are published through the settings API and used by the booking page for all visitors.</p>
+        <p class="mini-label">Operasyon</p>
+        <h2>Yönetim paneli</h2>
+        <p class="admin-note">Rota fiyatlarını, araç maliyetlerini ve gelen rezervasyon taleplerini buradan takip edebilirsin.</p>
+        <p class="admin-note">Not: GitHub Pages statik çalıştığı için bu liste şu an bu tarayıcıda oluşturulan talepleri gösterir. Tüm müşterilerden merkezi kayıt toplamak için backend gerekir.</p>
       </aside>
 
       <section class="admin-card">
         <form id="adminLogin">
           <label>
             <span>Admin PIN</span>
-            <input id="adminPin" type="password" placeholder="Enter admin PIN" autocomplete="off">
+            <input id="adminPin" type="password" placeholder="Admin PIN gir" autocomplete="off">
           </label>
-          <button class="primary-btn" type="submit">Open admin</button>
+          <button class="primary-btn" type="submit">Paneli aç</button>
         </form>
 
         <div id="adminPanel" class="hidden">
+          <section class="admin-bookings">
+            <div class="admin-section-title">
+              <div>
+                <p class="mini-label">Rezervasyonlar</p>
+                <h3>Oluşturulan talepler</h3>
+              </div>
+              <span id="bookingCount" class="admin-count">0 kayıt</span>
+            </div>
+            <div class="booking-list" id="adminBookings"></div>
+            <div class="admin-actions">
+              <button class="admin-btn" id="exportBookings" type="button">Rezervasyonları kopyala</button>
+              <button class="secondary-btn" id="clearBookings" type="button">Listeyi temizle</button>
+            </div>
+            <div class="admin-archive">
+              <label>
+                <span>FormSubmit API anahtarı</span>
+                <input id="formsubmitApiKey" type="password" placeholder="Mail arşiv anahtarı">
+              </label>
+              <div class="admin-actions compact">
+                <button class="admin-btn" id="fetchFormsubmitBookings" type="button">Mail arşivini çek</button>
+                <button class="secondary-btn" id="requestFormsubmitKey" type="button">API anahtarı iste</button>
+              </div>
+              <p class="admin-note">Tüm cihazlardan gelen mail kayıtlarını görmek için FormSubmit API anahtarını buraya gir.</p>
+            </div>
+          </section>
+
           <div class="form-grid two">
             <label>
-              <span>Business WhatsApp</span>
+              <span>İşletme WhatsApp</span>
               <input id="businessWhatsapp" inputmode="numeric">
             </label>
             <label>
-              <span>Booking email</span>
+              <span>Rezervasyon e-posta</span>
               <input id="businessEmail" type="email">
             </label>
           </div>
 
           <div class="form-grid two">
             <label>
-              <span>Night fee EUR</span>
+              <span>Gece ücreti EUR</span>
               <input id="nightFee" type="number" min="0">
             </label>
             <label>
-              <span>Child seat fee EUR</span>
+              <span>Çocuk koltuğu ücreti EUR</span>
               <input id="childSeatFee" type="number" min="0">
             </label>
           </div>
 
-          <h3>Routes and operator costs</h3>
+          <h3>Rotalar ve araç maliyetleri</h3>
           <div class="admin-table" id="adminTable"></div>
 
           <div class="admin-actions">
-            <button class="primary-btn" id="saveAdmin" type="button">Save</button>
-            <button class="admin-btn" id="exportAdmin" type="button">Copy settings</button>
-            <button class="secondary-btn" id="resetAdmin" type="button">Reset defaults</button>
+            <button class="primary-btn" id="saveAdmin" type="button">Kaydet</button>
+            <button class="admin-btn" id="exportAdmin" type="button">Ayarları kopyala</button>
+            <button class="secondary-btn" id="resetAdmin" type="button">Varsayılanlara dön</button>
           </div>
-          <p class="admin-note">Booking emails include both customer price and operator vehicle cost, so you can see the amount you should pay for the vehicle.</p>
+          <p class="admin-note">Rezervasyon e-postalarında müşteri fiyatı ve araç maliyeti birlikte yer alır.</p>
           <pre id="adminOutput"></pre>
         </div>
       </section>
@@ -79,17 +106,17 @@
   <footer class="footer">
     <div class="shell footer-grid">
       <div>
-        <strong>AYT Ride Admin</strong>
-        <p>Private transfer operations for Antalya.</p>
-        <p class="footer-badge">Powered by SHRAMWORLD infrastructure.</p>
+        <strong>AYT Ride Yönetim</strong>
+        <p>Antalya özel transfer operasyonu.</p>
+        <p class="footer-badge">SHRAMWORLD altyapısı ile çalışır.</p>
       </div>
       <div>
         <a href="mailto:info@shramworld.com">info@shramworld.com</a>
-        <a href="/">Booking page</a>
+        <a href="/">Rezervasyon sayfası</a>
       </div>
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js"></script>
+  <script src="/assets/app.js?v=20260912-2"></script>
 </body>
 </html>
