@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex,nofollow">
-  <link rel="stylesheet" href="/assets/site.css?v=20260914-production">
-  <script src="/assets/catalog.js?v=20260914-production"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260914-adminops">
+  <script src="/assets/catalog.js?v=20260914-adminops"></script>
 </head>
 <body>
   <header class="topbar">
@@ -27,8 +27,8 @@
       <aside class="admin-card">
         <p class="mini-label">Operasyon</p>
         <h1>Yönetim paneli</h1>
-        <p class="admin-note">Bu panel üretimde gerçek backend oturumu ister. Arama motorundan gizlemek güvenlik değildir; rezervasyon ve maliyet alanları sadece giriş yapılınca API üzerinden gelir.</p>
-        <p class="admin-note">Backend kurulana kadar canlı sitede kullanıcılar WhatsApp ile talep gönderebilir, fakat merkezi rezervasyon arşivi ve mail otomasyonu aktif olmaz.</p>
+        <p class="admin-note">Rezervasyonlar Cloudflare D1 veritabanından gelir. Doğrulanan kayıtlar ciroya dönüşür; bekleyen talepler gelir hesabına eklenmez.</p>
+        <p class="admin-note">Şoför maliyeti varsayılan olarak kilometre başına 35 TL hesaplanır. Euro gelir, paneldeki tahmini kurla TL kâra çevrilir.</p>
       </aside>
 
       <section class="admin-card">
@@ -45,6 +45,16 @@
         </form>
 
         <div id="adminPanel" class="hidden">
+          <section class="admin-overview">
+            <div class="admin-section-title">
+              <div>
+                <p class="mini-label">Ciro ve kâr</p>
+                <h2>Doğrulanan yolculuk özeti</h2>
+              </div>
+            </div>
+            <div class="admin-kpis" id="adminStats"></div>
+          </section>
+
           <section class="admin-bookings">
             <div class="admin-section-title">
               <div>
@@ -61,9 +71,29 @@
           </section>
 
           <section class="admin-archive">
-            <h2>Fiyat ve maliyet yönetimi</h2>
-            <p class="admin-note">Satış fiyatları public katalogdan okunur. Araç maliyeti ve kâr hesabı üretimde sadece backend veritabanında tutulmalıdır.</p>
-            <p class="admin-note">Fiyat güncelleme API’si bağlandığında burada rota fiyatlarını düzenleme alanı açılabilir.</p>
+            <div class="admin-section-title">
+              <div>
+                <p class="mini-label">Fiyat yönetimi</p>
+                <h2>Rota satış fiyatları</h2>
+              </div>
+            </div>
+            <form class="price-editor" id="priceEditor">
+              <label>
+                <span>Rota</span>
+                <select id="priceRoute" required></select>
+              </label>
+              <label>
+                <span>Araç</span>
+                <select id="priceVehicle" required></select>
+              </label>
+              <label>
+                <span>Satış fiyatı EUR</span>
+                <input id="priceEur" type="number" min="1" max="1000" step="1" required>
+              </label>
+              <button class="primary-btn" type="submit">Fiyatı kaydet</button>
+            </form>
+            <p class="admin-note">Bu alan müşteriye görünen sabit fiyatı değiştirir. Şoför maliyeti ayrıca km x 35 TL hesabıyla panelde tahmini gösterilir.</p>
+            <div class="price-list" id="priceList"></div>
           </section>
         </div>
         <pre id="adminOutput"></pre>
@@ -84,6 +114,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260914-production"></script>
+  <script src="/assets/app.js?v=20260914-adminops"></script>
 </body>
 </html>

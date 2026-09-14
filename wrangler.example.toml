@@ -17,6 +17,8 @@ ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahu
 BOOKING_EMAIL = "info@shramworld.com"
 MAIL_FROM = "AYT Ride <info@shramworld.com>"
 ADMIN_EMAILS = "info@shramworld.com"
+ADMIN_DRIVER_RATE_TRY_PER_KM = "35"
+ADMIN_EUR_TRY_RATE = "45"
 
 # Replace these placeholders in data/public-catalog.json before paid ads:
 # business.whatsapp = "90XXXXXXXXXX"

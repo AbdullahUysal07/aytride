@@ -16,7 +16,7 @@ export default {
       const url = new URL(request.url);
 
       if (url.pathname === "/api/public/catalog" && request.method === "GET") {
-        return json(publicCatalog, 200, cors);
+        return json(await catalogForEnv(env), 200, cors);
       }
 
       if (url.pathname === "/api/health" && request.method === "GET") {
@@ -37,6 +37,19 @@ export default {
 
       if (url.pathname === "/api/admin/bookings" && request.method === "GET") {
         return await listAdminBookings(request, env, cors);
+      }
+
+      const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete)$/);
+      if (bookingAction && request.method === "POST") {
+        return await updateAdminBookingStatus(request, env, cors, decodeURIComponent(bookingAction[1]), bookingAction[2]);
+      }
+
+      if (url.pathname === "/api/admin/prices" && request.method === "GET") {
+        return await listAdminPrices(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/prices" && request.method === "POST") {
+        return await updateAdminPrice(request, env, cors);
       }
 
       return json({ error: "Not found" }, 404, cors);
@@ -98,7 +111,8 @@ async function createBooking(request, env, cors) {
   if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
 
   const input = await readJson(request);
-  const result = validateBookingPayload(publicCatalog, input);
+  const liveCatalog = await catalogForEnv(env);
+  const result = validateBookingPayload(liveCatalog, input);
   if (!result.ok) return json({ error: "Validation failed", details: result.errors }, 400, cors);
 
   const privatePricing = parsePrivatePricing(env);
@@ -162,6 +176,26 @@ async function createBooking(request, env, cors) {
     quoteOnly: record.quoteOnly,
     emailStatus
   }, 201, cors);
+}
+
+async function catalogForEnv(env) {
+  const catalog = structuredCloneSafe(publicCatalog);
+  if (!env.DB) return catalog;
+  try {
+    const rows = await env.DB.prepare("select route_id, vehicle_id, price_eur, updated_at from route_prices").all();
+    (rows.results || []).forEach((row) => {
+      const route = catalog.routes.find((item) => item.id === row.route_id);
+      if (!route || !route.prices || row.price_eur == null) return;
+      route.prices[row.vehicle_id] = Number(row.price_eur);
+    });
+  } catch (error) {
+    console.warn("Price overrides are not available yet.", error);
+  }
+  return catalog;
+}
+
+function structuredCloneSafe(value) {
+  return JSON.parse(JSON.stringify(value));
 }
 
 function parsePrivatePricing(env) {
@@ -316,47 +350,221 @@ function logoutAdmin(cors) {
 
 async function listAdminBookings(request, env, cors) {
   if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
-  const session = await readSession(request, env.ADMIN_SESSION_SECRET);
-  if (!session) return json({ error: "Unauthorized" }, 401, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
 
   const rows = await env.DB.prepare(`
     select reference, language, route_id, trip_type, pickup, dropoff, pickup_date, pickup_time,
       return_date, return_time, flight_number, hotel_address, vehicle_id, passengers,
       luggage, child_seats, guest_name, guest_phone, guest_email, notes, public_total_eur,
-      quote_only, private_vehicle_price_eur, created_at
+      quote_only, private_vehicle_price_eur, status, confirmed_at, deleted_at, updated_at, created_at
     from bookings
+    where deleted_at is null
     order by created_at desc
     limit 200
   `).all();
 
+  const liveCatalog = await catalogForEnv(env);
+  const settings = adminFinanceSettings(env);
+  const bookings = (rows.results || []).map((row) => adminBooking(row, liveCatalog, settings));
+
   return json({
-    bookings: (rows.results || []).map((row) => ({
-      reference: row.reference,
-      language: row.language,
-      routeId: row.route_id,
-      tripType: row.trip_type,
-      pickup: row.pickup,
-      dropoff: row.dropoff,
-      pickupDate: row.pickup_date,
-      pickupTime: row.pickup_time,
-      returnDate: row.return_date,
-      returnTime: row.return_time,
-      flightNumber: row.flight_number,
-      hotelAddress: row.hotel_address,
-      vehicleId: row.vehicle_id,
-      passengers: row.passengers,
-      luggage: row.luggage,
-      childSeats: row.child_seats,
-      guestName: row.guest_name,
-      guestPhone: row.guest_phone,
-      guestEmail: row.guest_email,
-      notes: row.notes,
-      publicTotalEur: row.public_total_eur,
-      quoteOnly: Boolean(row.quote_only),
-      privateVehiclePriceEur: row.private_vehicle_price_eur,
-      createdAt: row.created_at
+    bookings,
+    summary: adminSummary(bookings),
+    settings
+  }, 200, cors);
+}
+
+async function updateAdminBookingStatus(request, env, cors, reference, action) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const now = new Date().toISOString();
+  let result;
+  if (action === "confirm") {
+    result = await env.DB.prepare(`
+      update bookings
+      set status = 'confirmed',
+          confirmed_at = coalesce(confirmed_at, ?),
+          updated_at = ?
+      where reference = ? and deleted_at is null
+    `).bind(now, now, reference).run();
+  } else if (action === "pending") {
+    result = await env.DB.prepare(`
+      update bookings
+      set status = 'pending',
+          confirmed_at = null,
+          updated_at = ?
+      where reference = ? and deleted_at is null
+    `).bind(now, reference).run();
+  } else {
+    result = await env.DB.prepare(`
+      update bookings
+      set status = 'deleted',
+          deleted_at = ?,
+          updated_at = ?
+      where reference = ?
+    `).bind(now, now, reference).run();
+  }
+
+  if (!result?.success) return json({ error: "Booking could not be updated." }, 500, cors);
+  return json({ ok: true, reference, action }, 200, cors);
+}
+
+async function listAdminPrices(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const liveCatalog = await catalogForEnv(env);
+  return json({
+    vehicles: liveCatalog.vehicles.map((item) => ({
+      id: item.id,
+      name: item.name,
+      shortName: item.shortName
+    })),
+    routes: liveCatalog.routes.filter((route) => route.available && !route.quoteOnly).map((route) => ({
+      id: route.id,
+      label: route.destination,
+      origin: route.origin,
+      distanceKm: route.distanceKm,
+      durationMin: route.durationMin,
+      prices: route.prices || {}
     }))
   }, 200, cors);
+}
+
+async function updateAdminPrice(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const body = await readJson(request);
+  const routeId = cleanAdminId(body.routeId);
+  const vehicleId = cleanAdminId(body.vehicleId);
+  const priceEur = Math.round(Number(body.priceEur));
+
+  const route = publicCatalog.routes.find((item) => item.id === routeId && item.available && !item.quoteOnly);
+  const vehicle = publicCatalog.vehicles.find((item) => item.id === vehicleId);
+  if (!route || !vehicle) return json({ error: "Route or vehicle is not available." }, 400, cors);
+  if (!Number.isFinite(priceEur) || priceEur < 1 || priceEur > 1000) {
+    return json({ error: "Price must be between 1 and 1000 EUR." }, 400, cors);
+  }
+
+  const now = new Date().toISOString();
+  await env.DB.prepare(`
+    insert into route_prices (route_id, vehicle_id, price_eur, updated_at)
+    values (?, ?, ?, ?)
+    on conflict(route_id, vehicle_id) do update set
+      price_eur = excluded.price_eur,
+      updated_at = excluded.updated_at
+  `).bind(routeId, vehicleId, priceEur, now).run();
+
+  return json({ ok: true, routeId, vehicleId, priceEur, updatedAt: now }, 200, cors);
+}
+
+function cleanAdminId(value) {
+  return String(value || "").replace(/[^a-z0-9-]/gi, "").slice(0, 80);
+}
+
+async function requireAdmin(request, env, cors) {
+  const session = await readSession(request, env.ADMIN_SESSION_SECRET);
+  if (!session) return json({ error: "Unauthorized" }, 401, cors);
+  return session;
+}
+
+function adminFinanceSettings(env) {
+  const driverRateTryPerKm = Number(env.ADMIN_DRIVER_RATE_TRY_PER_KM || 35);
+  const eurTryRate = Number(env.ADMIN_EUR_TRY_RATE || 45);
+  return {
+    driverRateTryPerKm: Number.isFinite(driverRateTryPerKm) && driverRateTryPerKm > 0 ? driverRateTryPerKm : 35,
+    eurTryRate: Number.isFinite(eurTryRate) && eurTryRate > 0 ? eurTryRate : 45
+  };
+}
+
+function adminBooking(row, catalog, settings) {
+  const route = catalog.routes.find((item) => item.id === row.route_id);
+  const distanceKm = Number(route?.distanceKm || 0);
+  const ways = row.trip_type === "return" ? 2 : 1;
+  const revenueEur = row.quote_only ? 0 : Number(row.public_total_eur || 0);
+  const revenueTry = Math.round(revenueEur * settings.eurTryRate);
+  const driverCostTry = distanceKm ? Math.round(distanceKm * ways * settings.driverRateTryPerKm) : null;
+  const profitTry = driverCostTry == null ? null : revenueTry - driverCostTry;
+
+  return {
+    reference: row.reference,
+    language: row.language,
+    routeId: row.route_id,
+    tripType: row.trip_type,
+    pickup: row.pickup,
+    dropoff: row.dropoff,
+    pickupDate: row.pickup_date,
+    pickupTime: row.pickup_time,
+    returnDate: row.return_date,
+    returnTime: row.return_time,
+    flightNumber: row.flight_number,
+    hotelAddress: row.hotel_address,
+    vehicleId: row.vehicle_id,
+    passengers: row.passengers,
+    luggage: row.luggage,
+    childSeats: row.child_seats,
+    guestName: row.guest_name,
+    guestPhone: row.guest_phone,
+    guestEmail: row.guest_email,
+    notes: row.notes,
+    publicTotalEur: row.public_total_eur,
+    quoteOnly: Boolean(row.quote_only),
+    privateVehiclePriceEur: row.private_vehicle_price_eur,
+    status: row.status || "pending",
+    confirmedAt: row.confirmed_at,
+    deletedAt: row.deleted_at,
+    updatedAt: row.updated_at,
+    createdAt: row.created_at,
+    distanceKm,
+    ways,
+    driverRateTryPerKm: settings.driverRateTryPerKm,
+    driverCostTry,
+    revenueTry,
+    profitTry
+  };
+}
+
+function adminSummary(bookings) {
+  const confirmed = bookings.filter((item) => item.status === "confirmed" && item.confirmedAt);
+  const now = new Date();
+  const today = dateKey(now);
+  const weekStart = startOfWeek(now);
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  return {
+    pendingCount: bookings.filter((item) => item.status !== "confirmed").length,
+    confirmedCount: confirmed.length,
+    today: sumPeriod(confirmed, (item) => dateKey(new Date(item.confirmedAt)) === today),
+    week: sumPeriod(confirmed, (item) => new Date(item.confirmedAt) >= weekStart),
+    month: sumPeriod(confirmed, (item) => new Date(item.confirmedAt) >= monthStart),
+    total: sumPeriod(confirmed, () => true)
+  };
+}
+
+function sumPeriod(bookings, filter) {
+  return bookings.filter(filter).reduce((total, item) => ({
+    count: total.count + 1,
+    revenueEur: total.revenueEur + Number(item.publicTotalEur || 0),
+    revenueTry: total.revenueTry + Number(item.revenueTry || 0),
+    driverCostTry: total.driverCostTry + Number(item.driverCostTry || 0),
+    profitTry: total.profitTry + Number(item.profitTry || 0)
+  }), { count: 0, revenueEur: 0, revenueTry: 0, driverCostTry: 0, profitTry: 0 });
+}
+
+function dateKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function startOfWeek(date) {
+  const base = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = base.getUTCDay() || 7;
+  base.setUTCDate(base.getUTCDate() - day + 1);
+  return base;
 }
 
 async function readSession(request, secret) {

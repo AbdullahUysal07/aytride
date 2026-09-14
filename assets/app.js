@@ -17,6 +17,25 @@
     quoteStarted: false
   };
 
+  async function loadLiveCatalog() {
+    if (!catalog.apiBase) return;
+    try {
+      const response = await fetch(`${catalog.apiBase}/api/public/catalog`, {
+        headers: { accept: "application/json" }
+      });
+      if (!response.ok) return;
+      const live = await response.json();
+      if (Array.isArray(live.routes) && Array.isArray(live.vehicles)) {
+        Object.assign(catalog, live);
+        if (!catalog.vehicles.some((item) => item.id === state.vehicleId)) {
+          state.vehicleId = catalog.vehicles[0]?.id || "";
+        }
+      }
+    } catch {
+      // Static catalog is still usable if the live Worker is unavailable.
+    }
+  }
+
   const copy = {
     en: {
       routeNeeded: "Choose a pickup and destination.",
@@ -758,12 +777,41 @@
     return response.json();
   }
 
+  const adminState = {
+    priceRoutes: [],
+    priceVehicles: []
+  };
+
   function formatAdminDate(value) {
     try {
       return new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
     } catch {
       return value || "";
     }
+  }
+
+  function moneyTry(value) {
+    return new Intl.NumberFormat("tr-TR", {
+      style: "currency",
+      currency: "TRY",
+      maximumFractionDigits: 0
+    }).format(Number(value || 0));
+  }
+
+  function plainEur(value) {
+    return `€${Number(value || 0).toFixed(0)}`;
+  }
+
+  function statusLabel(status) {
+    if (status === "confirmed") return "Doğrulandı";
+    if (status === "deleted") return "Silindi";
+    return "Bekliyor";
+  }
+
+  function statusClass(status) {
+    if (status === "confirmed") return "confirmed";
+    if (status === "deleted") return "deleted";
+    return "pending";
   }
 
   function escapeHtml(value) {
@@ -773,6 +821,36 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  function renderAdminStats(summary, settings) {
+    const target = document.querySelector("#adminStats");
+    if (!target) return;
+    const periods = [
+      ["Bugün", summary?.today],
+      ["Bu hafta", summary?.week],
+      ["Bu ay", summary?.month],
+      ["Toplam doğrulanan", summary?.total]
+    ];
+    target.innerHTML = `
+      <article class="kpi-card">
+        <small>Bekleyen</small>
+        <strong>${Number(summary?.pendingCount || 0)}</strong>
+        <span>Henüz ciroya alınmadı</span>
+      </article>
+      ${periods.map(([label, item]) => `
+        <article class="kpi-card">
+          <small>${label}</small>
+          <strong>${moneyTry(item?.profitTry || 0)}</strong>
+          <span>${Number(item?.count || 0)} yolculuk • Ciro ${plainEur(item?.revenueEur || 0)} • Şoför ${moneyTry(item?.driverCostTry || 0)}</span>
+        </article>
+      `).join("")}
+      <article class="kpi-card muted">
+        <small>Hesap ayarı</small>
+        <strong>${Number(settings?.driverRateTryPerKm || 35)} TL/km</strong>
+        <span>EUR kuru: ${Number(settings?.eurTryRate || 45)} TL</span>
+      </article>
+    `;
   }
 
   function renderAdminBookings(bookings) {
@@ -785,10 +863,16 @@
       return;
     }
     list.innerHTML = bookings.map((item) => `
-      <article class="booking-item">
+      <article class="booking-item" data-status="${escapeHtml(item.status || "pending")}">
         <div class="booking-item-head">
-          <div><strong>${escapeHtml(item.guestName)}</strong><small>${escapeHtml(item.reference)} • ${escapeHtml(formatAdminDate(item.createdAt))}</small></div>
-          <span>${item.quoteOnly ? "Teklif" : money(item.publicTotalEur)}</span>
+          <div>
+            <strong>${escapeHtml(item.guestName)}</strong>
+            <small>${escapeHtml(item.reference)} • ${escapeHtml(formatAdminDate(item.createdAt))}</small>
+          </div>
+          <div class="booking-head-actions">
+            <span class="status-badge ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+            <span class="booking-price">${item.quoteOnly ? "Teklif" : money(item.publicTotalEur)}</span>
+          </div>
         </div>
         <div class="booking-item-grid">
           <p><b>Rota</b>${escapeHtml(item.pickup)} -> ${escapeHtml(item.dropoff)}</p>
@@ -796,11 +880,64 @@
           <p><b>Araç</b>${escapeHtml(vehicle(item.vehicleId).name)}</p>
           <p><b>Telefon</b>${escapeHtml(item.guestPhone)}</p>
           <p><b>E-posta</b>${escapeHtml(item.guestEmail || "-")}</p>
-          <p><b>Araç maliyeti</b>${item.privateVehiclePriceEur == null ? "Backend hesaplar" : money(item.privateVehiclePriceEur)}</p>
+          <p><b>Mesafe</b>${Number(item.distanceKm || 0)} km • ${Number(item.ways || 1)} yön</p>
+          <p><b>Satış</b>${item.quoteOnly ? "Teklif bekliyor" : `${money(item.publicTotalEur)} / ${moneyTry(item.revenueTry)}`}</p>
+          <p><b>Şoföre verilecek</b>${item.driverCostTry == null ? "Mesafe yok" : `${moneyTry(item.driverCostTry)} (${Number(item.driverRateTryPerKm || 35)} TL/km)`}</p>
+          <p><b>Tahmini kâr</b><span class="${Number(item.profitTry || 0) >= 0 ? "profit-positive" : "profit-negative"}">${item.profitTry == null ? "-" : moneyTry(item.profitTry)}</span></p>
         </div>
         <p class="booking-note"><b>Not:</b> ${escapeHtml(item.notes || "-")}</p>
+        ${item.confirmedAt ? `<p class="booking-note"><b>Doğrulama:</b> ${escapeHtml(formatAdminDate(item.confirmedAt))}</p>` : ""}
+        <div class="booking-actions">
+          ${item.status === "confirmed"
+            ? `<button class="admin-btn soft" type="button" data-booking-action="pending" data-reference="${escapeHtml(item.reference)}">Beklemeye al</button>`
+            : `<button class="admin-btn success" type="button" data-booking-action="confirm" data-reference="${escapeHtml(item.reference)}">Doğrula ve ciroya ekle</button>`}
+          <button class="admin-btn danger" type="button" data-booking-action="delete" data-reference="${escapeHtml(item.reference)}">Sil</button>
+        </div>
       </article>
     `).join("");
+  }
+
+  function renderAdminPrices(data) {
+    adminState.priceRoutes = data.routes || [];
+    adminState.priceVehicles = data.vehicles || [];
+    const routeSelect = document.querySelector("#priceRoute");
+    const vehicleSelect = document.querySelector("#priceVehicle");
+    const priceInput = document.querySelector("#priceEur");
+    const list = document.querySelector("#priceList");
+    if (!routeSelect || !vehicleSelect || !priceInput || !list) return;
+
+    const selectedRouteId = routeSelect.value || adminState.priceRoutes[0]?.id || "";
+    const selectedVehicleId = vehicleSelect.value || adminState.priceVehicles[0]?.id || "";
+    routeSelect.innerHTML = adminState.priceRoutes.map((route) => `<option value="${escapeHtml(route.id)}"${route.id === selectedRouteId ? " selected" : ""}>${escapeHtml(route.label)}</option>`).join("");
+    vehicleSelect.innerHTML = adminState.priceVehicles.map((item) => `<option value="${escapeHtml(item.id)}"${item.id === selectedVehicleId ? " selected" : ""}>${escapeHtml(item.name)}</option>`).join("");
+
+    const selectedRoute = adminState.priceRoutes.find((route) => route.id === routeSelect.value);
+    priceInput.value = selectedRoute?.prices?.[vehicleSelect.value] ?? "";
+
+    list.innerHTML = adminState.priceRoutes.map((route) => `
+      <article class="price-row">
+        <div>
+          <strong>${escapeHtml(route.label)}</strong>
+          <small>${Number(route.distanceKm || 0)} km • ${Number(route.durationMin || 0)} dk</small>
+        </div>
+        ${adminState.priceVehicles.map((item) => `
+          <button type="button" data-price-route="${escapeHtml(route.id)}" data-price-vehicle="${escapeHtml(item.id)}">
+            <small>${escapeHtml(item.shortName || item.name)}</small>
+            <b>${plainEur(route.prices?.[item.id] || 0)}</b>
+          </button>
+        `).join("")}
+      </article>
+    `).join("");
+  }
+
+  async function reloadAdminDashboard() {
+    const [bookingsData, pricesData] = await Promise.all([
+      adminRequest("/api/admin/bookings"),
+      adminRequest("/api/admin/prices")
+    ]);
+    renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
+    renderAdminBookings(bookingsData.bookings || []);
+    renderAdminPrices(pricesData || {});
   }
 
   function initAdmin() {
@@ -811,9 +948,8 @@
     const output = document.querySelector("#adminOutput");
 
     async function loadBookings() {
-      output.textContent = "Rezervasyonlar yükleniyor...";
-      const data = await adminRequest("/api/admin/bookings");
-      renderAdminBookings(data.bookings || []);
+      output.textContent = "Panel verileri yükleniyor...";
+      await reloadAdminDashboard();
       output.textContent = "Rezervasyonlar güncellendi.";
     }
 
@@ -839,6 +975,66 @@
       loadBookings().catch((error) => {
         output.textContent = error.message || "Rezervasyonlar alınamadı.";
       });
+    });
+
+    document.querySelector("#adminBookings")?.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-booking-action]");
+      if (!button) return;
+      const action = button.dataset.bookingAction;
+      const reference = button.dataset.reference;
+      if (action === "delete" && !window.confirm(`${reference} rezervasyonu panelden silinsin mi?`)) return;
+      button.disabled = true;
+      output.textContent = "Rezervasyon güncelleniyor...";
+      try {
+        await adminRequest(`/api/admin/bookings/${encodeURIComponent(reference)}/${action}`, {
+          method: "POST",
+          body: "{}"
+        });
+        await loadBookings();
+      } catch (error) {
+        output.textContent = error.message || "Rezervasyon güncellenemedi.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    document.querySelector("#priceRoute")?.addEventListener("change", () => renderAdminPrices({
+      routes: adminState.priceRoutes,
+      vehicles: adminState.priceVehicles
+    }));
+
+    document.querySelector("#priceVehicle")?.addEventListener("change", () => renderAdminPrices({
+      routes: adminState.priceRoutes,
+      vehicles: adminState.priceVehicles
+    }));
+
+    document.querySelector("#priceList")?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-price-route]");
+      if (!button) return;
+      const routeSelect = document.querySelector("#priceRoute");
+      const vehicleSelect = document.querySelector("#priceVehicle");
+      if (routeSelect) routeSelect.value = button.dataset.priceRoute;
+      if (vehicleSelect) vehicleSelect.value = button.dataset.priceVehicle;
+      renderAdminPrices({ routes: adminState.priceRoutes, vehicles: adminState.priceVehicles });
+      document.querySelector("#priceEur")?.focus();
+    });
+
+    document.querySelector("#priceEditor")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const routeId = document.querySelector("#priceRoute")?.value || "";
+      const vehicleId = document.querySelector("#priceVehicle")?.value || "";
+      const priceEur = document.querySelector("#priceEur")?.value || "";
+      output.textContent = "Fiyat kaydediliyor...";
+      try {
+        await adminRequest("/api/admin/prices", {
+          method: "POST",
+          body: JSON.stringify({ routeId, vehicleId, priceEur })
+        });
+        await reloadAdminDashboard();
+        output.textContent = "Fiyat kaydedildi. Public katalog da güncellendi.";
+      } catch (error) {
+        output.textContent = error.message || "Fiyat kaydedilemedi.";
+      }
     });
 
     document.querySelector("#logoutAdmin")?.addEventListener("click", async () => {
@@ -907,7 +1103,8 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
+    await loadLiveCatalog();
     initConsent();
     initBooking();
     initConfirmation();

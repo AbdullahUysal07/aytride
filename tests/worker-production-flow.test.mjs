@@ -34,6 +34,7 @@ const insertColumns = [
 class FakeD1 {
   constructor() {
     this.rows = [];
+    this.prices = [];
   }
 
   prepare(sql) {
@@ -47,14 +48,60 @@ class FakeD1 {
         },
         run: async () => {
           if (/insert into bookings/i.test(sql)) {
-            this.rows.push(Object.fromEntries(insertColumns.map((column, index) => [column, values[index]])));
+            this.rows.push({
+              ...Object.fromEntries(insertColumns.map((column, index) => [column, values[index]])),
+              status: "pending",
+              confirmed_at: null,
+              deleted_at: null,
+              updated_at: null
+            });
+          }
+          if (/update bookings\s+set status = 'confirmed'/i.test(sql)) {
+            const row = this.rows.find((item) => item.reference === values[2] && !item.deleted_at);
+            if (row) {
+              row.status = "confirmed";
+              row.confirmed_at = row.confirmed_at || values[0];
+              row.updated_at = values[1];
+            }
+          }
+          if (/update bookings\s+set status = 'pending'/i.test(sql)) {
+            const row = this.rows.find((item) => item.reference === values[1] && !item.deleted_at);
+            if (row) {
+              row.status = "pending";
+              row.confirmed_at = null;
+              row.updated_at = values[0];
+            }
+          }
+          if (/update bookings\s+set status = 'deleted'/i.test(sql)) {
+            const row = this.rows.find((item) => item.reference === values[2]);
+            if (row) {
+              row.status = "deleted";
+              row.deleted_at = values[0];
+              row.updated_at = values[1];
+            }
+          }
+          if (/insert into route_prices/i.test(sql)) {
+            const [route_id, vehicle_id, price_eur, updated_at] = values;
+            const existing = this.prices.find((item) => item.route_id === route_id && item.vehicle_id === vehicle_id);
+            if (existing) {
+              existing.price_eur = price_eur;
+              existing.updated_at = updated_at;
+            } else {
+              this.prices.push({ route_id, vehicle_id, price_eur, updated_at });
+            }
           }
           return { success: true };
         },
-        all: async () => ({ results: this.sortedRows() })
+        all: async () => ({ results: this.resultsFor(sql) })
       }),
-      all: async () => ({ results: this.sortedRows() })
+      all: async () => ({ results: this.resultsFor(sql) })
     };
+  }
+
+  resultsFor(sql) {
+    if (/from route_prices/i.test(sql)) return [...this.prices];
+    if (/where deleted_at is null/i.test(sql)) return this.sortedRows().filter((row) => !row.deleted_at);
+    return this.sortedRows();
   }
 
   sortedRows() {
@@ -86,6 +133,8 @@ function makeEnv(db) {
     ADMIN_PASSWORD_SALT: adminSalt,
     ADMIN_PASSWORD_SHA256: createHash("sha256").update(`${adminPassword}${adminSalt}`).digest("hex"),
     ADMIN_SESSION_SECRET: "launch-check-session-secret",
+    ADMIN_DRIVER_RATE_TRY_PER_KM: "35",
+    ADMIN_EUR_TRY_RATE: "45",
     PRIVATE_PRICING_JSON: JSON.stringify({
       routes: {
         belek: {
@@ -95,6 +144,17 @@ function makeEnv(db) {
       }
     })
   };
+}
+
+async function adminCookie(env) {
+  const loginResponse = await worker.fetch(request("/api/admin/login", {
+    method: "POST",
+    body: JSON.stringify({ email: "info@shramworld.com", password: "launch-check-password" })
+  }), env);
+  assert.equal(loginResponse.status, 200);
+  const cookie = loginResponse.headers.get("set-cookie");
+  assert.match(cookie, /ayt_admin=/);
+  return cookie;
 }
 
 test("complete production booking flow persists AYT to Belek and appears in authenticated admin", async () => {
@@ -145,13 +205,7 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   const unauthenticated = await worker.fetch(request("/api/admin/bookings", { method: "GET" }), env);
   assert.equal(unauthenticated.status, 401);
 
-  const loginResponse = await worker.fetch(request("/api/admin/login", {
-    method: "POST",
-    body: JSON.stringify({ email: "info@shramworld.com", password: "launch-check-password" })
-  }), env);
-  assert.equal(loginResponse.status, 200);
-  const cookie = loginResponse.headers.get("set-cookie");
-  assert.match(cookie, /ayt_admin=/);
+  const cookie = await adminCookie(env);
 
   const adminResponse = await worker.fetch(request("/api/admin/bookings", {
     method: "GET",
@@ -166,4 +220,88 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   assert.equal(adminBody.bookings[0].vehicleId, "standard-sedan");
   assert.equal(adminBody.bookings[0].publicTotalEur, 45);
   assert.equal(adminBody.bookings[0].privateVehiclePriceEur, 32);
+  assert.equal(adminBody.bookings[0].status, "pending");
+  assert.equal(adminBody.bookings[0].driverCostTry, 1155);
+  assert.equal(adminBody.bookings[0].profitTry, 870);
+
+  const confirmResponse = await worker.fetch(request(`/api/admin/bookings/${payload.reference}/confirm`, {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(confirmResponse.status, 200);
+
+  const confirmedResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const confirmedBody = await confirmedResponse.json();
+  assert.equal(confirmedBody.bookings[0].status, "confirmed");
+  assert.equal(confirmedBody.summary.total.count, 1);
+  assert.equal(confirmedBody.summary.total.revenueEur, 45);
+  assert.equal(confirmedBody.summary.total.driverCostTry, 1155);
+  assert.equal(confirmedBody.summary.total.profitTry, 870);
+});
+
+test("admin can update public route prices and soft-delete bookings", async () => {
+  const db = new FakeD1();
+  const env = makeEnv(db);
+  const cookie = await adminCookie(env);
+
+  const priceResponse = await worker.fetch(request("/api/admin/prices", {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({ routeId: "belek", vehicleId: "standard-sedan", priceEur: 50 })
+  }), env);
+  assert.equal(priceResponse.status, 200);
+
+  const catalogResponse = await worker.fetch(request("/api/public/catalog", { method: "GET" }), env);
+  const catalogBody = await catalogResponse.json();
+  assert.equal(catalogBody.routes.find((route) => route.id === "belek").prices["standard-sedan"], 50);
+
+  const bookingResponse = await worker.fetch(request("/api/bookings", {
+    method: "POST",
+    body: JSON.stringify({
+      reference: "AYT-PRICE-OVERRIDE-BELEK-001",
+      language: "en",
+      routeId: "belek",
+      tripType: "oneway",
+      pickup: "Antalya Airport (AYT)",
+      dropoff: "Belek / Kadriye",
+      pickupDate: "2026-09-15",
+      pickupTime: "13:30",
+      returnDate: "",
+      returnTime: "",
+      flightNumber: "TK2420",
+      hotelAddress: "Belek hotel",
+      vehicleId: "standard-sedan",
+      passengers: 2,
+      luggage: 2,
+      childSeats: 0,
+      guestName: "Price Override Guest",
+      guestPhone: "+905000000001",
+      guestEmail: "",
+      notes: "",
+      publicTotalEur: 45,
+      quoteOnly: false,
+      attribution: {}
+    })
+  }), env);
+  const bookingBody = await bookingResponse.json();
+  assert.equal(bookingResponse.status, 201);
+  assert.equal(bookingBody.publicTotalEur, 50);
+
+  const deleteResponse = await worker.fetch(request("/api/admin/bookings/AYT-PRICE-OVERRIDE-BELEK-001/delete", {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(deleteResponse.status, 200);
+
+  const adminResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const adminBody = await adminResponse.json();
+  assert.equal(adminBody.bookings.length, 0);
 });
