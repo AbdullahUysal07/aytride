@@ -1,10 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260914-routephotos";
+const buildStamp = "20260914-adminblog";
 
 const languages = {
   en: {
@@ -675,10 +676,8 @@ ${header(language)}
           <div><p class="mini-label">Travel guides</p><h2>${l.articlesTitle}</h2></div>
           <a class="section-link" href="/blog/">${l.viewBlog}</a>
         </div>
-        <div class="post-grid">
-          <a class="post-card" href="/blog/antalya-airport-transfer-guide/"><span class="post-kicker">Airport guide</span><strong>Antalya Airport transfer basics</strong><small>Pickup timing, hotel details and pay-on-arrival expectations.</small><span class="post-meta">AYT guide</span></a>
-          <a class="post-card" href="/blog/private-transfer-vs-taxi-antalya/"><span class="post-kicker">Private transfer</span><strong>Private transfer vs taxi in Antalya</strong><small>When a fixed private ride makes more sense for families and groups.</small><span class="post-meta">Trust guide</span></a>
-          <a class="post-card" href="/blog/belek-golf-transfer/"><span class="post-kicker">Golf transfer</span><strong>Belek golf transfer checklist</strong><small>Plan Belek resort pickup, golf bags, luggage space and return timing before the airport transfer.</small><span class="post-meta">Belek guide</span></a>
+        <div class="post-grid" id="homeBlogPreview">
+          ${defaultBlogPosts.slice(0, 3).map((post) => blogCard(post)).join("")}
         </div>
       </div>
     </section>
@@ -936,41 +935,11 @@ ${footer("en")}
 </html>`;
 }
 
-const blogPosts = [
-  {
-    slug: "antalya-airport-transfer-guide",
-    kicker: "Airport guide",
-    title: "Antalya Airport transfer guide for first-time visitors",
-    description: "How to plan an Antalya Airport private transfer, pickup time, flight number, luggage, hotel details and pay-on-arrival expectations.",
-    body: [
-      ["What to prepare before landing", "Keep your flight number, hotel name, hotel block and WhatsApp number ready before requesting a transfer. These details help the operator confirm the meeting point clearly."],
-      ["Why a private transfer helps", "A private vehicle is useful when you travel with family, luggage or a late arrival. The route and vehicle choice are agreed before pickup."],
-      ["Payment after the ride", "AYT Ride does not ask for online card payment in the first booking flow. The passenger completes the ride first, then pays the driver unless a different arrangement is confirmed."]
-    ]
-  },
-  {
-    slug: "private-transfer-vs-taxi-antalya",
-    kicker: "Private transfer",
-    title: "Private transfer vs taxi in Antalya",
-    description: "Compare Antalya private transfers and taxi rides for airport pickup, fixed pricing, luggage planning, family travel and WhatsApp confirmation.",
-    body: [
-      ["When fixed pricing matters", "A listed route price lets the guest see the total vehicle price before sending the request. This is easier for airport arrivals, families and visitors who do not want to negotiate at the terminal."],
-      ["Vehicle and luggage planning", "Sedan works for small groups. VIP Van gives more cabin and suitcase space for larger families, golf bags and resort transfers."],
-      ["WhatsApp confirmation", "The prepared WhatsApp request includes route, flight number, passengers, luggage and notes so the team can confirm availability and pickup details quickly."]
-    ]
-  },
-  {
-    slug: "belek-golf-transfer",
-    kicker: "Golf transfer",
-    title: "Belek golf transfer checklist",
-    description: "Plan a Belek or Kadriye golf transfer from Antalya Airport with golf bags, resort gates, luggage space, child seats and return transfer timing.",
-    body: [
-      ["Add golf luggage early", "Golf bags can change the best vehicle choice. Add them in the notes so the transfer team can confirm whether a VIP Van is the right fit."],
-      ["Hotel and resort gate details", "Belek resorts may have several entrances and security gates. The exact hotel block or lobby name helps the driver confirm the cleanest pickup point."],
-      ["Return transfer timing", "For return airport transfers, allow enough time for hotel checkout, traffic and airport procedures. AYT Ride confirms the pickup time before the booking is final."]
-    ]
-  }
-];
+const blogPosts = defaultBlogPosts;
+
+function blogCard(post) {
+  return `<a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}"><span class="post-kicker">${escapeHtml(post.kicker)}</span><strong>${escapeHtml(post.title)}</strong><small>${escapeHtml(post.description)}</small><span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")}</span></a>`;
+}
 
 function blogIndexPage() {
   return `<!doctype html>
@@ -997,10 +966,39 @@ ${header("en")}
       </div>
     </section>
     <section class="article-wrap">
-      <div class="shell post-grid">
-        ${blogPosts.map((post) => `<a class="post-card" href="/blog/${post.slug}/"><span class="post-kicker">${post.kicker}</span><strong>${post.title}</strong><small>${post.description}</small><span class="post-meta">AYT Ride guide</span></a>`).join("")}
+      <div class="shell post-grid" id="blogPostGrid">
+        ${blogPosts.map((post) => blogCard(post)).join("")}
       </div>
     </section>
+  </main>
+${footer("en")}
+  <script src="/assets/app.js?v=${buildStamp}"></script>
+</body>
+</html>`;
+}
+
+function blogArticlePage() {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antalya Transfer Article - AYT Ride</title>
+  <meta name="description" content="AYT Ride Antalya Airport transfer article.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="${catalog.baseUrl}/blog/article/">
+  <link rel="icon" type="image/svg+xml" href="${favicon()}">
+  <link rel="stylesheet" href="/assets/site.css?v=${buildStamp}">
+  <script src="/assets/catalog.js?v=${buildStamp}"></script>
+</head>
+<body>
+${header("en")}
+  <main class="article-wrap">
+    <article class="article" data-blog-article>
+      <p class="mini-label">Travel guide</p>
+      <h1>Loading transfer article...</h1>
+      <p>Please wait while the live blog content loads.</p>
+    </article>
   </main>
 ${footer("en")}
   <script src="/assets/app.js?v=${buildStamp}"></script>
@@ -1061,6 +1059,7 @@ function sitemap() {
     ...Object.values(languages).filter((item) => item.homePath !== "/").map((item) => item.homePath),
     ...commercialRoutes.flatMap((route) => routeLanguages.map((language) => routePath(route, language))),
     "/blog/",
+    "/blog/article/",
     "/blog/antalya-airport-transfer-guide/",
     "/blog/private-transfer-vs-taxi-antalya/",
     "/blog/belek-golf-transfer/",
@@ -1099,6 +1098,7 @@ commercialRoutes.forEach((route) => {
 
 write("booking-confirmation/index.html", confirmationPage("en"));
 write("blog/index.html", blogIndexPage());
+write("blog/article/index.html", blogArticlePage());
 blogPosts.forEach((post) => write(`blog/${post.slug}/index.html`, blogPostPage(post)));
 write("about/index.html", legalPage("about", "About AYT Ride", [
   "AYT Ride is a private Antalya transfer booking brand focused on airport, hotel and resort routes.",

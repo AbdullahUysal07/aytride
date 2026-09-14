@@ -1,4 +1,5 @@
 import { publicCatalog } from "./public-catalog.mjs";
+import { defaultBlogPosts } from "./blog-posts.mjs";
 import { privateVehiclePrice, validateBookingPayload } from "./validation.mjs";
 
 const SESSION_COOKIE = "ayt_admin";
@@ -17,6 +18,15 @@ export default {
 
       if (url.pathname === "/api/public/catalog" && request.method === "GET") {
         return json(await catalogForEnv(env), 200, cors);
+      }
+
+      if (url.pathname === "/api/public/blog-posts" && request.method === "GET") {
+        return await listPublicBlogPosts(env, cors);
+      }
+
+      const publicBlogPost = url.pathname.match(/^\/api\/public\/blog-posts\/([^/]+)$/);
+      if (publicBlogPost && request.method === "GET") {
+        return await getPublicBlogPost(env, cors, decodeURIComponent(publicBlogPost[1]));
       }
 
       if (url.pathname === "/api/health" && request.method === "GET") {
@@ -50,6 +60,27 @@ export default {
 
       if (url.pathname === "/api/admin/prices" && request.method === "POST") {
         return await updateAdminPrice(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/settings" && request.method === "GET") {
+        return await listAdminSettings(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/settings" && request.method === "POST") {
+        return await updateAdminSettings(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/blog-posts" && request.method === "GET") {
+        return await listAdminBlogPosts(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/blog-posts" && request.method === "POST") {
+        return await updateAdminBlogPost(request, env, cors);
+      }
+
+      const blogAction = url.pathname.match(/^\/api\/admin\/blog-posts\/([^/]+)\/delete$/);
+      if (blogAction && request.method === "POST") {
+        return await deleteAdminBlogPost(request, env, cors, decodeURIComponent(blogAction[1]));
       }
 
       return json({ error: "Not found" }, 404, cors);
@@ -192,6 +223,84 @@ async function catalogForEnv(env) {
     console.warn("Price overrides are not available yet.", error);
   }
   return catalog;
+}
+
+async function listPublicBlogPosts(env, cors) {
+  const posts = await blogPostsForEnv(env, false);
+  return json({ posts }, 200, cors);
+}
+
+async function getPublicBlogPost(env, cors, slug) {
+  const cleanSlugValue = cleanSlug(slug);
+  if (!cleanSlugValue) return json({ error: "Blog post not found." }, 404, cors);
+  const posts = await blogPostsForEnv(env, false);
+  const post = posts.find((item) => item.slug === cleanSlugValue);
+  if (!post) return json({ error: "Blog post not found." }, 404, cors);
+  return json({ post }, 200, cors);
+}
+
+async function blogPostsForEnv(env, includeDeleted) {
+  if (!env.DB) return defaultBlogPostRows();
+  try {
+    const where = includeDeleted ? "" : "where deleted_at is null and status = 'published'";
+    const rows = await env.DB.prepare(`
+      select slug, status, kicker, title, description, body_json, meta_label, created_at, updated_at, deleted_at
+      from blog_posts
+      ${where}
+      order by updated_at desc
+    `).all();
+    const posts = (rows.results || []).map(blogPostFromRow).filter(Boolean);
+    return posts;
+  } catch (error) {
+    console.warn("Blog posts are not available yet.", error);
+  }
+  return defaultBlogPostRows();
+}
+
+function defaultBlogPostRows() {
+  return defaultBlogPosts.map((post) => ({
+    ...post,
+    status: "published",
+    metaLabel: post.metaLabel || "AYT Ride guide",
+    bodyText: bodyToText(post.body),
+    createdAt: "2026-09-12T00:00:00.000Z",
+    updatedAt: "2026-09-12T00:00:00.000Z",
+    deletedAt: null
+  }));
+}
+
+function blogPostFromRow(row) {
+  if (!row || row.deleted_at) return null;
+  let body = [];
+  try {
+    const parsed = JSON.parse(row.body_json || "[]");
+    if (Array.isArray(parsed)) {
+      body = parsed
+        .filter((item) => Array.isArray(item) && item.length >= 2)
+        .map((item) => [cleanText(item[0], 140), cleanText(item[1], 2400)])
+        .filter(([heading, textValue]) => heading && textValue);
+    }
+  } catch {
+    body = [];
+  }
+  if (!body.length) body = [["Transfer notes", cleanText(row.description, 700)]];
+  return {
+    slug: row.slug,
+    status: row.status || "published",
+    kicker: row.kicker,
+    title: row.title,
+    description: row.description,
+    metaLabel: row.meta_label || "AYT Ride guide",
+    body,
+    bodyText: bodyToText(body),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    deletedAt: row.deleted_at || null
+  };
+}
+
+function bodyToText(body) {
+  return (body || []).map(([heading, textValue]) => `${heading}\n${textValue}`).join("\n\n");
 }
 
 function structuredCloneSafe(value) {
@@ -365,7 +474,7 @@ async function listAdminBookings(request, env, cors) {
   `).all();
 
   const liveCatalog = await catalogForEnv(env);
-  const settings = adminFinanceSettings(env);
+  const settings = await adminFinanceSettings(env);
   const bookings = (rows.results || []).map((row) => adminBooking(row, liveCatalog, settings));
 
   return json({
@@ -464,8 +573,168 @@ async function updateAdminPrice(request, env, cors) {
   return json({ ok: true, routeId, vehicleId, priceEur, updatedAt: now }, 200, cors);
 }
 
+async function listAdminSettings(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  return json({ settings: await adminFinanceSettings(env) }, 200, cors);
+}
+
+async function updateAdminSettings(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const body = await readJson(request);
+  const settings = normalizeFinanceSettings(body);
+  const now = new Date().toISOString();
+
+  await writeAdminSetting(env, "driver_rate_try_per_km", settings.driverRateTryPerKm, now);
+  await writeAdminSetting(env, "eur_try_rate", settings.eurTryRate, now);
+
+  return json({ ok: true, settings: await adminFinanceSettings(env) }, 200, cors);
+}
+
+async function writeAdminSetting(env, key, value, updatedAt) {
+  await env.DB.prepare(`
+    insert into admin_settings (key, value, updated_at)
+    values (?, ?, ?)
+    on conflict(key) do update set
+      value = excluded.value,
+      updated_at = excluded.updated_at
+  `).bind(key, String(value), updatedAt).run();
+}
+
+async function listAdminBlogPosts(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  return json({ posts: await blogPostsForEnv(env, true) }, 200, cors);
+}
+
+async function updateAdminBlogPost(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const body = await readJson(request);
+  const post = normalizeBlogPostInput(body);
+  if (!post.slug || !post.title || !post.description || !post.body.length) {
+    return json({ error: "Blog slug, title, description and body are required." }, 400, cors);
+  }
+
+  const now = new Date().toISOString();
+  await env.DB.prepare(`
+    insert into blog_posts (slug, status, kicker, title, description, body_json, meta_label, created_at, updated_at, deleted_at)
+    values (?, 'published', ?, ?, ?, ?, ?, ?, ?, null)
+    on conflict(slug) do update set
+      status = 'published',
+      kicker = excluded.kicker,
+      title = excluded.title,
+      description = excluded.description,
+      body_json = excluded.body_json,
+      meta_label = excluded.meta_label,
+      updated_at = excluded.updated_at,
+      deleted_at = null
+  `).bind(
+    post.slug,
+    post.kicker,
+    post.title,
+    post.description,
+    JSON.stringify(post.body),
+    post.metaLabel,
+    now,
+    now
+  ).run();
+
+  return json({ ok: true, post: (await blogPostsForEnv(env, true)).find((item) => item.slug === post.slug) }, 200, cors);
+}
+
+async function deleteAdminBlogPost(request, env, cors, slug) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const cleanSlugValue = cleanSlug(slug);
+  if (!cleanSlugValue) return json({ error: "Invalid blog slug." }, 400, cors);
+  const now = new Date().toISOString();
+  const result = await env.DB.prepare(`
+    update blog_posts
+    set status = 'deleted',
+        deleted_at = ?,
+        updated_at = ?
+    where slug = ?
+  `).bind(now, now, cleanSlugValue).run();
+
+  if (!result?.success) return json({ error: "Blog post could not be deleted." }, 500, cors);
+  return json({ ok: true, slug: cleanSlugValue }, 200, cors);
+}
+
 function cleanAdminId(value) {
   return String(value || "").replace(/[^a-z0-9-]/gi, "").slice(0, 80);
+}
+
+function cleanSlug(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 90);
+}
+
+function cleanText(value, maxLength) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function normalizeFinanceSettings(input) {
+  const driverRateTryPerKm = Number(input.driverRateTryPerKm);
+  const eurTryRate = Number(input.eurTryRate);
+  if (!Number.isFinite(driverRateTryPerKm) || driverRateTryPerKm < 1 || driverRateTryPerKm > 500) {
+    throw new Error("Driver rate must be between 1 and 500 TL per km.");
+  }
+  if (!Number.isFinite(eurTryRate) || eurTryRate < 1 || eurTryRate > 500) {
+    throw new Error("EUR/TRY rate must be between 1 and 500.");
+  }
+  return {
+    driverRateTryPerKm: roundMoney(driverRateTryPerKm),
+    eurTryRate: roundMoney(eurTryRate)
+  };
+}
+
+function normalizeBlogPostInput(input) {
+  const body = bodyFromText(input.bodyText || input.body || "");
+  return {
+    slug: cleanSlug(input.slug || input.title),
+    kicker: cleanText(input.kicker || "Travel guide", 80),
+    title: cleanText(input.title, 140),
+    description: cleanText(input.description, 320),
+    metaLabel: cleanText(input.metaLabel || "AYT Ride guide", 80),
+    body
+  };
+}
+
+function bodyFromText(value) {
+  const blocks = String(value || "")
+    .split(/\n\s*\n/g)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .slice(0, 8);
+
+  return blocks.map((block) => {
+    const lines = block.split(/\n+/).map((line) => cleanText(line, 2400)).filter(Boolean);
+    if (lines.length <= 1) return ["Transfer details", lines[0] || ""];
+    return [cleanText(lines[0], 140), cleanText(lines.slice(1).join(" "), 2400)];
+  }).filter(([heading, textValue]) => heading && textValue);
+}
+
+function roundMoney(value) {
+  return Math.round(Number(value) * 100) / 100;
 }
 
 async function requireAdmin(request, env, cors) {
@@ -474,13 +743,30 @@ async function requireAdmin(request, env, cors) {
   return session;
 }
 
-function adminFinanceSettings(env) {
+async function adminFinanceSettings(env) {
   const driverRateTryPerKm = Number(env.ADMIN_DRIVER_RATE_TRY_PER_KM || 35);
   const eurTryRate = Number(env.ADMIN_EUR_TRY_RATE || 45);
-  return {
+  const settings = {
     driverRateTryPerKm: Number.isFinite(driverRateTryPerKm) && driverRateTryPerKm > 0 ? driverRateTryPerKm : 35,
     eurTryRate: Number.isFinite(eurTryRate) && eurTryRate > 0 ? eurTryRate : 45
   };
+  if (!env.DB) return settings;
+  try {
+    const rows = await env.DB.prepare(`
+      select key, value
+      from admin_settings
+      where key in ('driver_rate_try_per_km', 'eur_try_rate')
+    `).all();
+    (rows.results || []).forEach((row) => {
+      const value = Number(row.value);
+      if (!Number.isFinite(value) || value <= 0) return;
+      if (row.key === "driver_rate_try_per_km") settings.driverRateTryPerKm = value;
+      if (row.key === "eur_try_rate") settings.eurTryRate = value;
+    });
+  } catch (error) {
+    console.warn("Admin settings are not available yet.", error);
+  }
+  return settings;
 }
 
 function adminBooking(row, catalog, settings) {

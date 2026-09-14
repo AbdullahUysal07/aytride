@@ -773,6 +773,68 @@
     }
   }
 
+  async function publicRequest(path) {
+    if (!catalog.apiBase) throw new Error("Public API is not configured.");
+    const response = await fetch(`${catalog.apiBase}${path}`, {
+      headers: { accept: "application/json" }
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return response.json();
+  }
+
+  function blogCard(post) {
+    return `
+      <a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}">
+        <span class="post-kicker">${escapeHtml(post.kicker)}</span>
+        <strong>${escapeHtml(post.title)}</strong>
+        <small>${escapeHtml(post.description)}</small>
+        <span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")}</span>
+      </a>
+    `;
+  }
+
+  async function initBlogLists() {
+    const homePreview = document.querySelector("#homeBlogPreview");
+    const blogGrid = document.querySelector("#blogPostGrid");
+    if (!homePreview && !blogGrid) return;
+    try {
+      const data = await publicRequest("/api/public/blog-posts");
+      const posts = data.posts || [];
+      if (!posts.length) return;
+      if (homePreview) homePreview.innerHTML = posts.slice(0, 3).map(blogCard).join("");
+      if (blogGrid) blogGrid.innerHTML = posts.map(blogCard).join("");
+    } catch {
+      // Static blog cards remain visible if the live API cannot be reached.
+    }
+  }
+
+  async function initBlogArticle() {
+    const article = document.querySelector("[data-blog-article]");
+    if (!article) return;
+    const slug = new URLSearchParams(location.search).get("slug") || "";
+    if (!slug) {
+      article.innerHTML = "<p class=\"mini-label\">Travel guide</p><h1>Article not found</h1><p>Please choose a guide from the blog page.</p>";
+      return;
+    }
+    try {
+      const data = await publicRequest(`/api/public/blog-posts/${encodeURIComponent(slug)}`);
+      const post = data.post;
+      document.title = `${post.title} - AYT Ride`;
+      document.querySelector("meta[name='description']")?.setAttribute("content", post.description);
+      article.innerHTML = `
+        <p class="mini-label">${escapeHtml(post.kicker)}</p>
+        <h1>${escapeHtml(post.title)}</h1>
+        <p>${escapeHtml(post.description)}</p>
+        ${(post.body || []).map(([heading, body]) => `<h2>${escapeHtml(heading)}</h2><p>${escapeHtml(body)}</p>`).join("")}
+        <h2>Book with route details</h2>
+        <p>Use the AYT Ride booking form to choose the route, vehicle, date, passenger count and luggage count. The request opens on WhatsApp with a clear booking summary.</p>
+        <p><a class="primary-btn" href="/#booking">Check transfer price</a></p>
+      `;
+    } catch {
+      article.innerHTML = "<p class=\"mini-label\">Travel guide</p><h1>Article not found</h1><p>This blog article could not be loaded from the live backend.</p>";
+    }
+  }
+
   async function adminRequest(path, options = {}) {
     const response = await fetch(`${catalog.apiBase || ""}${path}`, {
       credentials: "include",
@@ -785,7 +847,8 @@
 
   const adminState = {
     priceRoutes: [],
-    priceVehicles: []
+    priceVehicles: [],
+    blogPosts: []
   };
 
   function formatAdminDate(value) {
@@ -859,6 +922,13 @@
     `;
   }
 
+  function renderAdminSettings(settings) {
+    const driverRateInput = document.querySelector("#driverRateTryPerKm");
+    const eurRateInput = document.querySelector("#eurTryRate");
+    if (driverRateInput) driverRateInput.value = settings?.driverRateTryPerKm ?? 35;
+    if (eurRateInput) eurRateInput.value = settings?.eurTryRate ?? 45;
+  }
+
   function renderAdminBookings(bookings) {
     const list = document.querySelector("#adminBookings");
     const count = document.querySelector("#bookingCount");
@@ -903,6 +973,45 @@
     `).join("");
   }
 
+  function renderAdminBlogs(posts) {
+    adminState.blogPosts = posts || [];
+    const list = document.querySelector("#adminBlogPosts");
+    if (!list) return;
+    if (!adminState.blogPosts.length) {
+      list.innerHTML = "<div class=\"booking-empty\"><strong>Henüz blog yazısı yok.</strong><p>İlk yazıyı yukarıdaki formdan ekleyebilirsin.</p></div>";
+      return;
+    }
+    list.innerHTML = adminState.blogPosts.map((post) => `
+      <article class="admin-blog-item">
+        <div>
+          <strong>${escapeHtml(post.title)}</strong>
+          <small>${escapeHtml(post.slug)} • ${escapeHtml(post.kicker)} • ${escapeHtml(post.metaLabel || "AYT Ride guide")}</small>
+          <small>${escapeHtml(post.description)}</small>
+        </div>
+        <div class="admin-blog-actions">
+          <a class="admin-btn soft" href="/blog/article/?slug=${encodeURIComponent(post.slug)}" target="_blank" rel="noopener">Aç</a>
+          <button class="admin-btn soft" type="button" data-blog-action="edit" data-slug="${escapeHtml(post.slug)}">Düzenle</button>
+          <button class="admin-btn danger" type="button" data-blog-action="delete" data-slug="${escapeHtml(post.slug)}">Sil</button>
+        </div>
+      </article>
+    `).join("");
+  }
+
+  function fillBlogEditor(post = {}) {
+    const fields = {
+      blogSlug: post.slug || "",
+      blogKicker: post.kicker || "",
+      blogTitle: post.title || "",
+      blogDescription: post.description || "",
+      blogMetaLabel: post.metaLabel || "",
+      blogBody: post.bodyText || ""
+    };
+    Object.entries(fields).forEach(([id, value]) => {
+      const field = document.querySelector(`#${id}`);
+      if (field) field.value = value;
+    });
+  }
+
   function renderAdminPrices(data) {
     adminState.priceRoutes = data.routes || [];
     adminState.priceVehicles = data.vehicles || [];
@@ -937,13 +1046,16 @@
   }
 
   async function reloadAdminDashboard() {
-    const [bookingsData, pricesData] = await Promise.all([
+    const [bookingsData, pricesData, blogData] = await Promise.all([
       adminRequest("/api/admin/bookings"),
-      adminRequest("/api/admin/prices")
+      adminRequest("/api/admin/prices"),
+      adminRequest("/api/admin/blog-posts")
     ]);
     renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
+    renderAdminSettings(bookingsData.settings || {});
     renderAdminBookings(bookingsData.bookings || []);
     renderAdminPrices(pricesData || {});
+    renderAdminBlogs(blogData.posts || []);
   }
 
   function initAdmin() {
@@ -1043,6 +1155,81 @@
       }
     });
 
+    document.querySelector("#settingsEditor")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const driverRateTryPerKm = document.querySelector("#driverRateTryPerKm")?.value || "";
+      const eurTryRate = document.querySelector("#eurTryRate")?.value || "";
+      output.textContent = "Maliyet ayarları kaydediliyor...";
+      try {
+        await adminRequest("/api/admin/settings", {
+          method: "POST",
+          body: JSON.stringify({ driverRateTryPerKm, eurTryRate })
+        });
+        await reloadAdminDashboard();
+        output.textContent = "Maliyet ayarları kaydedildi.";
+      } catch (error) {
+        output.textContent = error.message || "Maliyet ayarları kaydedilemedi.";
+      }
+    });
+
+    document.querySelector("#blogEditor")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        slug: document.querySelector("#blogSlug")?.value || "",
+        kicker: document.querySelector("#blogKicker")?.value || "",
+        title: document.querySelector("#blogTitle")?.value || "",
+        description: document.querySelector("#blogDescription")?.value || "",
+        metaLabel: document.querySelector("#blogMetaLabel")?.value || "",
+        bodyText: document.querySelector("#blogBody")?.value || ""
+      };
+      output.textContent = "Blog yazısı kaydediliyor...";
+      try {
+        await adminRequest("/api/admin/blog-posts", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        await reloadAdminDashboard();
+        output.textContent = "Blog yazısı kaydedildi.";
+      } catch (error) {
+        output.textContent = error.message || "Blog yazısı kaydedilemedi.";
+      }
+    });
+
+    document.querySelector("#clearBlogEditor")?.addEventListener("click", () => {
+      fillBlogEditor();
+      document.querySelector("#blogSlug")?.focus();
+    });
+
+    document.querySelector("#adminBlogPosts")?.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-blog-action]");
+      if (!button) return;
+      const action = button.dataset.blogAction;
+      const slug = button.dataset.slug;
+      const post = adminState.blogPosts.find((item) => item.slug === slug);
+      if (action === "edit" && post) {
+        fillBlogEditor(post);
+        document.querySelector("#blogTitle")?.focus();
+        output.textContent = `${slug} düzenleme formuna alındı.`;
+        return;
+      }
+      if (action !== "delete") return;
+      if (!window.confirm(`${slug} blog yazısı silinsin mi?`)) return;
+      button.disabled = true;
+      output.textContent = "Blog yazısı siliniyor...";
+      try {
+        await adminRequest(`/api/admin/blog-posts/${encodeURIComponent(slug)}/delete`, {
+          method: "POST",
+          body: "{}"
+        });
+        await reloadAdminDashboard();
+        output.textContent = "Blog yazısı silindi.";
+      } catch (error) {
+        output.textContent = error.message || "Blog yazısı silinemedi.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+
     document.querySelector("#logoutAdmin")?.addEventListener("click", async () => {
       try {
         await adminRequest("/api/admin/logout", { method: "POST", body: "{}" });
@@ -1114,6 +1301,8 @@
     initConsent();
     initBooking();
     initConfirmation();
+    initBlogLists();
+    initBlogArticle();
     initAdmin();
   });
 

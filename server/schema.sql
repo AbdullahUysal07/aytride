@@ -43,3 +43,24 @@ create table if not exists route_prices (
   updated_at text not null,
   primary key (route_id, vehicle_id)
 );
+
+create table if not exists admin_settings (
+  key text primary key,
+  value text not null,
+  updated_at text not null
+);
+
+create table if not exists blog_posts (
+  slug text primary key,
+  status text not null default 'published',
+  kicker text not null,
+  title text not null,
+  description text not null,
+  body_json text not null,
+  meta_label text,
+  created_at text not null,
+  updated_at text not null,
+  deleted_at text
+);
+
+create index if not exists idx_blog_posts_status on blog_posts (status, updated_at desc);

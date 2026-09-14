@@ -35,6 +35,8 @@ class FakeD1 {
   constructor() {
     this.rows = [];
     this.prices = [];
+    this.settings = [];
+    this.blogs = [];
   }
 
   prepare(sql) {
@@ -90,6 +92,40 @@ class FakeD1 {
               this.prices.push({ route_id, vehicle_id, price_eur, updated_at });
             }
           }
+          if (/insert into admin_settings/i.test(sql)) {
+            const [key, value, updated_at] = values;
+            const existing = this.settings.find((item) => item.key === key);
+            if (existing) {
+              existing.value = value;
+              existing.updated_at = updated_at;
+            } else {
+              this.settings.push({ key, value, updated_at });
+            }
+          }
+          if (/insert into blog_posts/i.test(sql)) {
+            const [slug, kicker, title, description, body_json, meta_label, created_at, updated_at] = values;
+            const existing = this.blogs.find((item) => item.slug === slug);
+            if (existing) {
+              existing.status = "published";
+              existing.kicker = kicker;
+              existing.title = title;
+              existing.description = description;
+              existing.body_json = body_json;
+              existing.meta_label = meta_label;
+              existing.updated_at = updated_at;
+              existing.deleted_at = null;
+            } else {
+              this.blogs.push({ slug, status: "published", kicker, title, description, body_json, meta_label, created_at, updated_at, deleted_at: null });
+            }
+          }
+          if (/update blog_posts\s+set status = 'deleted'/i.test(sql)) {
+            const row = this.blogs.find((item) => item.slug === values[2]);
+            if (row) {
+              row.status = "deleted";
+              row.deleted_at = values[0];
+              row.updated_at = values[1];
+            }
+          }
           return { success: true };
         },
         all: async () => ({ results: this.resultsFor(sql) })
@@ -100,6 +136,13 @@ class FakeD1 {
 
   resultsFor(sql) {
     if (/from route_prices/i.test(sql)) return [...this.prices];
+    if (/from admin_settings/i.test(sql)) return [...this.settings];
+    if (/from blog_posts/i.test(sql)) {
+      if (/where deleted_at is null and status = 'published'/i.test(sql)) {
+        return this.blogs.filter((row) => !row.deleted_at && row.status === "published");
+      }
+      return [...this.blogs];
+    }
     if (/where deleted_at is null/i.test(sql)) return this.sortedRows().filter((row) => !row.deleted_at);
     return this.sortedRows();
   }
@@ -304,4 +347,96 @@ test("admin can update public route prices and soft-delete bookings", async () =
   }), env);
   const adminBody = await adminResponse.json();
   assert.equal(adminBody.bookings.length, 0);
+});
+
+test("admin can update driver cost settings used by revenue calculations", async () => {
+  const db = new FakeD1();
+  const env = makeEnv(db);
+  const bookingResponse = await worker.fetch(request("/api/bookings", {
+    method: "POST",
+    body: JSON.stringify({
+      reference: "AYT-DRIVER-RATE-BELEK-001",
+      language: "en",
+      routeId: "belek",
+      tripType: "oneway",
+      pickup: "Antalya Airport (AYT)",
+      dropoff: "Belek / Kadriye",
+      pickupDate: "2026-09-15",
+      pickupTime: "13:30",
+      returnDate: "",
+      returnTime: "",
+      flightNumber: "TK2420",
+      hotelAddress: "Belek hotel",
+      vehicleId: "standard-sedan",
+      passengers: 2,
+      luggage: 2,
+      childSeats: 0,
+      guestName: "Driver Rate Guest",
+      guestPhone: "+905000000002",
+      guestEmail: "",
+      notes: "",
+      publicTotalEur: 45,
+      quoteOnly: false,
+      attribution: {}
+    })
+  }), env);
+  assert.equal(bookingResponse.status, 201);
+
+  const cookie = await adminCookie(env);
+  const settingsResponse = await worker.fetch(request("/api/admin/settings", {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({ driverRateTryPerKm: 40, eurTryRate: 45 })
+  }), env);
+  assert.equal(settingsResponse.status, 200);
+
+  const adminResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const adminBody = await adminResponse.json();
+  assert.equal(adminBody.settings.driverRateTryPerKm, 40);
+  assert.equal(adminBody.bookings[0].driverCostTry, 1320);
+  assert.equal(adminBody.bookings[0].profitTry, 705);
+});
+
+test("admin can create, publish and delete blog posts backed by D1", async () => {
+  const db = new FakeD1();
+  const env = makeEnv(db);
+  const cookie = await adminCookie(env);
+  const slug = "antalya-transfer-test-post";
+
+  const saveResponse = await worker.fetch(request("/api/admin/blog-posts", {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({
+      slug,
+      kicker: "Test guide",
+      title: "Antalya transfer test post",
+      description: "A test guide created from the admin panel.",
+      metaLabel: "Test guide",
+      bodyText: "Test section\nThis post proves blog content is stored in D1."
+    })
+  }), env);
+  assert.equal(saveResponse.status, 200);
+
+  const publicListResponse = await worker.fetch(request("/api/public/blog-posts", { method: "GET" }), env);
+  const publicList = await publicListResponse.json();
+  assert.equal(publicList.posts.some((post) => post.slug === slug), true);
+
+  const detailResponse = await worker.fetch(request(`/api/public/blog-posts/${slug}`, { method: "GET" }), env);
+  const detail = await detailResponse.json();
+  assert.equal(detail.post.title, "Antalya transfer test post");
+  assert.equal(detail.post.body[0][0], "Test section");
+
+  const deleteResponse = await worker.fetch(request(`/api/admin/blog-posts/${slug}/delete`, {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(deleteResponse.status, 200);
+
+  const afterDeleteResponse = await worker.fetch(request("/api/public/blog-posts", { method: "GET" }), env);
+  const afterDelete = await afterDeleteResponse.json();
+  assert.equal(afterDelete.posts.some((post) => post.slug === slug), false);
 });

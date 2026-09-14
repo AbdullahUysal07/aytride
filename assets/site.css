@@ -1783,12 +1783,17 @@ details p {
   padding: 12px;
 }
 
-.price-editor {
+.price-editor,
+.settings-editor {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) minmax(160px, .8fr) minmax(120px, .6fr) auto;
   gap: 10px;
   align-items: end;
   padding: 0;
+}
+
+.settings-editor {
+  grid-template-columns: repeat(2, minmax(160px, 1fr)) auto;
 }
 
 .price-list {
@@ -1831,6 +1836,50 @@ details p {
 
 .price-row button:hover {
   border-color: #148a60;
+}
+
+.blog-editor {
+  display: grid;
+  grid-template-columns: minmax(160px, .65fr) minmax(160px, .65fr) minmax(180px, .7fr);
+  gap: 10px;
+  padding: 0;
+}
+
+.blog-editor .wide {
+  grid-column: 1 / -1;
+}
+
+.admin-blog-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-blog-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #dbe7ef;
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 12px;
+}
+
+.admin-blog-item strong,
+.admin-blog-item small {
+  display: block;
+}
+
+.admin-blog-item small {
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.admin-blog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .admin-actions.compact {
@@ -1896,6 +1945,8 @@ pre {
   }
 
   .price-editor,
+  .settings-editor,
+  .blog-editor,
   .price-row {
     grid-template-columns: 1fr;
   }
@@ -2006,9 +2057,19 @@ pre {
   .footer-grid,
   .admin-kpis,
   .price-editor,
+  .settings-editor,
+  .blog-editor,
   .price-row,
   .admin-row {
     grid-template-columns: 1fr;
+  }
+
+  .admin-blog-item {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-blog-actions {
+    justify-content: flex-start;
   }
 
   .booking-head-actions,
