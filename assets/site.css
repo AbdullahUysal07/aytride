@@ -137,6 +137,37 @@
   font-weight: 900;
 }
 
+.route-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  margin: -18px -18px 4px;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: #dbeafe;
+}
+
+.route-thumb::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 44%;
+  background: linear-gradient(180deg, transparent, rgba(7, 24, 45, .28));
+  pointer-events: none;
+}
+
+.route-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .22s ease;
+}
+
+.route-card:hover .route-thumb img {
+  transform: scale(1.035);
+}
+
 .route-hero-grid {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(420px, 1fr);
@@ -2195,6 +2226,10 @@ form {
   min-height: 0 !important;
   gap: 10px;
   padding: 22px 18px 14px;
+}
+
+.route-card > button .route-thumb {
+  margin: -22px -18px 6px;
 }
 
 .route-card > a {

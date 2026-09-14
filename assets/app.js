@@ -539,9 +539,14 @@
       const vip = route.prices["vip-van"];
       const routeSlug = route.slugs?.[lang()] || route.slugs?.en || "";
       const guidePath = routeSlug ? (lang() === "en" ? `/${routeSlug}/` : `/${lang()}/${routeSlug}/`) : "";
+      const routeImage = route.image ? `
+            <span class="route-thumb">
+              <img src="${escapeHtml(route.image)}" alt="${escapeHtml(route.imageAlt || `${route.destination} transfer route`)}" loading="lazy">
+            </span>` : "";
       return `
         <article class="route-card">
           <button type="button" data-route="${route.id}" aria-label="Select ${route.destination}">
+            ${routeImage}
             <span class="route-card-top">
               <span class="route-code">AYT</span>
               <span class="route-price">From ${money(sedan)}</span>

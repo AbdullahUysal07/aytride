@@ -68,6 +68,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 30,
         "vip-van": 40
       },
+      "image": "/assets/routes/lara-kundu.jpg",
+      "imageAlt": "Lara Kundu beach and resort area near Antalya Airport",
       "slugs": {
         "en": "antalya-airport-to-lara-transfer",
         "de": "flughafen-antalya-lara-transfer",
@@ -172,6 +174,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 45,
         "vip-van": 60
       },
+      "image": "/assets/routes/belek-kadriye.jpg",
+      "imageAlt": "Belek Kadriye resort coastline near Antalya",
       "slugs": {
         "en": "antalya-airport-to-belek-transfer",
         "de": "flughafen-antalya-belek-transfer",
@@ -276,6 +280,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 60,
         "vip-van": 80
       },
+      "image": "/assets/routes/kemer.jpg",
+      "imageAlt": "Kemer beach hotels with Taurus mountains",
       "slugs": {
         "en": "antalya-airport-to-kemer-transfer",
         "de": "flughafen-antalya-kemer-transfer",
@@ -380,6 +386,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 65,
         "vip-van": 90
       },
+      "image": "/assets/routes/side-manavgat.jpg",
+      "imageAlt": "Side ancient temple and palm trees on the Antalya coast",
       "slugs": {
         "en": "antalya-airport-to-side-transfer",
         "de": "flughafen-antalya-side-transfer",
@@ -484,6 +492,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 95,
         "vip-van": 130
       },
+      "image": "/assets/routes/alanya.jpg",
+      "imageAlt": "Alanya harbor and castle coastline",
       "slugs": {
         "en": "antalya-airport-to-alanya-transfer",
         "de": "flughafen-antalya-alanya-transfer",
@@ -588,6 +598,8 @@ window.AYTRideCatalog = {
         "standard-sedan": 35,
         "vip-van": 45
       },
+      "image": "/assets/routes/kaleici-old-town.jpg",
+      "imageAlt": "Kaleici Old Town marina and Antalya historic harbor",
       "slugs": {
         "en": "antalya-airport-to-kaleici-transfer",
         "de": "flughafen-antalya-kaleici-transfer",
