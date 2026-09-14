@@ -587,6 +587,98 @@ export const publicCatalog = {
       "prices": {
         "standard-sedan": 35,
         "vip-van": 45
+      },
+      "slugs": {
+        "en": "antalya-airport-to-kaleici-transfer",
+        "de": "flughafen-antalya-kaleici-transfer",
+        "pl": "transfer-lotnisko-antalya-kaleici",
+        "ru": "transfer-aeroport-antaliya-kaleici"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Kaleici Transfer - Old Town Private Ride | AYT Ride",
+          "description": "Book a fixed-price private transfer from Antalya Airport to Kaleici Old Town. Sedan and VIP van options, WhatsApp confirmation and pay on arrival.",
+          "h1": "Antalya Airport to Kaleici Old Town private transfer",
+          "intro": "Kaleici is the historic Old Town of Antalya, close to the marina, boutique hotels and narrow streets. AYT Ride confirms the vehicle, meeting point and hotel access by WhatsApp before pickup.",
+          "local": "Some Kaleici hotels sit inside pedestrian or restricted streets. Share the hotel name, gate, marina side or exact address so the driver can confirm the closest legal drop-off point.",
+          "faq": [
+            [
+              "How long is Antalya Airport to Kaleici?",
+              "The journey is usually around 25 minutes, depending on traffic around the city center and Old Town gates."
+            ],
+            [
+              "Can the driver enter every Old Town street?",
+              "Some streets are narrow or restricted, so the closest safe pickup or drop-off point is confirmed on WhatsApp."
+            ],
+            [
+              "Is the price per vehicle?",
+              "Yes. The displayed route price is the total for the selected private vehicle."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Kaleici Transfer | AYT Ride",
+          "description": "Privater Festpreis-Transfer vom Flughafen Antalya nach Kaleici Old Town. Sedan oder VIP Van, WhatsApp-Bestätigung und Zahlung bei Ankunft.",
+          "h1": "Privater Transfer vom Flughafen Antalya nach Kaleici Old Town",
+          "intro": "Kaleici ist die historische Altstadt von Antalya mit Boutique-Hotels, Marina und engen Straßen. AYT Ride bestätigt Treffpunkt und Zufahrt per WhatsApp.",
+          "local": "Einige Hotels liegen in Fußgänger- oder Zufahrtsbereichen. Senden Sie Hotelname, Tor oder genaue Adresse, damit der beste Haltepunkt bestätigt werden kann.",
+          "faq": [
+            [
+              "Wie lange dauert Kaleici?",
+              "Meist etwa 25 Minuten, abhängig vom Verkehr rund um Zentrum und Altstadt."
+            ],
+            [
+              "Kann der Fahrer jede Altstadtstraße befahren?",
+              "Nicht immer. Enge oder gesperrte Straßen werden vorab per WhatsApp geklärt."
+            ],
+            [
+              "Ist der Preis pro Fahrzeug?",
+              "Ja, der Preis gilt als Gesamtpreis für das gewählte Privatfahrzeug."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Kaleici | AYT Ride",
+          "description": "Prywatny transfer w stałej cenie z lotniska Antalya do Kaleici Old Town. Sedan lub VIP van, WhatsApp i płatność po przyjeździe.",
+          "h1": "Prywatny transfer z lotniska Antalya do Kaleici Old Town",
+          "intro": "Kaleici to historyczna starówka Antalyi z mariną, butikowymi hotelami i wąskimi ulicami. AYT Ride potwierdza miejsce spotkania przez WhatsApp.",
+          "local": "Niektóre hotele są przy ulicach pieszych lub z ograniczonym wjazdem. Podaj nazwę hotelu, bramę lub dokładny adres.",
+          "faq": [
+            [
+              "Ile trwa transfer do Kaleici?",
+              "Zwykle około 25 minut, zależnie od ruchu w centrum."
+            ],
+            [
+              "Czy kierowca wjedzie pod każdy hotel?",
+              "Nie zawsze. Najbliższe bezpieczne miejsce jest potwierdzane na WhatsApp."
+            ],
+            [
+              "Czy cena jest za pojazd?",
+              "Tak, cena jest łączna za wybrany prywatny pojazd."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья - Калеичи | AYT Ride",
+          "description": "Частный трансфер из аэропорта Анталья в Калеичи Old Town по фиксированной цене. Sedan или VIP van, WhatsApp и оплата после поездки.",
+          "h1": "Частный трансфер из аэропорта Анталья в Калеичи Old Town",
+          "intro": "Калеичи - исторический старый город Антальи с мариной, бутик-отелями и узкими улицами. AYT Ride подтверждает место встречи в WhatsApp.",
+          "local": "Некоторые отели находятся на пешеходных или ограниченных улицах. Укажите название отеля, ворота или точный адрес.",
+          "faq": [
+            [
+              "Сколько ехать до Калеичи?",
+              "Обычно около 25 минут, в зависимости от движения в центре."
+            ],
+            [
+              "Можно подъехать к любому отелю?",
+              "Не всегда. Ближайшая безопасная точка подтверждается в WhatsApp."
+            ],
+            [
+              "Цена указана за автомобиль?",
+              "Да, цена указана за выбранный частный автомобиль."
+            ]
+          ]
+        }
       }
     },
     {

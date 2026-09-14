@@ -1332,6 +1332,7 @@ textarea:focus {
 }
 
 .post-card {
+  min-height: 184px;
   grid-template-rows: auto auto 1fr auto;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(244, 248, 252, .86)),

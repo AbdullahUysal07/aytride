@@ -537,7 +537,8 @@
     e.routeGrid.innerHTML = catalog.routes.filter((route) => route.available && !route.quoteOnly).slice(0, 6).map((route) => {
       const sedan = route.prices["standard-sedan"];
       const vip = route.prices["vip-van"];
-      const slug = route.slugs?.en || "";
+      const routeSlug = route.slugs?.[lang()] || route.slugs?.en || "";
+      const guidePath = routeSlug ? (lang() === "en" ? `/${routeSlug}/` : `/${lang()}/${routeSlug}/`) : "";
       return `
         <article class="route-card">
           <button type="button" data-route="${route.id}" aria-label="Select ${route.destination}">
@@ -557,7 +558,7 @@
             </span>
             <span class="route-card-action">${t("selectRoute")}</span>
           </button>
-          ${slug ? `<a href="/${slug}/">${t("routeGuide")}</a>` : ""}
+          ${guidePath ? `<a href="${guidePath}">${t("routeGuide")}</a>` : ""}
         </article>
       `;
     }).join("");

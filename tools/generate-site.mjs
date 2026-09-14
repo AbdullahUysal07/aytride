@@ -678,7 +678,7 @@ ${header(language)}
         <div class="post-grid">
           <a class="post-card" href="/blog/antalya-airport-transfer-guide/"><span class="post-kicker">Airport guide</span><strong>Antalya Airport transfer basics</strong><small>Pickup timing, hotel details and pay-on-arrival expectations.</small><span class="post-meta">AYT guide</span></a>
           <a class="post-card" href="/blog/private-transfer-vs-taxi-antalya/"><span class="post-kicker">Private transfer</span><strong>Private transfer vs taxi in Antalya</strong><small>When a fixed private ride makes more sense for families and groups.</small><span class="post-meta">Trust guide</span></a>
-          <a class="post-card" href="/blog/belek-golf-transfer/"><span class="post-kicker">Golf transfer</span><strong>Belek golf transfer checklist</strong><small>Planning hotel, golf bag and airport transfers.</small><span class="post-meta">Belek</span></a>
+          <a class="post-card" href="/blog/belek-golf-transfer/"><span class="post-kicker">Golf transfer</span><strong>Belek golf transfer checklist</strong><small>Plan Belek resort pickup, golf bags, luggage space and return timing before the airport transfer.</small><span class="post-meta">Belek guide</span></a>
         </div>
       </div>
     </section>
@@ -963,7 +963,7 @@ const blogPosts = [
     slug: "belek-golf-transfer",
     kicker: "Golf transfer",
     title: "Belek golf transfer checklist",
-    description: "Plan a Belek or Kadriye golf transfer from Antalya Airport with golf bags, resort gates, child seats and return transfer timing.",
+    description: "Plan a Belek or Kadriye golf transfer from Antalya Airport with golf bags, resort gates, luggage space, child seats and return transfer timing.",
     body: [
       ["Add golf luggage early", "Golf bags can change the best vehicle choice. Add them in the notes so the transfer team can confirm whether a VIP Van is the right fit."],
       ["Hotel and resort gate details", "Belek resorts may have several entrances and security gates. The exact hotel block or lobby name helps the driver confirm the cleanest pickup point."],
