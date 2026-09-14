@@ -1,15 +1,13 @@
 export const publicCatalog = {
-  "version": "2026-09-12",
+  "version": "2026-09-14",
   "baseUrl": "https://aytride.com",
   "apiBase": "",
   "currency": "EUR",
   "business": {
     "brand": "AYT Ride",
     "tagline": "Private Transfers in Antalya",
-    "bookingEmail": "booking@aytride.com",
+    "bookingEmail": "info@shramworld.com",
     "emailOptions": [
-      "booking@aytride.com",
-      "hello@aytride.com",
       "info@shramworld.com"
     ],
     "whatsapp": "16838502742",
@@ -23,7 +21,7 @@ export const publicCatalog = {
     "googleAdsBookingLabel": ""
   },
   "productionPlaceholders": {
-    "bookingEmail": "booking@aytride.com",
+    "bookingEmail": "info@shramworld.com",
     "turkishWhatsapp": "90XXXXXXXXXX",
     "displayTurkishWhatsapp": "+90 XXX XXX XX XX",
     "gtmId": "GTM-XXXXXXX",

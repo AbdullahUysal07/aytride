@@ -99,8 +99,8 @@ database_id = "PASTE_REAL_D1_DATABASE_ID"
 
 [vars]
 ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io"
-BOOKING_EMAIL = "booking@aytride.com"
-MAIL_FROM = "AYT Ride <booking@aytride.com>"
+BOOKING_EMAIL = "info@shramworld.com"
+MAIL_FROM = "AYT Ride <info@shramworld.com>"
 ADMIN_EMAILS = "admin@aytride.com"
 ```
 
@@ -118,7 +118,7 @@ There is no hardcoded production password in the repository. Choose the real adm
 
 Before paid ads, replace these placeholder values in `data/public-catalog.json` or production secrets:
 
-- Owner booking inbox: `booking@aytride.com`
+- Owner booking inbox: `info@shramworld.com`
 - Turkish WhatsApp: `90XXXXXXXXXX`
 - Display WhatsApp: `+90 XXX XXX XX XX`
 - GTM: `GTM-XXXXXXX`
@@ -151,8 +151,8 @@ The Worker is prepared for Resend. The email provider must be configured manuall
 1. Verify `aytride.com` in Resend or the chosen transactional email provider.
 2. Add the provider's DNS records for SPF, DKIM and return-path.
 3. Set `RESEND_API_KEY` in Cloudflare.
-4. Set `MAIL_FROM` to `AYT Ride <booking@aytride.com>`.
-5. Set `BOOKING_EMAIL` to `booking@aytride.com`.
+4. Set `MAIL_FROM` to `AYT Ride <info@shramworld.com>`.
+5. Set `BOOKING_EMAIL` to `info@shramworld.com`.
 
 Bookings are saved to D1 before email is attempted. If email delivery fails, the API still returns success with `emailStatus: "failed"` so the persistent reservation is not lost.
 
