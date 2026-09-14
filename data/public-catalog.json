@@ -1,7 +1,7 @@
 {
   "version": "2026-09-14",
   "baseUrl": "https://aytride.com",
-  "apiBase": "",
+  "apiBase": "https://ayt-ride-api.aytride.workers.dev",
   "currency": "EUR",
   "business": {
     "brand": "AYT Ride",

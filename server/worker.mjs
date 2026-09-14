@@ -303,14 +303,14 @@ async function loginAdmin(request, env, cors) {
   const token = await signSession({ email, exp: Math.floor(Date.now() / 1000) + 86400 }, env.ADMIN_SESSION_SECRET);
   return json({ ok: true }, 200, {
     ...cors,
-    "set-cookie": `${SESSION_COOKIE}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=86400`
+    "set-cookie": `${SESSION_COOKIE}=${token}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=86400`
   });
 }
 
 function logoutAdmin(cors) {
   return json({ ok: true }, 200, {
     ...cors,
-    "set-cookie": `${SESSION_COOKIE}=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0`
+    "set-cookie": `${SESSION_COOKIE}=; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=0`
   });
 }
 

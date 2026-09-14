@@ -2,3 +2,4 @@ wrangler.toml
 .wrangler/
 .wrangler-dry-run/
 node_modules/
+admin-cookie.txt

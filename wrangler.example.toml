@@ -16,7 +16,7 @@ database_id = "00000000-0000-0000-0000-000000000000"
 ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io"
 BOOKING_EMAIL = "info@shramworld.com"
 MAIL_FROM = "AYT Ride <info@shramworld.com>"
-ADMIN_EMAILS = "admin@aytride.com"
+ADMIN_EMAILS = "info@shramworld.com"
 
 # Replace these placeholders in data/public-catalog.json before paid ads:
 # business.whatsapp = "90XXXXXXXXXX"

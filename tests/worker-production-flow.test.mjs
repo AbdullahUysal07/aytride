@@ -82,7 +82,7 @@ function makeEnv(db) {
     ALLOWED_ORIGINS: "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io",
     BOOKING_EMAIL: "info@shramworld.com",
     MAIL_FROM: "AYT Ride <info@shramworld.com>",
-    ADMIN_EMAILS: "admin@aytride.com",
+    ADMIN_EMAILS: "info@shramworld.com",
     ADMIN_PASSWORD_SALT: adminSalt,
     ADMIN_PASSWORD_SHA256: createHash("sha256").update(`${adminPassword}${adminSalt}`).digest("hex"),
     ADMIN_SESSION_SECRET: "launch-check-session-secret",
@@ -147,7 +147,7 @@ test("complete production booking flow persists AYT to Belek and appears in auth
 
   const loginResponse = await worker.fetch(request("/api/admin/login", {
     method: "POST",
-    body: JSON.stringify({ email: "admin@aytride.com", password: "launch-check-password" })
+    body: JSON.stringify({ email: "info@shramworld.com", password: "launch-check-password" })
   }), env);
   assert.equal(loginResponse.status, 200);
   const cookie = loginResponse.headers.get("set-cookie");

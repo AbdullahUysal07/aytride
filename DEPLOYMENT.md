@@ -101,7 +101,7 @@ database_id = "PASTE_REAL_D1_DATABASE_ID"
 ALLOWED_ORIGINS = "https://aytride.com,https://www.aytride.com,https://abdullahuysal07.github.io"
 BOOKING_EMAIL = "info@shramworld.com"
 MAIL_FROM = "AYT Ride <info@shramworld.com>"
-ADMIN_EMAILS = "admin@aytride.com"
+ADMIN_EMAILS = "info@shramworld.com"
 ```
 
 ## Admin Login
@@ -109,7 +109,7 @@ ADMIN_EMAILS = "admin@aytride.com"
 The production admin email placeholder is:
 
 ```text
-admin@aytride.com
+info@shramworld.com
 ```
 
 There is no hardcoded production password in the repository. Choose the real admin password during Cloudflare setup, generate `ADMIN_PASSWORD_SALT` and `ADMIN_PASSWORD_SHA256`, then save both as Cloudflare secrets. The same plain password you chose is the password for `/admin/`.
