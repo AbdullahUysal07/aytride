@@ -7,7 +7,8 @@ create table if not exists admin_settings (
 insert or ignore into admin_settings (key, value, updated_at)
 values
   ('driver_rate_try_per_km', '35', '2026-09-14T00:00:00.000Z'),
-  ('eur_try_rate', '45', '2026-09-14T00:00:00.000Z');
+  ('eur_try_rate', '45', '2026-09-14T00:00:00.000Z'),
+  ('eur_try_rate_fallback', '45', '2026-09-14T00:00:00.000Z');
 
 create table if not exists blog_posts (
   slug text primary key,

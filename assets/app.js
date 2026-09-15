@@ -883,6 +883,13 @@
     return "pending";
   }
 
+  function exchangeSourceLabel(source) {
+    if (source === "auto-live") return "otomatik canlı kur";
+    if (source === "auto-cache") return "otomatik kayıtlı kur";
+    if (source === "auto-stale") return "otomatik eski kayıtlı kur";
+    return "yedek kur";
+  }
+
   function escapeHtml(value) {
     return String(value ?? "")
       .replace(/&/g, "&amp;")
@@ -917,7 +924,7 @@
       <article class="kpi-card muted">
         <small>Hesap ayarı</small>
         <strong>${Number(settings?.driverRateTryPerKm || 35)} TL/km</strong>
-        <span>EUR kuru: ${Number(settings?.eurTryRate || 45)} TL</span>
+        <span>EUR kuru: ${Number(settings?.eurTryRate || 45)} TL • ${exchangeSourceLabel(settings?.eurTryRateSource)}</span>
       </article>
     `;
   }
@@ -925,8 +932,17 @@
   function renderAdminSettings(settings) {
     const driverRateInput = document.querySelector("#driverRateTryPerKm");
     const eurRateInput = document.querySelector("#eurTryRate");
+    const status = document.querySelector("#exchangeRateStatus");
     if (driverRateInput) driverRateInput.value = settings?.driverRateTryPerKm ?? 35;
-    if (eurRateInput) eurRateInput.value = settings?.eurTryRate ?? 45;
+    if (eurRateInput) eurRateInput.value = settings?.eurTryRateFallback ?? settings?.eurTryRate ?? 45;
+    if (status) {
+      const fetched = settings?.eurTryRateFetchedAt ? `Son yenileme: ${formatAdminDate(settings.eurTryRateFetchedAt)}` : "Henüz canlı kur kaydı yok";
+      const rateDate = settings?.eurTryRateDate ? `Kur tarihi: ${settings.eurTryRateDate}` : "";
+      status.innerHTML = `
+        <strong>Kullanılan EUR/TRY: ${Number(settings?.eurTryRate || 45)} TL (${exchangeSourceLabel(settings?.eurTryRateSource)})</strong>
+        <small>${escapeHtml([settings?.exchangeRateProvider || "Frankfurter", rateDate, fetched].filter(Boolean).join(" • "))}</small>
+      `;
+    }
   }
 
   function renderAdminBookings(bookings) {
@@ -1158,17 +1174,32 @@
     document.querySelector("#settingsEditor")?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const driverRateTryPerKm = document.querySelector("#driverRateTryPerKm")?.value || "";
-      const eurTryRate = document.querySelector("#eurTryRate")?.value || "";
+      const eurTryRateFallback = document.querySelector("#eurTryRate")?.value || "";
       output.textContent = "Maliyet ayarları kaydediliyor...";
       try {
         await adminRequest("/api/admin/settings", {
           method: "POST",
-          body: JSON.stringify({ driverRateTryPerKm, eurTryRate })
+          body: JSON.stringify({ driverRateTryPerKm, eurTryRateFallback })
         });
         await reloadAdminDashboard();
         output.textContent = "Maliyet ayarları kaydedildi.";
       } catch (error) {
         output.textContent = error.message || "Maliyet ayarları kaydedilemedi.";
+      }
+    });
+
+    document.querySelector("#refreshExchangeRate")?.addEventListener("click", async () => {
+      output.textContent = "EUR kuru yenileniyor...";
+      try {
+        const data = await adminRequest("/api/admin/settings/refresh-rate", {
+          method: "POST",
+          body: "{}"
+        });
+        renderAdminSettings(data.settings || {});
+        await reloadAdminDashboard();
+        output.textContent = "EUR kuru otomatik servisten yenilendi.";
+      } catch (error) {
+        output.textContent = error.message || "EUR kuru yenilenemedi; yedek kur kullanılacak.";
       }
     });
 

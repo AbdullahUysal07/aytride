@@ -178,6 +178,7 @@ function makeEnv(db) {
     ADMIN_SESSION_SECRET: "launch-check-session-secret",
     ADMIN_DRIVER_RATE_TRY_PER_KM: "35",
     ADMIN_EUR_TRY_RATE: "45",
+    AUTO_EUR_TRY_RATE: "false",
     PRIVATE_PRICING_JSON: JSON.stringify({
       routes: {
         belek: {
@@ -398,6 +399,54 @@ test("admin can update driver cost settings used by revenue calculations", async
   assert.equal(adminBody.settings.driverRateTryPerKm, 40);
   assert.equal(adminBody.bookings[0].driverCostTry, 1320);
   assert.equal(adminBody.bookings[0].profitTry, 705);
+});
+
+test("admin can refresh automatic EUR TRY rate and reuse the cached value", async () => {
+  const db = new FakeD1();
+  const env = {
+    ...makeEnv(db),
+    AUTO_EUR_TRY_RATE: "true",
+    EUR_TRY_RATE_API_URL: "https://rates.example.test/eur-try"
+  };
+  const cookie = await adminCookie(env);
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async (url) => {
+    if (String(url) === env.EUR_TRY_RATE_API_URL) {
+      calls += 1;
+      return new Response(JSON.stringify({ date: "2026-09-15", rate: 56.25 }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
+      });
+    }
+    return originalFetch(url);
+  };
+
+  try {
+    const refreshResponse = await worker.fetch(request("/api/admin/settings/refresh-rate", {
+      method: "POST",
+      headers: { cookie },
+      body: "{}"
+    }), env);
+    const refreshBody = await refreshResponse.json();
+    assert.equal(refreshResponse.status, 200);
+    assert.equal(refreshBody.settings.eurTryRate, 56.25);
+    assert.equal(refreshBody.settings.eurTryRateSource, "auto-live");
+    assert.equal(refreshBody.settings.eurTryRateDate, "2026-09-15");
+    assert.equal(calls, 1);
+
+    const settingsResponse = await worker.fetch(request("/api/admin/settings", {
+      method: "GET",
+      headers: { cookie }
+    }), env);
+    const settingsBody = await settingsResponse.json();
+    assert.equal(settingsResponse.status, 200);
+    assert.equal(settingsBody.settings.eurTryRate, 56.25);
+    assert.equal(settingsBody.settings.eurTryRateSource, "auto-cache");
+    assert.equal(calls, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test("admin can create, publish and delete blog posts backed by D1", async () => {

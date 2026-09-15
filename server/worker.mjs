@@ -3,6 +3,8 @@ import { defaultBlogPosts } from "./blog-posts.mjs";
 import { privateVehiclePrice, validateBookingPayload } from "./validation.mjs";
 
 const SESSION_COOKIE = "ayt_admin";
+const DEFAULT_EUR_TRY_RATE_API = "https://api.frankfurter.dev/v2/rate/eur/try";
+const EXCHANGE_RATE_CACHE_MS = 6 * 60 * 60 * 1000;
 
 export default {
   async fetch(request, env) {
@@ -68,6 +70,10 @@ export default {
 
       if (url.pathname === "/api/admin/settings" && request.method === "POST") {
         return await updateAdminSettings(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/settings/refresh-rate" && request.method === "POST") {
+        return await refreshAdminExchangeRate(request, env, cors);
       }
 
       if (url.pathname === "/api/admin/blog-posts" && request.method === "GET") {
@@ -591,9 +597,17 @@ async function updateAdminSettings(request, env, cors) {
   const now = new Date().toISOString();
 
   await writeAdminSetting(env, "driver_rate_try_per_km", settings.driverRateTryPerKm, now);
-  await writeAdminSetting(env, "eur_try_rate", settings.eurTryRate, now);
+  await writeAdminSetting(env, "eur_try_rate_fallback", settings.eurTryRateFallback, now);
 
   return json({ ok: true, settings: await adminFinanceSettings(env) }, 200, cors);
+}
+
+async function refreshAdminExchangeRate(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  return json({ ok: true, settings: await adminFinanceSettings(env, { forceRefresh: true }) }, 200, cors);
 }
 
 async function writeAdminSetting(env, key, value, updatedAt) {
@@ -694,16 +708,16 @@ function cleanText(value, maxLength) {
 
 function normalizeFinanceSettings(input) {
   const driverRateTryPerKm = Number(input.driverRateTryPerKm);
-  const eurTryRate = Number(input.eurTryRate);
+  const eurTryRateFallback = Number(input.eurTryRateFallback ?? input.eurTryRate);
   if (!Number.isFinite(driverRateTryPerKm) || driverRateTryPerKm < 1 || driverRateTryPerKm > 500) {
     throw new Error("Driver rate must be between 1 and 500 TL per km.");
   }
-  if (!Number.isFinite(eurTryRate) || eurTryRate < 1 || eurTryRate > 500) {
-    throw new Error("EUR/TRY rate must be between 1 and 500.");
+  if (!Number.isFinite(eurTryRateFallback) || eurTryRateFallback < 1 || eurTryRateFallback > 500) {
+    throw new Error("Fallback EUR/TRY rate must be between 1 and 500.");
   }
   return {
     driverRateTryPerKm: roundMoney(driverRateTryPerKm),
-    eurTryRate: roundMoney(eurTryRate)
+    eurTryRateFallback: roundMoney(eurTryRateFallback)
   };
 }
 
@@ -743,30 +757,117 @@ async function requireAdmin(request, env, cors) {
   return session;
 }
 
-async function adminFinanceSettings(env) {
-  const driverRateTryPerKm = Number(env.ADMIN_DRIVER_RATE_TRY_PER_KM || 35);
-  const eurTryRate = Number(env.ADMIN_EUR_TRY_RATE || 45);
+async function adminFinanceSettings(env, options = {}) {
+  const envDriverRateTryPerKm = Number(env.ADMIN_DRIVER_RATE_TRY_PER_KM || 35);
+  const envEurTryRate = Number(env.ADMIN_EUR_TRY_RATE || 45);
   const settings = {
-    driverRateTryPerKm: Number.isFinite(driverRateTryPerKm) && driverRateTryPerKm > 0 ? driverRateTryPerKm : 35,
-    eurTryRate: Number.isFinite(eurTryRate) && eurTryRate > 0 ? eurTryRate : 45
+    driverRateTryPerKm: positiveNumber(envDriverRateTryPerKm, 35),
+    eurTryRate: positiveNumber(envEurTryRate, 45),
+    eurTryRateFallback: positiveNumber(envEurTryRate, 45),
+    eurTryRateSource: "fallback",
+    eurTryRateDate: null,
+    eurTryRateFetchedAt: null,
+    eurTryRateAutoEnabled: autoExchangeRateEnabled(env),
+    exchangeRateProvider: "Frankfurter"
   };
   if (!env.DB) return settings;
   try {
-    const rows = await env.DB.prepare(`
-      select key, value
-      from admin_settings
-      where key in ('driver_rate_try_per_km', 'eur_try_rate')
-    `).all();
-    (rows.results || []).forEach((row) => {
-      const value = Number(row.value);
-      if (!Number.isFinite(value) || value <= 0) return;
-      if (row.key === "driver_rate_try_per_km") settings.driverRateTryPerKm = value;
-      if (row.key === "eur_try_rate") settings.eurTryRate = value;
-    });
+    const stored = await readAdminSettingsMap(env);
+    settings.driverRateTryPerKm = positiveNumber(stored.driver_rate_try_per_km, settings.driverRateTryPerKm);
+    settings.eurTryRateFallback = positiveNumber(
+      stored.eur_try_rate_fallback ?? stored.eur_try_rate,
+      settings.eurTryRateFallback
+    );
+    settings.eurTryRate = settings.eurTryRateFallback;
+
+    if (!settings.eurTryRateAutoEnabled) return settings;
+
+    const cached = {
+      rate: positiveNumber(stored.eur_try_rate_auto, 0),
+      fetchedAt: stored.eur_try_rate_auto_fetched_at || "",
+      date: stored.eur_try_rate_auto_date || ""
+    };
+    if (!options.forceRefresh && cached.rate && isFreshIso(cached.fetchedAt, EXCHANGE_RATE_CACHE_MS)) {
+      return {
+        ...settings,
+        eurTryRate: cached.rate,
+        eurTryRateSource: "auto-cache",
+        eurTryRateDate: cached.date,
+        eurTryRateFetchedAt: cached.fetchedAt
+      };
+    }
+
+    try {
+      const liveRate = await fetchEurTryRate(env);
+      await persistExchangeRate(env, liveRate);
+      return {
+        ...settings,
+        eurTryRate: liveRate.rate,
+        eurTryRateSource: "auto-live",
+        eurTryRateDate: liveRate.date,
+        eurTryRateFetchedAt: liveRate.fetchedAt,
+        exchangeRateProvider: liveRate.provider
+      };
+    } catch (rateError) {
+      console.warn("Automatic EUR/TRY rate is not available.", rateError);
+      if (cached.rate) {
+        return {
+          ...settings,
+          eurTryRate: cached.rate,
+          eurTryRateSource: "auto-stale",
+          eurTryRateDate: cached.date,
+          eurTryRateFetchedAt: cached.fetchedAt
+        };
+      }
+    }
   } catch (error) {
     console.warn("Admin settings are not available yet.", error);
   }
   return settings;
+}
+
+async function readAdminSettingsMap(env) {
+  const rows = await env.DB.prepare("select key, value from admin_settings").all();
+  return Object.fromEntries((rows.results || []).map((row) => [row.key, row.value]));
+}
+
+function autoExchangeRateEnabled(env) {
+  return String(env.AUTO_EUR_TRY_RATE ?? "true").toLowerCase() !== "false";
+}
+
+function positiveNumber(value, fallback) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : fallback;
+}
+
+function isFreshIso(value, maxAgeMs) {
+  const time = Date.parse(value || "");
+  return Number.isFinite(time) && Date.now() - time < maxAgeMs;
+}
+
+async function fetchEurTryRate(env) {
+  const url = String(env.EUR_TRY_RATE_API_URL || DEFAULT_EUR_TRY_RATE_API);
+  const response = await fetch(url, {
+    headers: { accept: "application/json" },
+    cf: { cacheTtl: 3600, cacheEverything: true }
+  });
+  if (!response.ok) throw new Error(`Exchange rate provider rejected request: ${response.status}`);
+  const data = await response.json();
+  const rate = positiveNumber(data.rate ?? data.rates?.TRY ?? data.rates?.try, 0);
+  if (!rate) throw new Error("Exchange rate provider did not return EUR/TRY.");
+  return {
+    rate: roundMoney(rate),
+    date: cleanText(data.date || new Date().toISOString().slice(0, 10), 20),
+    fetchedAt: new Date().toISOString(),
+    provider: "Frankfurter"
+  };
+}
+
+async function persistExchangeRate(env, liveRate) {
+  await writeAdminSetting(env, "eur_try_rate_auto", liveRate.rate, liveRate.fetchedAt);
+  await writeAdminSetting(env, "eur_try_rate_auto_date", liveRate.date, liveRate.fetchedAt);
+  await writeAdminSetting(env, "eur_try_rate_auto_fetched_at", liveRate.fetchedAt, liveRate.fetchedAt);
+  await writeAdminSetting(env, "eur_try_rate_provider", liveRate.provider, liveRate.fetchedAt);
 }
 
 function adminBooking(row, catalog, settings) {
