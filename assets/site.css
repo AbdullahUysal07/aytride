@@ -2449,6 +2449,46 @@ form {
   }
 }
 
+/* Align route information with the booking section without long text lines. */
+.article.route-article {
+  width: min(100% - 32px, 1180px);
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(220px, .42fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px 48px;
+  padding: 12px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.route-article > h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.route-article > p,
+.route-article > .faq-grid,
+.route-article > .adjacent-links {
+  min-width: 0;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .article.route-article {
+    width: calc(100% - 28px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .route-article > h2:not(:first-child) {
+    margin-top: 18px;
+  }
+}
+
 /* Route detail pages: compact hero, stable form sizing and per-route visual */
 .route-hero {
   padding-top: 46px;
