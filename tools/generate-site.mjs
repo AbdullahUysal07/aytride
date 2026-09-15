@@ -343,7 +343,7 @@ function altRouteTags(route) {
 }
 
 function favicon() {
-  return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b66c3'/%3E%3Cpath d='M12 43c12-12 24-17 40-19' fill='none' stroke='%2312805c' stroke-width='6' stroke-linecap='round'/%3E%3Ctext x='32' y='33' text-anchor='middle' font-family='Arial,sans-serif' font-size='16' font-weight='800' fill='white'%3EAYT%3C/text%3E%3C/svg%3E";
+  return "/favicon.svg";
 }
 
 function header(language) {
@@ -1138,6 +1138,7 @@ write("404.html", `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found - AYT Ride</title>
   <meta name="robots" content="noindex,follow">
+  <link rel="icon" type="image/svg+xml" href="${favicon()}">
   <link rel="stylesheet" href="/assets/site.css?v=${buildStamp}">
   <script src="/assets/catalog.js?v=${buildStamp}"></script>
 </head>
