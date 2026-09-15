@@ -1,0 +1,54 @@
+name: Link German guide hub
+
+on:
+  push:
+    paths:
+      - '.github/workflows/link-german-guide-hub.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  link-german-guides:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Update German internal links safely
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+            const full = path.join(dir, entry.name);
+            return entry.isDirectory() ? walk(full) : [full];
+          });
+
+          for (const file of walk('de').filter((p) => p.endsWith('.html'))) {
+            let text = fs.readFileSync(file, 'utf8');
+            const next = text.replaceAll('href="/blog/">Blog</a>', 'href="/de/ratgeber/">Ratgeber</a>');
+            if (next !== text) fs.writeFileSync(file, next);
+          }
+
+          const generator = 'tools/generate-site.mjs';
+          let source = fs.readFileSync(generator, 'utf8');
+          const oldLine = '<a href=\\"/blog/\\">${l.navBlog}</a>';
+          const newLine = '<a href=\\"${language === "de" ? "/de/ratgeber/" : "/blog/"}\\">${language === "de" ? "Ratgeber" : l.navBlog}</a>';
+          if (!source.includes(oldLine)) throw new Error('Expected generator blog link not found; refusing unsafe edit.');
+          source = source.replace(oldLine, newLine);
+          fs.writeFileSync(generator, source);
+          NODE
+      - name: Commit German guide links
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add de tools/generate-site.mjs
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Link German pages to transfer guide hub"
+            git push
+          fi
