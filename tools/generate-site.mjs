@@ -346,6 +346,19 @@ function favicon() {
   return "/favicon.svg";
 }
 
+function routeVisual(route) {
+  if (!route.image) return "";
+  const alt = route.imageAlt || `${route.destination} private transfer route`;
+  return `<figure class="route-visual-card">
+            <img src="${escapeHtml(route.image)}" alt="${escapeHtml(alt)}" loading="eager" fetchpriority="high">
+            <figcaption>
+              <span>${escapeHtml(route.origin)}</span>
+              <strong>${escapeHtml(route.destination)}</strong>
+              <small>${route.distanceKm} km / ${route.durationMin} min</small>
+            </figcaption>
+          </figure>`;
+}
+
 function header(language) {
   const l = languages[language];
   return `
@@ -813,7 +826,7 @@ function routePage(route, language) {
   <meta property="og:type" content="website">
   <meta property="og:url" content="${url}">
   <meta property="og:locale" content="${l.locale}">
-  <meta property="og:image" content="${catalog.baseUrl}/assets/ayt-ride-transfer.jpg">
+  <meta property="og:image" content="${catalog.baseUrl}${route.image || "/assets/ayt-ride-transfer.jpg"}">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="${url}">
   ${altRouteTags(route)}
@@ -827,10 +840,11 @@ ${header(language)}
   <main>
     <section class="page-hero route-hero">
       <div class="shell route-hero-grid">
-        <div>
+        <div class="route-hero-copy">
           <p class="eyebrow">${l.eyebrow}</p>
           <h1>${escapeHtml(page.h1)}</h1>
           <p>${escapeHtml(page.intro)}</p>
+          ${routeVisual(route)}
           <div class="route-price-band">
             <span><small>Standard Sedan</small><strong>${money(sedan)} TOTAL</strong></span>
             <span><small>VIP Van</small><strong>${money(vip)} TOTAL</strong></span>

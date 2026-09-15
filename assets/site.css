@@ -327,6 +327,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden;
   color: var(--ink);
   background:
     radial-gradient(circle at 12% 4%, rgba(18, 128, 92, .12), transparent 22rem),
@@ -414,6 +415,7 @@ a {
 }
 
 .nav-links {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -456,6 +458,7 @@ a {
 }
 
 .nav-cta {
+  flex: 0 0 auto;
   min-height: 42px;
   display: inline-flex;
   align-items: center;
@@ -2443,5 +2446,245 @@ form {
   .visual-band {
     padding-top: 28px;
     padding-bottom: 28px;
+  }
+}
+
+/* Route detail pages: compact hero, stable form sizing and per-route visual */
+.route-hero {
+  padding-top: 46px;
+  padding-bottom: 44px;
+}
+
+.route-hero-grid {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, .86fr);
+  gap: 30px;
+}
+
+.route-hero-copy {
+  min-width: 0;
+  padding-top: 12px;
+}
+
+.route-hero h1 {
+  max-width: 720px;
+  margin-bottom: 14px;
+  font-size: 3.25rem;
+  line-height: 1.03;
+  text-wrap: balance;
+}
+
+.route-hero p {
+  max-width: 650px;
+  color: #4b5565;
+}
+
+.route-hero .booking-card {
+  width: 100%;
+  max-width: 590px;
+  min-width: 0;
+  justify-self: end;
+}
+
+.route-hero .booking-card-head {
+  padding: 18px 20px;
+}
+
+.route-hero form {
+  padding: 18px 20px 20px;
+}
+
+#booking {
+  scroll-margin-top: 112px;
+}
+
+.route-visual-card {
+  width: min(100%, 560px);
+  display: grid;
+  grid-template-columns: minmax(132px, 170px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  margin: 18px 0 0;
+  border: 1px solid #cfe7df;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(241, 252, 247, .92)),
+    #fff;
+  padding: 10px;
+  box-shadow: 0 16px 44px rgba(17, 24, 39, .08);
+}
+
+.route-visual-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.route-visual-card figcaption {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.route-visual-card span {
+  color: var(--blue-2);
+  font-size: .78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.route-visual-card strong {
+  color: var(--navy);
+  font-size: 1.12rem;
+  line-height: 1.15;
+}
+
+.route-visual-card small {
+  width: fit-content;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius);
+  background: #e8f8f1;
+  color: var(--green-2);
+  padding: 5px 9px;
+  font-weight: 900;
+}
+
+.route-hero .route-price-band {
+  margin-top: 16px;
+}
+
+.route-hero .route-price-band span {
+  min-height: 78px;
+}
+
+@media (max-width: 1020px) {
+  .route-hero {
+    padding-top: 32px;
+  }
+
+  .route-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .route-hero .booking-card {
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav {
+    overflow: visible;
+  }
+
+  .nav-links {
+    flex: 0 0 auto;
+    gap: 0;
+  }
+
+  .nav-cta {
+    max-width: none;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  .route-hero {
+    padding-top: 22px;
+    padding-bottom: 28px;
+  }
+
+  .route-hero .shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .route-hero .eyebrow {
+    font-size: .75rem;
+    line-height: 1.25;
+  }
+
+  .route-hero h1 {
+    font-size: 2.15rem;
+    line-height: 1.05;
+  }
+
+  .route-hero p {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    font-size: .96rem;
+    line-height: 1.45;
+  }
+
+  .route-hero-copy {
+    padding-top: 0;
+  }
+
+  .route-visual-card {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 11px;
+    margin-top: 14px;
+    padding: 8px;
+  }
+
+  .route-visual-card img {
+    aspect-ratio: 1 / 1;
+  }
+
+  .route-visual-card strong {
+    font-size: 1rem;
+  }
+
+  .route-hero .route-price-band {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .route-hero .route-price-band span {
+    min-width: 0;
+    padding: 10px 8px;
+    font-size: .8rem;
+    overflow-wrap: break-word;
+  }
+
+  .route-hero .booking-card {
+    overflow: hidden;
+  }
+
+  .route-hero .route-fields,
+  .route-hero .form-grid.two,
+  .route-hero .form-grid.three,
+  .route-hero .counter-row,
+  .route-hero .vehicle-grid {
+    width: 100%;
+  }
+
+  #booking {
+    scroll-margin-top: 18px;
+  }
+
+  input[type="date"],
+  input[type="time"] {
+    min-width: 0;
+    min-height: 54px;
+    text-align: center;
+  }
+
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="time"]::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .route-visual-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .route-visual-card img {
+    aspect-ratio: 1 / 1;
   }
 }
