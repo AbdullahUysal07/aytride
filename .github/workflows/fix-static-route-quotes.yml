@@ -1,0 +1,38 @@
+name: Fix static route quote placeholders
+
+on:
+  push:
+    paths:
+      - "tools/fix-static-route-quotes.mjs"
+      - ".github/workflows/fix-static-route-quotes.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  fix-static-route-quotes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Correct route-page static prices
+        run: node tools/fix-static-route-quotes.mjs
+
+      - name: Commit corrected route pages
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No route quote changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "Fix static route price placeholders"
+          git push
