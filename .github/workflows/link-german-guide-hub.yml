@@ -35,8 +35,8 @@ jobs:
 
           const generator = 'tools/generate-site.mjs';
           let source = fs.readFileSync(generator, 'utf8');
-          const oldLine = '<a href=\\"/blog/\\">${l.navBlog}</a>';
-          const newLine = '<a href=\\"${language === "de" ? "/de/ratgeber/" : "/blog/"}\\">${language === "de" ? "Ratgeber" : l.navBlog}</a>';
+          const oldLine = '<a href="/blog/">${l.navBlog}</a>';
+          const newLine = '<a href="${language === "de" ? "/de/ratgeber/" : "/blog/"}">${language === "de" ? "Ratgeber" : l.navBlog}</a>';
           if (!source.includes(oldLine)) throw new Error('Expected generator blog link not found; refusing unsafe edit.');
           source = source.replace(oldLine, newLine);
           fs.writeFileSync(generator, source);
