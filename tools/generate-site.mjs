@@ -360,7 +360,7 @@ function header(language) {
       </a>
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="${l.homePath}#booking">${l.navBook}</a>
-        <a href="/blog/">${l.navBlog}</a>
+        <a href="${language === "de" ? "/de/ratgeber/" : "/blog/"}">${language === "de" ? "Ratgeber" : l.navBlog}</a>
         <a href="${l.homePath}#routes">${l.navRoutes}</a>
         <span class="language-switch" aria-label="Language options">
           ${Object.entries(languages).map(([code, item]) => `<a class="${code === language ? "active" : ""}" href="${item.homePath}" aria-label="${code.toUpperCase()}">${item.label}</a>`).join("")}
