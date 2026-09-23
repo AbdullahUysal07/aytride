@@ -201,6 +201,17 @@ async function adminCookie(env) {
   return cookie;
 }
 
+async function adminSessionToken(env) {
+  const response = await worker.fetch(request("/api/admin/login", {
+    method: "POST",
+    body: JSON.stringify({ email: "info@shramworld.com", password: "launch-check-password" })
+  }), env);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.match(body.sessionToken, /^[A-Za-z0-9_-]+\.[a-f0-9]{64}$/);
+  return body.sessionToken;
+}
+
 test("complete production booking flow persists AYT to Belek and appears in authenticated admin", async () => {
   const db = new FakeD1();
   const env = makeEnv(db);
@@ -211,7 +222,7 @@ test("complete production booking flow persists AYT to Belek and appears in auth
     tripType: "oneway",
     pickup: "Antalya Airport (AYT)",
     dropoff: "Belek / Kadriye",
-    pickupDate: "2026-09-15",
+    pickupDate: "2026-10-15",
     pickupTime: "23:30",
     returnDate: "",
     returnTime: "",
@@ -267,6 +278,14 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   assert.equal(adminBody.bookings[0].status, "pending");
   assert.equal(adminBody.bookings[0].driverCostTry, 1155);
   assert.equal(adminBody.bookings[0].profitTry, 870);
+  assert.equal(adminBody.bookings[0].attribution.utm_source, "launch-check");
+
+  const sessionToken = await adminSessionToken(env);
+  const tokenResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { authorization: `Bearer ${sessionToken}` }
+  }), env);
+  assert.equal(tokenResponse.status, 200);
 
   const confirmResponse = await worker.fetch(request(`/api/admin/bookings/${payload.reference}/confirm`, {
     method: "POST",
@@ -312,7 +331,7 @@ test("admin can update public route prices and soft-delete bookings", async () =
       tripType: "oneway",
       pickup: "Antalya Airport (AYT)",
       dropoff: "Belek / Kadriye",
-      pickupDate: "2026-09-15",
+      pickupDate: "2026-10-15",
       pickupTime: "13:30",
       returnDate: "",
       returnTime: "",
@@ -362,7 +381,7 @@ test("admin can update driver cost settings used by revenue calculations", async
       tripType: "oneway",
       pickup: "Antalya Airport (AYT)",
       dropoff: "Belek / Kadriye",
-      pickupDate: "2026-09-15",
+      pickupDate: "2026-10-15",
       pickupTime: "13:30",
       returnDate: "",
       returnTime: "",

@@ -3,6 +3,7 @@
   if (!catalog) return;
 
   const attributionKey = "aytRideAttribution";
+  const adminSessionKey = "aytRideAdminSession";
   const confirmationKey = "aytRideLastConfirmation";
   const consentKey = "aytRideConsent";
 
@@ -505,6 +506,25 @@
         changed = true;
       }
     });
+    if (!current.landingPage) {
+      current.landingPage = `${location.pathname}${location.search}`.slice(0, 500);
+      changed = true;
+    }
+    if (!current.referrerHost && document.referrer) {
+      try {
+        current.referrerHost = new URL(document.referrer).hostname.slice(0, 180);
+        changed = true;
+      } catch {
+        // Invalid referrer values are not recorded.
+      }
+    }
+    if (!current.source) {
+      if (current.gclid || current.gbraid || current.wbraid) current.source = "Google Ads";
+      else if (current.utm_source) current.source = current.utm_source;
+      else if (current.referrerHost) current.source = current.referrerHost;
+      else current.source = "Direct";
+      changed = true;
+    }
     if (changed) localStorage.setItem(attributionKey, JSON.stringify(current));
   }
 
@@ -836,9 +856,15 @@
   }
 
   async function adminRequest(path, options = {}) {
+    const sessionToken = sessionStorage.getItem(adminSessionKey);
     const response = await fetch(`${catalog.apiBase || ""}${path}`, {
       credentials: "include",
-      headers: { "content-type": "application/json", accept: "application/json", ...(options.headers || {}) },
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+        ...(sessionToken ? { authorization: `Bearer ${sessionToken}` } : {}),
+        ...(options.headers || {})
+      },
       ...options
     });
     if (!response.ok) throw new Error(await response.text());
@@ -972,6 +998,7 @@
           <p><b>Araç</b>${escapeHtml(vehicle(item.vehicleId).name)}</p>
           <p><b>Telefon</b>${escapeHtml(item.guestPhone)}</p>
           <p><b>E-posta</b>${escapeHtml(item.guestEmail || "-")}</p>
+          <p><b>Kaynak</b>${escapeHtml(item.attribution?.source || item.attribution?.utm_source || item.attribution?.referrerHost || "Doğrudan")}</p>
           <p><b>Mesafe</b>${Number(item.distanceKm || 0)} km • ${Number(item.ways || 1)} yön</p>
           <p><b>Satış</b>${item.quoteOnly ? "Teklif bekliyor" : `${money(item.publicTotalEur)} / ${moneyTry(item.revenueTry)}`}</p>
           <p><b>Şoföre verilecek</b>${item.driverCostTry == null ? "Mesafe yok" : `${moneyTry(item.driverCostTry)} (${Number(item.driverRateTryPerKm || 35)} TL/km)`}</p>
@@ -1093,10 +1120,11 @@
       const email = text(document.querySelector("#adminEmail").value);
       const password = document.querySelector("#adminPassword").value;
       try {
-        await adminRequest("/api/admin/login", {
+        const data = await adminRequest("/api/admin/login", {
           method: "POST",
           body: JSON.stringify({ email, password })
         });
+        if (data.sessionToken) sessionStorage.setItem(adminSessionKey, data.sessionToken);
         login.classList.add("hidden");
         panel.classList.remove("hidden");
         await loadBookings();
@@ -1269,8 +1297,20 @@
       }
       panel.classList.add("hidden");
       login.classList.remove("hidden");
+      sessionStorage.removeItem(adminSessionKey);
       output.textContent = "Oturum kapatıldı.";
     });
+
+    if (sessionStorage.getItem(adminSessionKey)) {
+      login.classList.add("hidden");
+      panel.classList.remove("hidden");
+      loadBookings().catch(() => {
+        sessionStorage.removeItem(adminSessionKey);
+        panel.classList.add("hidden");
+        login.classList.remove("hidden");
+        output.textContent = "Oturum süresi doldu. Lütfen yeniden giriş yapın.";
+      });
+    }
   }
 
   function initConsent() {

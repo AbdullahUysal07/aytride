@@ -106,7 +106,7 @@ function corsHeaders(env, origin) {
     "access-control-allow-origin": allowOrigin,
     "access-control-allow-credentials": "true",
     "access-control-allow-methods": "GET,POST,OPTIONS",
-    "access-control-allow-headers": "content-type,accept",
+    "access-control-allow-headers": "content-type,accept,authorization",
     "vary": "Origin"
   };
 }
@@ -450,7 +450,7 @@ async function loginAdmin(request, env, cors) {
   if (actual !== env.ADMIN_PASSWORD_SHA256) return json({ error: "Invalid login" }, 401, cors);
 
   const token = await signSession({ email, exp: Math.floor(Date.now() / 1000) + 86400 }, env.ADMIN_SESSION_SECRET);
-  return json({ ok: true }, 200, {
+  return json({ ok: true, sessionToken: token }, 200, {
     ...cors,
     "set-cookie": `${SESSION_COOKIE}=${token}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=86400`
   });
@@ -472,7 +472,7 @@ async function listAdminBookings(request, env, cors) {
     select reference, language, route_id, trip_type, pickup, dropoff, pickup_date, pickup_time,
       return_date, return_time, flight_number, hotel_address, vehicle_id, passengers,
       luggage, child_seats, guest_name, guest_phone, guest_email, notes, public_total_eur,
-      quote_only, private_vehicle_price_eur, status, confirmed_at, deleted_at, updated_at, created_at
+      quote_only, private_vehicle_price_eur, attribution_json, status, confirmed_at, deleted_at, updated_at, created_at
     from bookings
     where deleted_at is null
     order by created_at desc
@@ -903,6 +903,7 @@ function adminBooking(row, catalog, settings) {
     publicTotalEur: row.public_total_eur,
     quoteOnly: Boolean(row.quote_only),
     privateVehiclePriceEur: row.private_vehicle_price_eur,
+    attribution: parseAttribution(row.attribution_json),
     status: row.status || "pending",
     confirmedAt: row.confirmed_at,
     deletedAt: row.deleted_at,
@@ -915,6 +916,15 @@ function adminBooking(row, catalog, settings) {
     revenueTry,
     profitTry
   };
+}
+
+function parseAttribution(value) {
+  try {
+    const attribution = JSON.parse(value || "{}");
+    return attribution && typeof attribution === "object" && !Array.isArray(attribution) ? attribution : {};
+  } catch {
+    return {};
+  }
 }
 
 function adminSummary(bookings) {
@@ -956,8 +966,11 @@ function startOfWeek(date) {
 
 async function readSession(request, secret) {
   if (!secret) return null;
+  const authorization = request.headers.get("authorization") || "";
+  const bearerToken = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
   const cookie = request.headers.get("cookie") || "";
-  const token = cookie.split(";").map((item) => item.trim()).find((item) => item.startsWith(`${SESSION_COOKIE}=`))?.slice(SESSION_COOKIE.length + 1);
+  const cookieToken = cookie.split(";").map((item) => item.trim()).find((item) => item.startsWith(`${SESSION_COOKIE}=`))?.slice(SESSION_COOKIE.length + 1);
+  const token = bearerToken || cookieToken;
   if (!token) return null;
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return null;
