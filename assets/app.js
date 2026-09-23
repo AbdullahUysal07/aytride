@@ -998,7 +998,7 @@
           <p><b>Araç</b>${escapeHtml(vehicle(item.vehicleId).name)}</p>
           <p><b>Telefon</b>${escapeHtml(item.guestPhone)}</p>
           <p><b>E-posta</b>${escapeHtml(item.guestEmail || "-")}</p>
-          <p><b>Kaynak</b>${escapeHtml(item.attribution?.source || item.attribution?.utm_source || item.attribution?.referrerHost || "Doğrudan")}</p>
+          <p><b>Kaynak</b>${escapeHtml(item.attribution?.source || item.attribution?.utm_source || item.attribution?.referrerHost || "Kaynak kaydı yok")}</p>
           <p><b>Mesafe</b>${Number(item.distanceKm || 0)} km • ${Number(item.ways || 1)} yön</p>
           <p><b>Satış</b>${item.quoteOnly ? "Teklif bekliyor" : `${money(item.publicTotalEur)} / ${moneyTry(item.revenueTry)}`}</p>
           <p><b>Şoföre verilecek</b>${item.driverCostTry == null ? "Mesafe yok" : `${moneyTry(item.driverCostTry)} (${Number(item.driverRateTryPerKm || 35)} TL/km)`}</p>
