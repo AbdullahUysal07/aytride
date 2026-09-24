@@ -487,6 +487,35 @@
     if (window.gtag) window.gtag("event", name, safeParams);
   }
 
+  function initGuideBookingCta() {
+    const guides = {
+      "/blog/antalya-airport-to-alanya-distance-transfer-time/": { href: "/antalya-airport-to-alanya-transfer/#booking", route: "alanya", label: "Check Alanya transfer price" },
+      "/blog/antalya-airport-to-side-distance-transfer-time/": { href: "/antalya-airport-to-side-transfer/#booking", route: "side", label: "Check Side transfer price" },
+      "/blog/antalya-airport-to-kemer-distance-transfer-time/": { href: "/antalya-airport-to-kemer-transfer/#booking", route: "kemer", label: "Check Kemer transfer price" },
+      "/blog/antalya-airport-to-lara-kundu-transfer-time/": { href: "/antalya-airport-to-lara-transfer/#booking", route: "lara", label: "Check Lara and Kundu transfer price" },
+      "/blog/belek-golf-transfer/": { href: "/antalya-airport-to-belek-transfer/#booking", route: "belek", label: "Check Belek transfer price" },
+      "/de/ratgeber/flughafen-antalya-alanya-entfernung-fahrzeit/": { href: "/de/flughafen-antalya-alanya-transfer/#booking", route: "alanya", label: "Alanya Transferpreis ansehen" },
+      "/de/ratgeber/flughafen-antalya-side-entfernung-fahrzeit/": { href: "/de/flughafen-antalya-side-transfer/#booking", route: "side", label: "Side Transferpreis ansehen" },
+      "/de/ratgeber/flughafen-antalya-belek-entfernung-fahrzeit/": { href: "/de/flughafen-antalya-belek-transfer/#booking", route: "belek", label: "Belek Transferpreis ansehen" },
+      "/de/ratgeber/flughafen-antalya-kemer-entfernung-fahrzeit/": { href: "/de/flughafen-antalya-kemer-transfer/#booking", route: "kemer", label: "Kemer Transferpreis ansehen" },
+      "/de/ratgeber/flughafen-antalya-lara-kundu-transferzeit/": { href: "/de/flughafen-antalya-lara-transfer/#booking", route: "lara", label: "Lara und Kundu Transferpreis ansehen" }
+    };
+    const guide = guides[location.pathname];
+    const article = document.querySelector("article.article");
+    if (!guide || !article || article.querySelector("[data-guide-booking-cta]")) return;
+    const cta = document.createElement("aside");
+    cta.className = "article-booking-cta";
+    cta.dataset.guideBookingCta = "true";
+    cta.innerHTML = `<p>Fixed vehicle price, WhatsApp confirmation and payment on arrival.</p><a class="primary-btn" href="${guide.href}">${guide.label}</a>`;
+    const firstParagraph = article.querySelector("p:not(.mini-label)");
+    if (firstParagraph) firstParagraph.insertAdjacentElement("afterend", cta);
+    else article.prepend(cta);
+    cta.querySelector("a")?.addEventListener("click", () => aytEvent("guide_booking_cta_clicked", {
+      guide_path: location.pathname,
+      route_id: guide.route
+    }));
+  }
+
   function readAttribution() {
     try {
       return JSON.parse(localStorage.getItem(attributionKey) || "{}");
@@ -1370,6 +1399,7 @@
   document.addEventListener("DOMContentLoaded", async () => {
     await loadLiveCatalog();
     initConsent();
+    initGuideBookingCta();
     initBooking();
     initConfirmation();
     initBlogLists();

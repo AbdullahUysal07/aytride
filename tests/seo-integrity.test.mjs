@@ -80,6 +80,7 @@ test("public pages do not contain old unsafe booking patterns", () => {
 test("sitemap contains crawlable commercial URLs and excludes admin", () => {
   const sitemap = read("sitemap.xml");
   assert.equal(sitemap.includes("/admin/"), false);
+  assert.equal(sitemap.includes("/blog/article/"), false);
   assert.ok(sitemap.includes("https://aytride.com/"));
   for (const route of catalog.routes.filter((item) => item.slugs?.en)) {
     for (const language of routeLanguages) {
@@ -87,4 +88,29 @@ test("sitemap contains crawlable commercial URLs and excludes admin", () => {
       assert.ok(sitemap.includes(`${catalog.baseUrl}/${urlPath}`), `${route.id} ${language} missing from sitemap`);
     }
   }
+});
+
+test("high-intent guides offer a measured path to a route booking form", () => {
+  const app = read("assets/app.js");
+  assert.match(app, /guide_booking_cta_clicked/);
+  for (const route of ["alanya", "side", "kemer", "lara", "belek"]) {
+    assert.match(app, new RegExp(`route: "${route}"`));
+  }
+});
+
+test("commercial pages retain a booking path and local destination context", () => {
+  const laraRoute = read("antalya-airport-to-lara-transfer/index.html");
+  const home = read("index.html");
+
+  assert.match(laraRoute, /id="booking"/);
+  assert.match(laraRoute, /Lara Beach/);
+  assert.match(home, /guest-confidence/);
+});
+
+test("partner landing page is indexed and linked from the sitemap", () => {
+  const partnerPage = read("hotel-transfer-partners/index.html");
+  const sitemap = read("sitemap.xml");
+
+  assert.match(partnerPage, /Antalya hotel and travel partners/);
+  assert.match(sitemap, /hotel-transfer-partners/);
 });

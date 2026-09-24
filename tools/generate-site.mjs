@@ -5,7 +5,8 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260915-auto-rate";
+const buildStamp = "20260924-conversion-seo";
+const buildDate = "2026-09-24";
 
 const languages = {
   en: {
@@ -346,6 +347,42 @@ function favicon() {
   return "/favicon.svg";
 }
 
+function confidenceBand(language) {
+  const content = {
+    en: { kicker: "Book with confidence", title: "Clear transfer details before your driver is confirmed.", items: ["WhatsApp confirmation", "Fixed vehicle price", "Pay on arrival"] },
+    de: { kicker: "Mit Vertrauen buchen", title: "Klare Transferdetails vor der Fahrerbestätigung.", items: ["WhatsApp-Bestätigung", "Fester Fahrzeugpreis", "Zahlung bei Ankunft"] },
+    pl: { kicker: "Rezerwuj bez obaw", title: "Jasne szczegóły transferu przed potwierdzeniem kierowcy.", items: ["Potwierdzenie WhatsApp", "Stała cena za pojazd", "Płatność po przyjeździe"] },
+    ru: { kicker: "Бронируйте уверенно", title: "Понятные детали трансфера до подтверждения водителя.", items: ["Подтверждение в WhatsApp", "Фиксированная цена за автомобиль", "Оплата по прибытии"] },
+    nl: { kicker: "Boek met vertrouwen", title: "Duidelijke transferdetails voordat de chauffeur is bevestigd.", items: ["WhatsApp-bevestiging", "Vaste voertuigprijs", "Betalen bij aankomst"] }
+  };
+  const item = content[language] || content.en;
+  return `<section class="guest-confidence" aria-label="${escapeHtml(item.kicker)}">
+      <div class="shell confidence-grid">
+        <div class="confidence-stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div><p class="mini-label">${escapeHtml(item.kicker)}</p><h2>${escapeHtml(item.title)}</h2></div>
+        <ul class="confidence-list">${item.items.map((label) => `<li>${escapeHtml(label)}</li>`).join("")}</ul>
+      </div>
+    </section>`;
+}
+
+function destinationAreas(route, language) {
+  const areas = {
+    lara: ["Lara", "Kundu", "Lara Beach", "Aksu hotel zone"],
+    belek: ["Belek", "Kadriye", "The Land of Legends area", "Belek golf resorts"],
+    kemer: ["Beldibi", "Göynük", "Kemer centre", "Kiriş", "Çamyuva", "Tekirova"],
+    side: ["Side", "Evrenseki", "Kumköy", "Çolaklı", "Manavgat", "Titreyengöl"],
+    alanya: ["Okurcalar", "Avsallar", "Türkler", "Konaklı", "Alanya centre", "Mahmutlar"]
+  };
+  const copy = {
+    en: { title: "Popular hotel and resort areas", text: "Choose the exact hotel or accommodation in the booking form so the pickup and route can be confirmed accurately." },
+    de: { title: "Beliebte Hotel- und Urlaubsgebiete", text: "Geben Sie im Buchungsformular das genaue Hotel oder die Unterkunft an, damit Abholung und Route korrekt bestätigt werden können." },
+    pl: { title: "Popularne hotele i regiony wypoczynkowe", text: "Podaj w formularzu dokładny hotel lub miejsce zakwaterowania, aby potwierdzić odbiór i trasę." },
+    ru: { title: "Популярные отельные и курортные районы", text: "Укажите в форме точный отель или адрес проживания, чтобы правильно подтвердить маршрут и встречу." }
+  };
+  const item = copy[language] || copy.en;
+  return `<h2>${item.title}</h2><p>${item.text}</p><div class="area-links">${(areas[route.id] || []).map((area) => `<span>${escapeHtml(area)}</span>`).join("")}</div>`;
+}
+
 function routeVisual(route) {
   if (!route.image) return "";
   const alt = route.imageAlt || `${route.destination} private transfer route`;
@@ -664,6 +701,7 @@ ${header(language)}
         </div>
       </div>
     </section>
+    ${confidenceBand(language)}
 
     <section class="routes-section" id="routes">
       <div class="shell">
@@ -860,6 +898,7 @@ ${header(language)}
         <p>${article.pickupP}</p>
         <h2>${article.localH}</h2>
         <p>${escapeHtml(page.local)}</p>
+        ${destinationAreas(route, language)}
         <h2>${article.capacityH}</h2>
         <p>${article.capacityP}</p>
         <h2>${article.paymentH}</h2>
@@ -1073,10 +1112,18 @@ function sitemap() {
     ...Object.values(languages).filter((item) => item.homePath !== "/").map((item) => item.homePath),
     ...commercialRoutes.flatMap((route) => routeLanguages.map((language) => routePath(route, language))),
     "/blog/",
-    "/blog/article/",
-    "/blog/antalya-airport-transfer-guide/",
-    "/blog/private-transfer-vs-taxi-antalya/",
-    "/blog/belek-golf-transfer/",
+    ...blogPosts.map((post) => `/blog/${post.slug}/`),
+    "/blog/antalya-airport-to-alanya-distance-transfer-time/",
+    "/blog/antalya-airport-to-side-distance-transfer-time/",
+    "/blog/antalya-airport-to-kemer-distance-transfer-time/",
+    "/blog/antalya-airport-to-lara-kundu-transfer-time/",
+    "/de/ratgeber/",
+    "/de/ratgeber/flughafen-antalya-alanya-entfernung-fahrzeit/",
+    "/de/ratgeber/flughafen-antalya-side-entfernung-fahrzeit/",
+    "/de/ratgeber/flughafen-antalya-belek-entfernung-fahrzeit/",
+    "/de/ratgeber/flughafen-antalya-kemer-entfernung-fahrzeit/",
+    "/de/ratgeber/flughafen-antalya-lara-kundu-transferzeit/",
+    "/hotel-transfer-partners/",
     "/about/",
     "/contact/",
     "/privacy/",
@@ -1088,7 +1135,7 @@ function sitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((url) => `  <url>
     <loc>${catalog.baseUrl}${url}</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>${buildDate}</lastmod>
     <changefreq>${url.includes("blog") || url.includes("transfer") ? "monthly" : "weekly"}</changefreq>
     <priority>${url === "/" ? "1.0" : url.includes("transfer") ? "0.9" : "0.7"}</priority>
   </url>`).join("\n")}
@@ -1143,6 +1190,11 @@ write("transfer-service-conditions/index.html", legalPage("transfer-service-cond
   "Passengers must provide accurate flight, pickup, destination, passenger and luggage information before confirmation.",
   "Child seats, golf bags, extra luggage and special meeting instructions should be added to the request notes.",
   "AYT Ride does not ask for online card payment in the first phase; payment is handled after the ride unless confirmed otherwise."
+]));
+write("hotel-transfer-partners/index.html", legalPage("hotel-transfer-partners", "Antalya hotel and travel partners", [
+  "AYT Ride works with hotels, villas, travel planners and tourism businesses that need a clear private-transfer booking path for guests arriving at Antalya Airport.",
+  "A partner enquiry can cover airport pickup guidance, route pages for a resort area, guest WhatsApp confirmation and a booking link that opens the relevant transfer form.",
+  `To discuss a guest transfer or partnership enquiry, contact AYT Ride by WhatsApp at ${catalog.business.displayWhatsapp} or email ${catalog.business.bookingEmail}.`
 ]));
 
 write("404.html", `<!doctype html>
