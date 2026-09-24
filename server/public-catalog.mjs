@@ -65,8 +65,8 @@ export const publicCatalog = {
       "durationMin": 20,
       "available": true,
       "prices": {
-        "standard-sedan": 30,
-        "vip-van": 40
+        "standard-sedan": 27,
+        "vip-van": 35
       },
       "image": "/assets/routes/lara-kundu.jpg",
       "imageAlt": "Lara Kundu beach and resort area near Antalya Airport",
@@ -171,8 +171,8 @@ export const publicCatalog = {
       "durationMin": 35,
       "available": true,
       "prices": {
-        "standard-sedan": 45,
-        "vip-van": 60
+        "standard-sedan": 40,
+        "vip-van": 50
       },
       "image": "/assets/routes/belek-kadriye.jpg",
       "imageAlt": "Belek Kadriye resort coastline near Antalya",
@@ -277,8 +277,8 @@ export const publicCatalog = {
       "durationMin": 65,
       "available": true,
       "prices": {
-        "standard-sedan": 60,
-        "vip-van": 80
+        "standard-sedan": 57,
+        "vip-van": 70
       },
       "image": "/assets/routes/kemer.jpg",
       "imageAlt": "Kemer beach hotels with Taurus mountains",
@@ -383,8 +383,8 @@ export const publicCatalog = {
       "durationMin": 60,
       "available": true,
       "prices": {
-        "standard-sedan": 65,
-        "vip-van": 90
+        "standard-sedan": 63,
+        "vip-van": 75
       },
       "image": "/assets/routes/side-manavgat.jpg",
       "imageAlt": "Side ancient temple and palm trees on the Antalya coast",
@@ -489,8 +489,8 @@ export const publicCatalog = {
       "durationMin": 120,
       "available": true,
       "prices": {
-        "standard-sedan": 95,
-        "vip-van": 130
+        "standard-sedan": 105,
+        "vip-van": 115
       },
       "image": "/assets/routes/alanya.jpg",
       "imageAlt": "Alanya harbor and castle coastline",
@@ -595,8 +595,8 @@ export const publicCatalog = {
       "durationMin": 25,
       "available": true,
       "prices": {
-        "standard-sedan": 35,
-        "vip-van": 45
+        "standard-sedan": 33,
+        "vip-van": 40
       },
       "image": "/assets/routes/kaleici-old-town.jpg",
       "imageAlt": "Kaleici Old Town marina and Antalya historic harbor",
@@ -701,8 +701,8 @@ export const publicCatalog = {
       "durationMin": 35,
       "available": true,
       "prices": {
-        "standard-sedan": 40,
-        "vip-van": 55
+        "standard-sedan": 37,
+        "vip-van": 45
       }
     },
     {
