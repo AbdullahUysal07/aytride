@@ -66,7 +66,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 27,
-        "vip-van": 40
+        "vip-van": 35
       },
       "image": "/assets/routes/lara-kundu.jpg",
       "imageAlt": "Lara Kundu beach and resort area near Antalya Airport",
@@ -172,7 +172,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 40,
-        "vip-van": 60
+        "vip-van": 50
       },
       "image": "/assets/routes/belek-kadriye.jpg",
       "imageAlt": "Belek Kadriye resort coastline near Antalya",
@@ -278,7 +278,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 57,
-        "vip-van": 80
+        "vip-van": 70
       },
       "image": "/assets/routes/kemer.jpg",
       "imageAlt": "Kemer beach hotels with Taurus mountains",
@@ -384,7 +384,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 63,
-        "vip-van": 90
+        "vip-van": 75
       },
       "image": "/assets/routes/side-manavgat.jpg",
       "imageAlt": "Side ancient temple and palm trees on the Antalya coast",
@@ -490,7 +490,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 105,
-        "vip-van": 130
+        "vip-van": 115
       },
       "image": "/assets/routes/alanya.jpg",
       "imageAlt": "Alanya harbor and castle coastline",
@@ -596,7 +596,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 33,
-        "vip-van": 45
+        "vip-van": 40
       },
       "image": "/assets/routes/kaleici-old-town.jpg",
       "imageAlt": "Kaleici Old Town marina and Antalya historic harbor",
@@ -702,7 +702,7 @@
       "available": true,
       "prices": {
         "standard-sedan": 37,
-        "vip-van": 55
+        "vip-van": 45
       }
     },
     {
