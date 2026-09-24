@@ -1229,8 +1229,15 @@
         login.classList.add("hidden");
         panel.classList.remove("hidden");
         await loadBookings();
-      } catch {
-        output.textContent = "Giriş yapılamadı. Production backend ve admin şifresi kurulmadan panel açılmaz.";
+      } catch (error) {
+        const message = String(error?.message || "");
+        if (message.includes("Invalid login")) {
+          output.textContent = "E-posta veya şifre eşleşmedi. E-posta doğruysa Cloudflare'daki admin parola kaydı bu şifreyle eşleşmiyor olabilir.";
+        } else if (message.includes("not configured")) {
+          output.textContent = "Admin giriş ayarları sunucuda eksik. Cloudflare Worker gizli değişkenleri kontrol edilmeli.";
+        } else {
+          output.textContent = "Giriş sırasında bağlantı hatası oluştu. Lütfen tekrar deneyin.";
+        }
       }
     });
 
