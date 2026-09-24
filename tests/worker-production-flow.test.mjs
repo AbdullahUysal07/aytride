@@ -250,10 +250,10 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   assert.equal(bookingResponse.status, 201);
   assert.equal(bookingBody.ok, true);
   assert.equal(bookingBody.reference, payload.reference);
-  assert.equal(bookingBody.publicTotalEur, 45);
+  assert.equal(bookingBody.publicTotalEur, 40);
   assert.equal(bookingBody.emailStatus, "skipped_not_configured");
   assert.equal(db.rows.length, 1);
-  assert.equal(db.rows[0].public_total_eur, 45);
+  assert.equal(db.rows[0].public_total_eur, 40);
   assert.equal(db.rows[0].private_vehicle_price_eur, 32);
   assert.equal(db.rows[0].child_seats, 1);
 
@@ -273,11 +273,11 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   assert.equal(adminBody.bookings[0].reference, payload.reference);
   assert.equal(adminBody.bookings[0].routeId, "belek");
   assert.equal(adminBody.bookings[0].vehicleId, "standard-sedan");
-  assert.equal(adminBody.bookings[0].publicTotalEur, 45);
+  assert.equal(adminBody.bookings[0].publicTotalEur, 40);
   assert.equal(adminBody.bookings[0].privateVehiclePriceEur, 32);
   assert.equal(adminBody.bookings[0].status, "pending");
   assert.equal(adminBody.bookings[0].driverCostTry, 1155);
-  assert.equal(adminBody.bookings[0].profitTry, 870);
+  assert.equal(adminBody.bookings[0].profitTry, 645);
   assert.equal(adminBody.bookings[0].attribution.utm_source, "launch-check");
 
   const sessionToken = await adminSessionToken(env);
@@ -301,9 +301,9 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   const confirmedBody = await confirmedResponse.json();
   assert.equal(confirmedBody.bookings[0].status, "confirmed");
   assert.equal(confirmedBody.summary.total.count, 1);
-  assert.equal(confirmedBody.summary.total.revenueEur, 45);
+  assert.equal(confirmedBody.summary.total.revenueEur, 40);
   assert.equal(confirmedBody.summary.total.driverCostTry, 1155);
-  assert.equal(confirmedBody.summary.total.profitTry, 870);
+  assert.equal(confirmedBody.summary.total.profitTry, 645);
 });
 
 test("admin can update public route prices and soft-delete bookings", async () => {
@@ -417,7 +417,7 @@ test("admin can update driver cost settings used by revenue calculations", async
   const adminBody = await adminResponse.json();
   assert.equal(adminBody.settings.driverRateTryPerKm, 40);
   assert.equal(adminBody.bookings[0].driverCostTry, 1320);
-  assert.equal(adminBody.bookings[0].profitTry, 705);
+  assert.equal(adminBody.bookings[0].profitTry, 480);
 });
 
 test("admin can refresh automatic EUR TRY rate and reuse the cached value", async () => {

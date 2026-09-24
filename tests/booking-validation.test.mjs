@@ -33,7 +33,7 @@ function basePayload(overrides = {}) {
 test("calculates fixed sedan price from the public catalog", () => {
   const result = validateBookingPayload(catalog, basePayload(), { today: "2026-09-12" });
   assert.equal(result.ok, true);
-  assert.equal(result.payload.publicTotalEur, 30);
+  assert.equal(result.payload.publicTotalEur, 27);
   assert.equal(result.payload.quoteOnly, false);
 });
 
@@ -46,7 +46,7 @@ test("applies return discount without trusting client totals", () => {
     publicTotalEur: 1
   }), { today: "2026-09-12" });
   assert.equal(result.ok, true);
-  assert.equal(result.payload.publicTotalEur, 54);
+  assert.equal(result.payload.publicTotalEur, 49);
 });
 
 test("keeps fixed price unchanged for night pickup and child seats", () => {
@@ -54,7 +54,7 @@ test("keeps fixed price unchanged for night pickup and child seats", () => {
     pickupTime: "23:30",
     childSeats: 1
   }));
-  assert.equal(quote.total, 30);
+  assert.equal(quote.total, 27);
 });
 
 test("keeps Belek sedan fixed price unchanged after step two extras", () => {
@@ -68,7 +68,7 @@ test("keeps Belek sedan fixed price unchanged after step two extras", () => {
     childSeats: 1
   }), { today: "2026-09-12" });
   assert.equal(result.ok, true);
-  assert.equal(result.payload.publicTotalEur, 45);
+  assert.equal(result.payload.publicTotalEur, 40);
 });
 
 test("rejects sedan requests that exceed vehicle capacity", () => {
