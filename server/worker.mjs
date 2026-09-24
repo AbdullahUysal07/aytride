@@ -35,6 +35,10 @@ export default {
         return json(healthStatus(env), 200, cors);
       }
 
+      if (url.pathname === "/api/analytics/events" && request.method === "POST") {
+        return await createAnalyticsEvent(request, env, cors);
+      }
+
       if (url.pathname === "/api/bookings" && request.method === "POST") {
         return await createBooking(request, env, cors);
       }
@@ -49,6 +53,10 @@ export default {
 
       if (url.pathname === "/api/admin/bookings" && request.method === "GET") {
         return await listAdminBookings(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/analytics" && request.method === "GET") {
+        return await listAdminAnalytics(request, env, cors);
       }
 
       const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete)$/);
@@ -490,6 +498,56 @@ async function listAdminBookings(request, env, cors) {
   }, 200, cors);
 }
 
+async function createAnalyticsEvent(request, env, cors) {
+  if (!env.DB) return json({ error: "Analytics database is not configured." }, 503, cors);
+  const body = await request.json();
+  const eventType = String(body.eventType || "").trim();
+  const allowedEvents = new Set(["page_view", "booking_quote_started", "booking_confirmed", "guide_booking_cta_clicked"]);
+  if (!allowedEvents.has(eventType)) return json({ error: "Unsupported analytics event." }, 400, cors);
+
+  const visitorId = cleanAnalyticsValue(body.visitorId, 80);
+  const path = cleanAnalyticsPath(body.path);
+  if (!visitorId || !path) return json({ error: "Analytics event is missing required fields." }, 400, cors);
+
+  const now = new Date().toISOString();
+  await env.DB.prepare(`
+    insert into analytics_events (
+      event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at
+    ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    eventType,
+    visitorId,
+    path,
+    cleanAnalyticsValue(body.source, 80) || "direct",
+    cleanAnalyticsValue(body.medium, 80),
+    cleanAnalyticsValue(body.campaign, 120),
+    cleanAnalyticsValue(body.referrerHost, 160),
+    cleanAnalyticsValue(body.routeId, 80),
+    now
+  ).run();
+
+  return json({ ok: true }, 201, cors);
+}
+
+async function listAdminAnalytics(request, env, cors) {
+  if (!env.DB) return json({ error: "Analytics database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const since = new Date();
+  since.setUTCDate(since.getUTCDate() - 6);
+  since.setUTCHours(0, 0, 0, 0);
+  const rows = await env.DB.prepare(`
+    select event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at
+    from analytics_events
+    where created_at >= ?
+    order by created_at desc
+    limit 10000
+  `).bind(since.toISOString()).all();
+
+  return json(analyticsSummary(rows.results || []), 200, cors);
+}
+
 async function updateAdminBookingStatus(request, env, cors, reference, action) {
   if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
   const session = await requireAdmin(request, env, cors);
@@ -925,6 +983,73 @@ function parseAttribution(value) {
   } catch {
     return {};
   }
+}
+
+function cleanAnalyticsValue(value, maxLength) {
+  return String(value || "")
+    .replace(/[\r\n\t]/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function cleanAnalyticsPath(value) {
+  const path = cleanAnalyticsValue(value, 180);
+  return path.startsWith("/") && !path.includes("?") && !path.includes("#") ? path : "";
+}
+
+function analyticsSummary(events) {
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date();
+    date.setUTCDate(date.getUTCDate() - (6 - index));
+    return dateKey(date);
+  });
+  const daily = new Map(days.map((day) => [day, { date: day, visitors: new Set(), pageViews: 0, quoteStarts: 0, bookings: 0 }]));
+  const sources = new Map();
+  const allVisitors = new Set();
+
+  for (const event of events) {
+    const day = dateKey(new Date(event.created_at));
+    const item = daily.get(day);
+    if (!item) continue;
+    if (event.visitor_id) {
+      item.visitors.add(event.visitor_id);
+      allVisitors.add(event.visitor_id);
+    }
+    if (event.event_type === "page_view") {
+      item.pageViews += 1;
+      const label = event.source || event.referrer_host || "direct";
+      sources.set(label, (sources.get(label) || 0) + 1);
+    }
+    if (event.event_type === "booking_quote_started") item.quoteStarts += 1;
+    if (event.event_type === "booking_confirmed") item.bookings += 1;
+  }
+
+  const daysOut = days.map((day) => {
+    const item = daily.get(day);
+    return {
+      date: day,
+      visitors: item.visitors.size,
+      pageViews: item.pageViews,
+      quoteStarts: item.quoteStarts,
+      bookings: item.bookings
+    };
+  });
+  const today = daysOut.at(-1) || { visitors: 0, pageViews: 0, quoteStarts: 0, bookings: 0 };
+  return {
+    collectedFrom: events.length ? daysOut.find((item) => item.pageViews || item.quoteStarts || item.bookings)?.date || null : null,
+    today,
+    week: {
+      visitors: allVisitors.size,
+      pageViews: daysOut.reduce((total, item) => total + item.pageViews, 0),
+      quoteStarts: daysOut.reduce((total, item) => total + item.quoteStarts, 0),
+      bookings: daysOut.reduce((total, item) => total + item.bookings, 0)
+    },
+    days: daysOut,
+    sources: [...sources.entries()]
+      .sort((left, right) => right[1] - left[1])
+      .slice(0, 8)
+      .map(([source, pageViews]) => ({ source, pageViews }))
+  };
 }
 
 function adminSummary(bookings) {

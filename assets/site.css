@@ -2582,6 +2582,129 @@ form {
   box-shadow: none;
 }
 
+.admin-workspace {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 18px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.admin-sidebar button {
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #526173;
+  cursor: pointer;
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit;
+  font-weight: 800;
+}
+
+.admin-sidebar button:hover,
+.admin-sidebar button:focus-visible {
+  border-left-color: var(--blue);
+  background: #eef6ff;
+  color: var(--navy);
+  outline: none;
+}
+
+.admin-views {
+  min-width: 0;
+}
+
+.analytics-kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(220px, .9fr);
+  gap: 12px;
+}
+
+.analytics-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 14px;
+}
+
+.analytics-panel h3 {
+  font-size: .95rem;
+}
+
+.analytics-day,
+.analytics-source {
+  display: grid;
+  grid-template-columns: minmax(88px, 1.2fr) repeat(4, minmax(74px, 1fr));
+  gap: 8px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  color: #526173;
+  font-size: .82rem;
+  padding: 10px 0;
+}
+
+.analytics-day strong,
+.analytics-source strong {
+  color: var(--navy);
+}
+
+.analytics-source {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+@media (max-width: 980px) {
+  .admin-workspace,
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: static;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .admin-sidebar button {
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+    padding: 9px 6px;
+    text-align: center;
+  }
+
+  .admin-sidebar button:hover,
+  .admin-sidebar button:focus-visible {
+    border-bottom-color: var(--blue);
+  }
+
+  .analytics-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .admin-sidebar {
+    overflow-x: auto;
+    grid-template-columns: repeat(4, 116px);
+  }
+
+  .analytics-day {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .route-article > h2 {
   margin: 0;
   font-size: 1.25rem;

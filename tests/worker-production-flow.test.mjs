@@ -37,6 +37,7 @@ class FakeD1 {
     this.prices = [];
     this.settings = [];
     this.blogs = [];
+    this.analyticsEvents = [];
   }
 
   prepare(sql) {
@@ -118,6 +119,10 @@ class FakeD1 {
               this.blogs.push({ slug, status: "published", kicker, title, description, body_json, meta_label, created_at, updated_at, deleted_at: null });
             }
           }
+          if (/insert into analytics_events/i.test(sql)) {
+            const [event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at] = values;
+            this.analyticsEvents.push({ event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at });
+          }
           if (/update blog_posts\s+set status = 'deleted'/i.test(sql)) {
             const row = this.blogs.find((item) => item.slug === values[2]);
             if (row) {
@@ -143,6 +148,7 @@ class FakeD1 {
       }
       return [...this.blogs];
     }
+    if (/from analytics_events/i.test(sql)) return [...this.analyticsEvents];
     if (/where deleted_at is null/i.test(sql)) return this.sortedRows().filter((row) => !row.deleted_at);
     return this.sortedRows();
   }
@@ -304,6 +310,30 @@ test("complete production booking flow persists AYT to Belek and appears in auth
   assert.equal(confirmedBody.summary.total.revenueEur, 40);
   assert.equal(confirmedBody.summary.total.driverCostTry, 1155);
   assert.equal(confirmedBody.summary.total.profitTry, 645);
+});
+
+test("consented analytics events appear in the protected seven-day summary", async () => {
+  const db = new FakeD1();
+  const env = makeEnv(db);
+  const event = (eventType, visitorId, source) => worker.fetch(request("/api/analytics/events", {
+    method: "POST",
+    body: JSON.stringify({ eventType, visitorId, path: "/", source })
+  }), env);
+
+  assert.equal((await event("page_view", "visitor-a", "google")).status, 201);
+  assert.equal((await event("booking_quote_started", "visitor-a", "google")).status, 201);
+  assert.equal((await event("page_view", "visitor-b", "direct")).status, 201);
+  assert.equal((await event("booking_confirmed", "visitor-a", "google")).status, 201);
+
+  const cookie = await adminCookie(env);
+  const response = await worker.fetch(request("/api/admin/analytics", { method: "GET", headers: { cookie } }), env);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.today.visitors, 2);
+  assert.equal(body.today.pageViews, 2);
+  assert.equal(body.week.quoteStarts, 1);
+  assert.equal(body.week.bookings, 1);
+  assert.equal(body.sources[0].source, "google");
 });
 
 test("admin can update public route prices and soft-delete bookings", async () => {

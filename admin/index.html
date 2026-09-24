@@ -6,8 +6,8 @@
   <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260915-auto-rate">
-  <script src="/assets/catalog.js?v=20260915-auto-rate"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260924-analytics">
+  <script src="/assets/catalog.js?v=20260924-analytics"></script>
 </head>
 <body>
   <header class="topbar">
@@ -46,6 +46,30 @@
         </form>
 
         <div id="adminPanel" class="hidden">
+          <div class="admin-workspace">
+            <nav class="admin-sidebar" aria-label="Yönetim bölümleri">
+              <button type="button" data-admin-scroll="adminAnalytics">İstatistik</button>
+              <button type="button" data-admin-scroll="adminBookingsSection">Rezervasyonlar</button>
+              <button type="button" data-admin-scroll="priceEditor">Fiyatlar</button>
+              <button type="button" data-admin-scroll="blogEditor">Blog</button>
+            </nav>
+            <div class="admin-views">
+          <section class="admin-overview" id="adminAnalytics">
+            <div class="admin-section-title">
+              <div>
+                <p class="mini-label">Ziyaretçi istatistikleri</p>
+                <h2>Bugün ve son 7 gün</h2>
+              </div>
+              <button class="admin-btn soft" id="refreshAnalytics" type="button">İstatistikleri yenile</button>
+            </div>
+            <div class="analytics-kpis" id="analyticsStats"></div>
+            <div class="analytics-grid">
+              <section class="analytics-panel"><h3>Günlük özet</h3><div id="analyticsDays"></div></section>
+              <section class="analytics-panel"><h3>Kaynaklar</h3><div id="analyticsSources"></div></section>
+            </div>
+            <p class="admin-note" id="analyticsNote">Analitik izni veren ziyaretçiler için veri toplanır.</p>
+          </section>
+
           <section class="admin-overview">
             <div class="admin-section-title">
               <div>
@@ -56,7 +80,7 @@
             <div class="admin-kpis" id="adminStats"></div>
           </section>
 
-          <section class="admin-bookings">
+          <section class="admin-bookings" id="adminBookingsSection">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Rezervasyonlar</p>
@@ -161,6 +185,8 @@
             </form>
             <div class="admin-blog-list" id="adminBlogPosts"></div>
           </section>
+            </div>
+          </div>
         </div>
         <pre id="adminOutput"></pre>
       </section>
@@ -180,6 +206,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260915-auto-rate"></script>
+  <script src="/assets/app.js?v=20260924-analytics"></script>
 </body>
 </html>

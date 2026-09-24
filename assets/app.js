@@ -3,6 +3,7 @@
   if (!catalog) return;
 
   const attributionKey = "aytRideAttribution";
+  const analyticsVisitorKey = "aytRideAnalyticsVisitor";
   const adminSessionKey = "aytRideAdminSession";
   const confirmationKey = "aytRideLastConfirmation";
   const consentKey = "aytRideConsent";
@@ -485,6 +486,47 @@
     delete safeParams.internalPrice;
     window.dataLayer.push({ event: name, ...safeParams });
     if (window.gtag) window.gtag("event", name, safeParams);
+    const trackedEvent = {
+      quote_started: "booking_quote_started",
+      booking_confirmed: "booking_confirmed",
+      guide_booking_cta_clicked: "guide_booking_cta_clicked"
+    }[name];
+    if (trackedEvent) recordAnalyticsEvent(trackedEvent, safeParams.route_id || safeParams.route);
+  }
+
+  function analyticsVisitorId() {
+    let visitorId = localStorage.getItem(analyticsVisitorKey);
+    if (!visitorId) {
+      visitorId = typeof window.crypto?.randomUUID === "function"
+        ? window.crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      localStorage.setItem(analyticsVisitorKey, visitorId);
+    }
+    return visitorId;
+  }
+
+  function recordAnalyticsEvent(eventType, routeId = "") {
+    if (localStorage.getItem(consentKey) !== "accepted") return;
+    const attribution = readAttribution();
+    const body = JSON.stringify({
+      eventType,
+      visitorId: analyticsVisitorId(),
+      path: location.pathname,
+      source: attribution.source || attribution.utm_source || "direct",
+      medium: attribution.utm_medium || "",
+      campaign: attribution.utm_campaign || "",
+      referrerHost: attribution.referrerHost || "",
+      routeId: routeId || ""
+    });
+    fetch(`${catalog.apiBase || ""}/api/analytics/events`, {
+      method: "POST",
+      credentials: "omit",
+      keepalive: true,
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body
+    }).catch(() => {
+      // Analytics must never interrupt the reservation flow.
+    });
   }
 
   function initGuideBookingCta() {
@@ -984,6 +1026,34 @@
     `;
   }
 
+  function renderAdminAnalytics(data) {
+    const stats = document.querySelector("#analyticsStats");
+    const days = document.querySelector("#analyticsDays");
+    const sources = document.querySelector("#analyticsSources");
+    const note = document.querySelector("#analyticsNote");
+    if (!stats || !days || !sources || !note) return;
+    const today = data?.today || {};
+    const week = data?.week || {};
+    stats.innerHTML = [
+      ["Bugün ziyaretçi", today.visitors, "Tekil, analitik izni veren ziyaretçi"],
+      ["Bugün görüntüleme", today.pageViews, "Sayfa görüntüleme"],
+      ["7 günde ziyaretçi", week.visitors, "Tekil ziyaretçi"],
+      ["Teklif başlangıcı", week.quoteStarts, "Son 7 gün"],
+      ["Rezervasyon", week.bookings, "Onay sayfasına ulaşan kayıt"],
+    ].map(([label, value, description]) => `
+      <article class="kpi-card"><small>${escapeHtml(label)}</small><strong>${Number(value || 0)}</strong><span>${escapeHtml(description)}</span></article>
+    `).join("");
+    days.innerHTML = (data?.days || []).map((item) => `
+      <div class="analytics-day"><strong>${escapeHtml(item.date)}</strong><span>${Number(item.visitors || 0)} ziyaretçi</span><span>${Number(item.pageViews || 0)} görüntüleme</span><span>${Number(item.quoteStarts || 0)} teklif</span><span>${Number(item.bookings || 0)} rezervasyon</span></div>
+    `).join("") || "<p class=\"admin-note\">Henüz ziyaret verisi yok.</p>";
+    sources.innerHTML = (data?.sources || []).map((item) => `
+      <div class="analytics-source"><strong>${escapeHtml(item.source || "direct")}</strong><span>${Number(item.pageViews || 0)} görüntüleme</span></div>
+    `).join("") || "<p class=\"admin-note\">Kaynak verisi, ilk analitik izinli ziyaretten sonra görünür.</p>";
+    note.textContent = data?.collectedFrom
+      ? `Veriler ${data.collectedFrom} tarihinden itibaren, analitik izni veren ziyaretçilerden toplanır. GA4 raporlarıyla karşılaştırmak için aynı olay adları kullanılır.`
+      : "Analitik izni veren ziyaretçiler için veri toplama bu yayınla başlar; ilk ziyaretlerden sonra burada görünür.";
+  }
+
   function renderAdminSettings(settings) {
     const driverRateInput = document.querySelector("#driverRateTryPerKm");
     const eurRateInput = document.querySelector("#eurTryRate");
@@ -1118,16 +1188,18 @@
   }
 
   async function reloadAdminDashboard() {
-    const [bookingsData, pricesData, blogData] = await Promise.all([
+    const [bookingsData, pricesData, blogData, analyticsData] = await Promise.all([
       adminRequest("/api/admin/bookings"),
       adminRequest("/api/admin/prices"),
-      adminRequest("/api/admin/blog-posts")
+      adminRequest("/api/admin/blog-posts"),
+      adminRequest("/api/admin/analytics")
     ]);
     renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
     renderAdminSettings(bookingsData.settings || {});
     renderAdminBookings(bookingsData.bookings || []);
     renderAdminPrices(pricesData || {});
     renderAdminBlogs(blogData.posts || []);
+    renderAdminAnalytics(analyticsData || {});
   }
 
   function initAdmin() {
@@ -1380,6 +1452,18 @@
       ad_personalization: "granted",
       analytics_storage: "granted"
     });
+
+    document.querySelector("#refreshAnalytics")?.addEventListener("click", () => {
+      loadBookings().catch((error) => { output.textContent = error.message || "İstatistikler yenilenemedi."; });
+    });
+
+    root.querySelector(".admin-sidebar")?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-admin-scroll]");
+      const target = button && document.querySelector(`#${button.dataset.adminScroll}`);
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    recordAnalyticsEvent("page_view");
     const tagId = ids.gtmId || ids.ga4MeasurementId || ids.googleAdsId;
     if (!tagId || document.querySelector("[data-ayt-tag]")) return;
     const script = document.createElement("script");
