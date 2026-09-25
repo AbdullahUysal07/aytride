@@ -17,7 +17,7 @@ window.AYTRideCatalog = {
   "analytics": {
     "gtmId": "",
     "ga4MeasurementId": "G-K8REM1KSV7",
-    "googleAdsId": "",
+    "googleAdsId": "AW-18450697828",
     "googleAdsBookingLabel": ""
   },
   "productionPlaceholders": {
