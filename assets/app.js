@@ -1075,22 +1075,23 @@
     const weekBookings = dayKeys.reduce((sum, day) => sum + (bookingCounts.get(day) || 0), 0);
     const analyticsDays = new Map((data?.days || []).map((item) => [item.date, item]));
     stats.innerHTML = [
-      ["Bugünkü ziyaretçi*", today.visitors, "İzin veren ziyaretçiler"],
-      ["Bugünkü görüntüleme*", today.pageViews, "Sayfa görüntülemeleri"],
-      ["7 günlük rezervasyon", weekBookings, "D1'e kaydedilen talepler"],
-      ["Bugünkü rezervasyon", bookingCounts.get(currentDay) || 0, "Türkiye saatine göre"],
+      ["Bugün", today.visitors, "Kayıtlı ziyaretçi*"],
+      ["Son 7 gün", week.visitors, "Kayıtlı ziyaretçi*"],
+      ["Rezervasyon", weekBookings, "Son 7 gün, D1 kayıtları"],
     ].map(([label, value, description]) => `
       <article class="kpi-card"><small>${escapeHtml(label)}</small><strong>${Number(value || 0)}</strong><span>${escapeHtml(description)}</span></article>
     `).join("");
     days.innerHTML = dayKeys.map((day) => {
       const item = analyticsDays.get(day) || {};
-      return `<div class="analytics-day">
-        <strong>${escapeHtml(new Intl.DateTimeFormat("tr-TR", { day: "2-digit", month: "short" }).format(new Date(`${day}T12:00:00Z`)))}</strong>
-        <span>${Number(item.visitors || 0)} ziyaretçi*</span>
-        <span>${Number(item.pageViews || 0)} görüntüleme*</span>
-        <span>${Number(item.quoteStarts || 0)} teklif*</span>
-        <span>${Number(bookingCounts.get(day) || 0)} D1 rezervasyon</span>
-      </div>`;
+      const date = new Date(`${day}T12:00:00Z`);
+      const weekday = new Intl.DateTimeFormat("tr-TR", { weekday: "short" }).format(date);
+      const label = new Intl.DateTimeFormat("tr-TR", { day: "2-digit", month: "short" }).format(date);
+      return `<article class="analytics-day">
+        <header><span>${escapeHtml(weekday)}</span><strong>${escapeHtml(label)}</strong></header>
+        <p><b>${Number(item.visitors || 0)}</b> ziyaretçi*</p>
+        <p><b>${Number(item.pageViews || 0)}</b> görüntüleme*</p>
+        <p class="analytics-reservation"><b>${Number(bookingCounts.get(day) || 0)}</b> rezervasyon</p>
+      </article>`;
     }).join("");
     const sourceTotal = (data?.sources || []).reduce((sum, item) => sum + Number(item.pageViews || 0), 0);
     sources.innerHTML = (data?.sources || []).map((item) => {

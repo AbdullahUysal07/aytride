@@ -1638,6 +1638,11 @@ details p {
   padding: 18px;
 }
 
+.admin-grid > .admin-card:first-child {
+  position: sticky;
+  top: 90px;
+}
+
 .admin-overview {
   display: grid;
   gap: 12px;
@@ -2623,7 +2628,7 @@ form {
 
 .analytics-kpis {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 18px;
 }
@@ -2660,40 +2665,80 @@ form {
   font-size: .82rem;
 }
 
-.analytics-day,
-.analytics-source {
+#analyticsDays {
   display: grid;
-  grid-template-columns: minmax(76px, 1.15fr) repeat(4, minmax(68px, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 8px;
-  align-items: center;
-  border-top: 1px solid var(--line);
-  color: #526173;
-  font-size: .82rem;
-  padding: 10px 0;
 }
 
-.analytics-day strong,
-.analytics-source strong {
-  color: var(--navy);
+.analytics-day {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfdff;
+  padding: 10px;
 }
 
-.analytics-day-heading {
-  border-top: 0;
-  padding: 0 0 8px;
-  color: #718096;
-  font-size: .72rem;
-  font-weight: 900;
+.analytics-day header {
+  display: grid;
+  gap: 1px;
+}
+
+.analytics-day header span {
+  color: var(--muted);
+  font-size: .74rem;
   text-transform: uppercase;
 }
 
+.analytics-day strong {
+  color: var(--navy);
+  font-size: .86rem;
+}
+
+.analytics-day p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.25;
+}
+
+.analytics-day p b {
+  display: block;
+  color: var(--navy);
+  font-size: 1rem;
+}
+
+.analytics-day .analytics-reservation {
+  border-top: 1px solid var(--line);
+  padding-top: 7px;
+}
+
+.analytics-day .analytics-reservation b {
+  color: var(--green-2);
+}
+
 .analytics-source {
+  display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  border-top: 1px solid var(--line);
   padding: 12px 0;
+}
+
+.analytics-source:first-child {
+  border-top: 0;
 }
 
 .analytics-source div {
   display: grid;
   gap: 3px;
+}
+
+.analytics-source strong {
+  color: var(--navy);
 }
 
 .analytics-source span {
@@ -2737,6 +2782,14 @@ form {
   .analytics-kpis {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .admin-grid > .admin-card:first-child {
+    position: static;
+  }
+
+  #analyticsDays {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 620px) {
@@ -2745,17 +2798,8 @@ form {
     grid-template-columns: repeat(4, 116px);
   }
 
-  .analytics-day {
+  #analyticsDays {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  .analytics-day-heading {
-    display: none;
-  }
-
-  .analytics-day span {
-    font-size: .78rem;
   }
 }
 
