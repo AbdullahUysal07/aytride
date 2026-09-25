@@ -366,6 +366,18 @@
     return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
   }
 
+  function confirmationUrl(reference, payload) {
+    const params = new URLSearchParams({
+      ref: reference,
+      pickup: payload.pickup || "",
+      dropoff: payload.dropoff || "",
+      vehicle: payload.vehicleId || "",
+      price: String(payload.publicTotalEur ?? ""),
+      quote: payload.quoteOnly ? "1" : "0"
+    });
+    return `/booking-confirmation/?${params.toString()}`;
+  }
+
   function showToast(message) {
     const toast = document.querySelector("#toast");
     if (!toast) return;
@@ -801,6 +813,8 @@
       const q = calculate();
       const reference = bookingRef();
       const payload = bookingPayload(reference, q);
+      // Open within the original tap event; iOS blocks popups opened after an awaited request.
+      window.open(whatsappUrl(bookingMessage(reference, q)), "_blank", "noopener");
       aytEvent("booking_submitted", {
         language: lang(),
         route: payload.routeId,
@@ -811,16 +825,12 @@
       try {
         const saved = await submitBooking(payload);
         const finalReference = saved.reference || reference;
-        const message = bookingMessage(finalReference, q);
         const persisted = Boolean(saved.ok && !saved.developmentOnly);
         sessionStorage.setItem(confirmationKey, JSON.stringify({ ...payload, reference: finalReference, persisted }));
-        window.open(whatsappUrl(message), "_blank", "noopener");
         aytEvent("whatsapp_clicked", { language: lang(), route: payload.routeId, trip_type: payload.tripType, vehicle: payload.vehicleId });
         showToast(t("whatsappOpened"));
-        location.href = `/booking-confirmation/?ref=${encodeURIComponent(finalReference)}`;
+        location.href = confirmationUrl(finalReference, payload);
       } catch {
-        const message = bookingMessage(reference, q);
-        window.open(whatsappUrl(message), "_blank", "noopener");
         aytEvent("whatsapp_clicked", { language: lang(), route: payload.routeId, trip_type: payload.tripType, vehicle: payload.vehicleId });
         setStatus(t("serverMissing"), "warning");
         showToast(t("whatsappOnly"));
@@ -840,19 +850,30 @@
     if (!page) return;
     const params = new URLSearchParams(location.search);
     const ref = params.get("ref");
+    const fallback = {
+      reference: ref,
+      pickup: params.get("pickup") || "",
+      dropoff: params.get("dropoff") || "",
+      vehicleId: params.get("vehicle") || "",
+      publicTotalEur: Number(params.get("price") || 0),
+      quoteOnly: params.get("quote") === "1"
+    };
     let saved = null;
     try {
       saved = JSON.parse(sessionStorage.getItem(confirmationKey) || "null");
     } catch {
       saved = null;
     }
-    const reference = saved?.reference || ref || "AYT";
+    const summary = saved || fallback;
+    const reference = summary.reference || "AYT";
     page.querySelector("[data-confirmation-ref]").textContent = reference;
-    if (saved) {
-      page.querySelector("[data-confirmation-route]").textContent = `${saved.pickup} -> ${saved.dropoff}`;
-      page.querySelector("[data-confirmation-vehicle]").textContent = vehicle(saved.vehicleId).name;
-      page.querySelector("[data-confirmation-price]").textContent = saved.quoteOnly ? t("quoteOnly") : money(saved.publicTotalEur);
+    if (summary.pickup && summary.dropoff) {
+      page.querySelector("[data-confirmation-route]").textContent = `${summary.pickup} -> ${summary.dropoff}`;
+      page.querySelector("[data-confirmation-vehicle]").textContent = vehicle(summary.vehicleId).name;
+      page.querySelector("[data-confirmation-price]").textContent = summary.quoteOnly ? t("quoteOnly") : money(summary.publicTotalEur);
     }
+    const whatsapp = page.querySelector("[data-confirmation-whatsapp]");
+    if (whatsapp) whatsapp.href = whatsappUrl(`Hello AYT Ride, I would like to confirm booking request ${reference}.`);
     if (saved?.persisted) {
       aytEvent("booking_confirmed", {
         language: saved.language,
