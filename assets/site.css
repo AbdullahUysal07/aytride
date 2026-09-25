@@ -2969,3 +2969,50 @@ form {
     aspect-ratio: 1 / 1;
   }
 }
+
+
+/* 2026-09-25: iOS Safari form visibility and mobile route price cards. */
+#booking select,
+#booking input[type="date"],
+#booking input[type="time"] {
+  color: #152c45;
+  -webkit-text-fill-color: #152c45;
+  background-color: #fff;
+  opacity: 1;
+}
+#booking select {
+  -webkit-appearance: menulist;
+  appearance: auto;
+}
+#booking input[type="date"],
+#booking input[type="time"] {
+  -webkit-appearance: auto;
+  appearance: auto;
+  text-align: left;
+}
+#booking input[type="date"]::-webkit-date-and-time-value,
+#booking input[type="time"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+#booking select option {
+  color: #152c45;
+  background: #fff;
+}
+@media (max-width: 720px) {
+  #routeGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  #routeGrid .route-card,
+  #routeGrid .route-card > button {
+    min-width: 0;
+  }
+  #routeGrid .route-thumb {
+    aspect-ratio: 16 / 8;
+  }
+  #booking input[type="date"],
+  #booking input[type="time"] {
+    text-align: left;
+  }
+}
