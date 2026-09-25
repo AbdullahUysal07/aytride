@@ -927,19 +927,36 @@
   }
 
   async function adminRequest(path, options = {}) {
-    const sessionToken = sessionStorage.getItem(adminSessionKey);
-    const response = await fetch(`${catalog.apiBase || ""}${path}`, {
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-        accept: "application/json",
-        ...(sessionToken ? { authorization: `Bearer ${sessionToken}` } : {}),
-        ...(options.headers || {})
-      },
-      ...options
-    });
-    if (!response.ok) throw new Error(await response.text());
-    return response.json();
+    if (!catalog.apiBase) throw new Error("API_MISSING");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    try {
+      const sessionToken = sessionStorage.getItem(adminSessionKey);
+      const response = await fetch(`${catalog.apiBase}${path}`, {
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+          ...(sessionToken ? { authorization: `Bearer ${sessionToken}` } : {}),
+          ...(options.headers || {})
+        },
+        ...options,
+        signal: controller.signal
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(payload.error || `HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+      return payload;
+    } catch (error) {
+      if (error.name === "AbortError") throw new Error("API_TIMEOUT");
+      if (error instanceof TypeError) throw new Error("API_NETWORK");
+      throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   const adminState = {
@@ -1208,6 +1225,18 @@
     const login = document.querySelector("#adminLogin");
     const panel = document.querySelector("#adminPanel");
     const output = document.querySelector("#adminOutput");
+    const submitButton = login.querySelector('button[type="submit"]');
+    window.AYTRideAdminReady = true;
+
+    function loginErrorMessage(error) {
+      const message = String(error?.message || "");
+      if (error?.status === 401 || message.includes("Invalid login")) return "E-posta veya şifre hatalı. Cloudflare Worker'daki admin hesabı ve şifre özetinin doğru tanımlandığını kontrol edin.";
+      if (error?.status === 503 || message.includes("not configured")) return "Sunucuda yönetici girişi yapılandırılmamış olabilir. Aşağıdaki Sunucu durumunu kontrol et bağlantısından adminConfigured değerine bakın.";
+      if (message === "API_TIMEOUT") return "Sunucu 12 saniye içinde yanıt vermedi. Bağlantıyı ve Cloudflare Worker'ın çalıştığını kontrol edin.";
+      if (message === "API_NETWORK") return "Sunucuya bağlanılamıyor. Cloudflare Worker adresi, internet bağlantısı veya CORS ayarı kontrol edilmeli.";
+      if (message === "API_MISSING") return "API adresi eksik. Site katalog ayarını kontrol edin.";
+      return `Giriş başarısız: ${message.slice(0, 160) || "Bilinmeyen hata"}`;
+    }
 
     async function loadBookings() {
       output.textContent = "Panel verileri yükleniyor...";
@@ -1217,7 +1246,10 @@
 
     login.addEventListener("submit", async (event) => {
       event.preventDefault();
-      output.textContent = "";
+      if (submitButton.disabled) return;
+      submitButton.disabled = true;
+      submitButton.textContent = "Giriş kontrol ediliyor...";
+      output.textContent = "Cloudflare sunucusuna bağlanılıyor...";
       const email = text(document.querySelector("#adminEmail").value);
       const password = document.querySelector("#adminPassword").value;
       try {
@@ -1225,19 +1257,20 @@
           method: "POST",
           body: JSON.stringify({ email, password })
         });
-        if (data.sessionToken) sessionStorage.setItem(adminSessionKey, data.sessionToken);
+        if (!data.sessionToken) throw new Error("Sunucu oturum anahtarı döndürmedi.");
+        sessionStorage.setItem(adminSessionKey, data.sessionToken);
         login.classList.add("hidden");
         panel.classList.remove("hidden");
-        await loadBookings();
-      } catch (error) {
-        const message = String(error?.message || "");
-        if (message.includes("Invalid login")) {
-          output.textContent = "E-posta veya şifre eşleşmedi. E-posta doğruysa Cloudflare'daki admin parola kaydı bu şifreyle eşleşmiyor olabilir.";
-        } else if (message.includes("not configured")) {
-          output.textContent = "Admin giriş ayarları sunucuda eksik. Cloudflare Worker gizli değişkenleri kontrol edilmeli.";
-        } else {
-          output.textContent = "Giriş sırasında bağlantı hatası oluştu. Lütfen tekrar deneyin.";
+        try {
+          await loadBookings();
+        } catch (error) {
+          output.textContent = "Giriş başarılı, ancak panel verileri alınamadı: " + loginErrorMessage(error);
         }
+      } catch (error) {
+        output.textContent = loginErrorMessage(error);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Giriş yap";
       }
     });
 
@@ -1490,13 +1523,14 @@
   document.addEventListener("DOMContentLoaded", () => {
     // Never hold the booking form or route cards hostage to a slow Worker API.
     // The bundled catalog is a complete, immediately usable fallback on mobile.
-    initConsent();
+    // Admin login must work even when marketing/storage initialization fails.
+    initAdmin();
+    try { initConsent(); } catch (error) { console.warn("Analytics initialization skipped", error); }
     initGuideBookingCta();
     initBooking();
     initConfirmation();
     initBlogLists();
     initBlogArticle();
-    initAdmin();
 
     // Refresh prices and destinations only after the live catalog arrives.
     loadLiveCatalog().then(() => {
