@@ -1586,7 +1586,10 @@
       }
       banner.remove();
     });
-    document.body.appendChild(banner);
+    const mobileConsentHost = window.matchMedia("(max-width: 720px)").matches
+      ? document.querySelector(".home-page .hero")
+      : null;
+    (mobileConsentHost || document.body).appendChild(banner);
   }
 
   function loadMarketingTags() {

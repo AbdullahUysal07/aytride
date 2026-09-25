@@ -2245,10 +2245,10 @@ details p {
 
 @media (max-width: 720px) {
   .home-page .consent-bar {
-    right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    left: 10px;
+    position: static;
+    width: auto;
     max-width: none;
+    margin: 0 10px 18px;
   }
 }
 
