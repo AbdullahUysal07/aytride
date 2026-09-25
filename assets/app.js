@@ -903,12 +903,21 @@
   }
 
   function blogCard(post) {
+    const images = {
+      "antalya-airport-transfer-guide": "/assets/ayt-ride-transfer.jpg",
+      "private-transfer-vs-taxi-antalya": "/assets/routes/lara-kundu.jpg",
+      "belek-golf-transfer": "/assets/routes/belek-kadriye.jpg"
+    };
+    const image = images[post.slug] || "/assets/ayt-ride-transfer.jpg";
     return `
       <a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}">
-        <span class="post-kicker">${escapeHtml(post.kicker)}</span>
-        <strong>${escapeHtml(post.title)}</strong>
-        <small>${escapeHtml(post.description)}</small>
-        <span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")}</span>
+        <span class="post-card-media"><img src="${image}" alt="" loading="lazy"></span>
+        <span class="post-card-body">
+          <span class="post-kicker">${escapeHtml(post.kicker)}</span>
+          <strong>${escapeHtml(post.title)}</strong>
+          <small>${escapeHtml(post.description)}</small>
+          <span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")} <b aria-hidden="true">→</b></span>
+        </span>
       </a>
     `;
   }
