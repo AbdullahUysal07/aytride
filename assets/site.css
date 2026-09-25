@@ -2178,6 +2178,56 @@ details p {
   box-shadow: 0 14px 32px rgba(10, 29, 47, .18);
 }
 
+/* Prevent the service-card content from inheriting incompatible legacy grid tracks. */
+.home-page .hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(460px, .9fr);
+}
+
+.home-page .hero-title {
+  max-width: 650px;
+  font-size: clamp(3.1rem, 4.35vw, 4.25rem);
+}
+
+.home-page .promise-grid article {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  grid-template-areas:
+    "icon title"
+    "icon copy";
+  column-gap: 16px;
+  row-gap: 6px;
+  align-content: center;
+  padding: 18px 20px;
+}
+
+.home-page .promise-grid .icon-dot {
+  position: static;
+  grid-area: icon;
+  align-self: start;
+  width: 38px;
+  height: 38px;
+}
+
+.home-page .promise-grid h3 {
+  grid-area: title;
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.home-page .promise-grid p {
+  grid-area: copy;
+  margin: 0;
+  font-size: .91rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 720px) {
+  .home-page .hero-grid { grid-template-columns: 1fr; }
+  .home-page .hero-title { font-size: clamp(2.7rem, 11vw, 3.5rem); }
+  .home-page .promise-grid article { padding: 16px; }
+}
+
 @media (max-width: 720px) {
   .home-page .consent-bar {
     right: 10px;
