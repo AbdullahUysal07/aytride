@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260925-layoutfix3";
+const buildStamp = "20260925-contentcards";
 const buildDate = "2026-09-24";
 
 const languages = {
@@ -365,6 +365,37 @@ function confidenceBand(language) {
     </section>`;
 }
 
+function hotelAreaShowcase(language) {
+  const copy = {
+    en: { eyebrow: "Resort pickup areas", title: "Transfer planning for Antalya's hotel zones", text: "Choose the resort area first, then add the exact hotel, lobby or villa address in the request.", action: "View route" },
+    de: { eyebrow: "Hotel-Abholgebiete", title: "Transfers zu Antalyas Hotelregionen", text: "Wählen Sie zuerst die Hotelregion und geben Sie danach Hotel, Lobby oder Villa im Formular an.", action: "Route ansehen" },
+    pl: { eyebrow: "Strefy odbioru z hoteli", title: "Transfer do hotelowych regionów Antalyi", text: "Najpierw wybierz region, a następnie wpisz dokładny hotel, lobby lub adres willi.", action: "Zobacz trasę" },
+    ru: { eyebrow: "Зоны отелей", title: "Трансферы в отельные районы Антальи", text: "Сначала выберите район, затем укажите точный отель, лобби или адрес виллы.", action: "Смотреть маршрут" },
+    nl: { eyebrow: "Hotelophaalgebieden", title: "Transfers naar de hotelzones van Antalya", text: "Kies eerst de regio en voeg daarna het hotel, de lobby of het villa-adres toe.", action: "Route bekijken" }
+  };
+  const item = copy[language] || copy.en;
+  const areas = [
+    { label: "Lara & Kundu", detail: "Beach resorts and Aksu hotels", image: "/assets/routes/lara-kundu.jpg", href: "/antalya-airport-to-lara-transfer/" },
+    { label: "Belek & Kadriye", detail: "Golf resorts and family stays", image: "/assets/routes/belek-kadriye.jpg", href: "/antalya-airport-to-belek-transfer/" },
+    { label: "Side & Manavgat", detail: "Coastal hotels and historic Side", image: "/assets/routes/side-manavgat.jpg", href: "/antalya-airport-to-side-transfer/" }
+  ];
+  return `<section class="hotel-showcase">
+      <div class="shell">
+        <div class="section-head hotel-showcase-head">
+          <div><p class="mini-label">${escapeHtml(item.eyebrow)}</p><h2>${escapeHtml(item.title)}</h2></div>
+          <p class="section-copy">${escapeHtml(item.text)}</p>
+        </div>
+        <div class="hotel-card-grid">
+          ${areas.map((area) => `<a class="hotel-area-card" href="${area.href}">
+            <img src="${area.image}" alt="${escapeHtml(area.label)} hotel transfer area" loading="lazy">
+            <span class="hotel-area-overlay"></span>
+            <span class="hotel-area-content"><small>${escapeHtml(item.eyebrow)}</small><strong>${escapeHtml(area.label)}</strong><em>${escapeHtml(area.detail)}</em><b>${escapeHtml(item.action)} <span aria-hidden="true">→</span></b></span>
+          </a>`).join("")}
+        </div>
+      </div>
+    </section>`;
+}
+
 function destinationAreas(route, language) {
   const areas = {
     lara: ["Lara", "Kundu", "Lara Beach", "Aksu hotel zone"],
@@ -708,6 +739,8 @@ ${header(language)}
       </div>
     </section>
 
+    ${hotelAreaShowcase(language)}
+
     <section class="visual-band">
       <div class="shell image-grid">
         <picture class="hero-image">
@@ -715,10 +748,10 @@ ${header(language)}
           <img src="/assets/ayt-ride-transfer.jpg" alt="Private van waiting near Antalya coast and airport route">
         </picture>
         <div class="promise-grid">
-          <article><span class="icon-dot">WA</span><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></article>
-          <article><span class="icon-dot">FLT</span><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></article>
-          <article><span class="icon-dot">PAY</span><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></article>
-          <article><span class="icon-dot">€</span><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></article>
+          <article><span class="icon-dot">WA</span><div class="promise-copy"><small>CONFIRMATION</small><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
+          <article><span class="icon-dot">FLT</span><div class="promise-copy"><small>PICKUP READY</small><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
+          <article><span class="icon-dot">PAY</span><div class="promise-copy"><small>NO ONLINE CARD</small><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
+          <article><span class="icon-dot">€</span><div class="promise-copy"><small>PRICE FIRST</small><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
         </div>
       </div>
     </section>
@@ -1019,7 +1052,13 @@ ${footer("en")}
 const blogPosts = defaultBlogPosts;
 
 function blogCard(post) {
-  return `<a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}"><span class="post-kicker">${escapeHtml(post.kicker)}</span><strong>${escapeHtml(post.title)}</strong><small>${escapeHtml(post.description)}</small><span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")}</span></a>`;
+  const images = {
+    "antalya-airport-transfer-guide": "/assets/ayt-ride-transfer.jpg",
+    "private-transfer-vs-taxi-antalya": "/assets/routes/lara-kundu.jpg",
+    "belek-golf-transfer": "/assets/routes/belek-kadriye.jpg"
+  };
+  const image = images[post.slug] || "/assets/ayt-ride-transfer.jpg";
+  return `<a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}"><span class="post-card-media"><img src="${image}" alt="" loading="lazy"></span><span class="post-card-body"><span class="post-kicker">${escapeHtml(post.kicker)}</span><strong>${escapeHtml(post.title)}</strong><small>${escapeHtml(post.description)}</small><span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")} <b aria-hidden="true">→</b></span></span></a>`;
 }
 
 function blogIndexPage() {
