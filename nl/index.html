@@ -26,8 +26,8 @@
   <link rel="alternate" hreflang="nl-NL" href="https://aytride.com/nl/">
   <link rel="alternate" hreflang="x-default" href="https://aytride.com/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260924-loginfix">
-  <script src="/assets/catalog.js?v=20260924-loginfix"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260925-mobile-booking">
+  <script src="/assets/catalog.js?v=20260925-mobile-booking"></script>
   <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@graph": [
@@ -164,12 +164,12 @@
           <div class="route-fields">
             <label>
               <span>Ophaalpunt</span>
-              <select id="pickup" name="pickup" required></select>
+              <select id="pickup" name="pickup" required><option value="Antalya Airport (AYT)" selected>Antalya Airport (AYT)</option><option value="Lara / Kundu">Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
             </label>
             <button class="swap-btn" type="button" id="swapRoute" aria-label="Swap pickup and destination" title="Swap route">↔</button>
             <label>
               <span>Bestemming</span>
-              <select id="dropoff" name="dropoff" required></select>
+              <select id="dropoff" name="dropoff" required><option value="Antalya Airport (AYT)">Antalya Airport (AYT)</option><option value="Lara / Kundu" selected>Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
             </label>
           </div>
           <div class="custom-route hidden" id="customRouteFields">
@@ -343,7 +343,67 @@
           <span>Standard Sedan + VIP Van</span>
           <span>Vaste totaalprijs per voertuig</span>
         </div>
-        <div class="route-grid" id="routeGrid"></div>
+        <div class="route-grid" id="routeGrid"><article class="route-card">
+      <button type="button" data-route="lara" aria-label="Select Lara / Kundu">
+        <span class="route-thumb"><img src="/assets/routes/lara-kundu.jpg" alt="Lara Kundu beach and resort area near Antalya Airport" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €27</span></span>
+        <strong>Lara / Kundu</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€27</b></span><span><small>VIP Van</small><b>€35</b></span></span>
+        <span class="route-stats"><small>14 km</small><small>20 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-lara-transfer/">Routegids</a>
+    </article><article class="route-card">
+      <button type="button" data-route="belek" aria-label="Select Belek / Kadriye">
+        <span class="route-thumb"><img src="/assets/routes/belek-kadriye.jpg" alt="Belek Kadriye resort coastline near Antalya" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €40</span></span>
+        <strong>Belek / Kadriye</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€40</b></span><span><small>VIP Van</small><b>€50</b></span></span>
+        <span class="route-stats"><small>33 km</small><small>35 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-belek-transfer/">Routegids</a>
+    </article><article class="route-card">
+      <button type="button" data-route="kemer" aria-label="Select Kemer">
+        <span class="route-thumb"><img src="/assets/routes/kemer.jpg" alt="Kemer beach hotels with Taurus mountains" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €57</span></span>
+        <strong>Kemer</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€57</b></span><span><small>VIP Van</small><b>€70</b></span></span>
+        <span class="route-stats"><small>58 km</small><small>65 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-kemer-transfer/">Routegids</a>
+    </article><article class="route-card">
+      <button type="button" data-route="side" aria-label="Select Side / Manavgat">
+        <span class="route-thumb"><img src="/assets/routes/side-manavgat.jpg" alt="Side ancient temple and palm trees on the Antalya coast" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €63</span></span>
+        <strong>Side / Manavgat</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€63</b></span><span><small>VIP Van</small><b>€75</b></span></span>
+        <span class="route-stats"><small>65 km</small><small>60 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-side-transfer/">Routegids</a>
+    </article><article class="route-card">
+      <button type="button" data-route="alanya" aria-label="Select Alanya">
+        <span class="route-thumb"><img src="/assets/routes/alanya.jpg" alt="Alanya harbor and castle coastline" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €105</span></span>
+        <strong>Alanya</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€105</b></span><span><small>VIP Van</small><b>€115</b></span></span>
+        <span class="route-stats"><small>125 km</small><small>120 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-alanya-transfer/">Routegids</a>
+    </article><article class="route-card">
+      <button type="button" data-route="oldtown" aria-label="Select Kaleici / Old Town">
+        <span class="route-thumb"><img src="/assets/routes/kaleici-old-town.jpg" alt="Kaleici Old Town marina and Antalya historic harbor" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €33</span></span>
+        <strong>Kaleici / Old Town</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€33</b></span><span><small>VIP Van</small><b>€40</b></span></span>
+        <span class="route-stats"><small>16 km</small><small>25 min</small></span>
+        <span class="route-card-action">Selecteer route</span>
+      </button>
+      <a href="/nl/antalya-airport-to-kaleici-transfer/">Routegids</a>
+    </article></div>
       </div>
     </section>
 
@@ -377,6 +437,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260924-loginfix"></script>
+  <script src="/assets/app.js?v=20260925-mobile-booking"></script>
 </body>
 </html>
