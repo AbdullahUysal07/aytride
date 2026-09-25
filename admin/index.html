@@ -6,8 +6,8 @@
   <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260924-analytics">
-  <script src="/assets/catalog.js?v=20260924-analytics"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260925-admin-diagnostic">
+  <script src="/assets/catalog.js?v=20260925-admin-diagnostic"></script>
 </head>
 <body>
   <header class="topbar">
@@ -43,6 +43,7 @@
             <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Şifre" required>
           </label>
           <button class="primary-btn" type="submit">Giriş yap</button>
+          <p class="admin-note">Giriş sonuçları formun altında gösterilir. <a href="https://ayt-ride-api.aytride.workers.dev/api/health" target="_blank" rel="noopener">Sunucu durumunu kontrol et</a></p>
         </form>
 
         <div id="adminPanel" class="hidden">
@@ -188,7 +189,7 @@
             </div>
           </div>
         </div>
-        <pre id="adminOutput"></pre>
+        <pre id="adminOutput" role="status" aria-live="polite" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre>
       </section>
     </div>
   </main>
@@ -206,6 +207,13 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260924-loginfix"></script>
+  <script src="/assets/app.js?v=20260925-admin-diagnostic"></script>
+  <script>
+    window.addEventListener("load", function () {
+      if (!window.AYTRideAdminReady) {
+        document.getElementById("adminOutput").textContent = "Yönetim paneli kodu başlatılamadı. Sayfayı yenileyin. Sorun sürerse Safari içerik engelleyicisini kontrol edin veya farklı tarayıcı deneyin.";
+      }
+    });
+  </script>
 </body>
 </html>
