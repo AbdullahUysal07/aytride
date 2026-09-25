@@ -690,22 +690,6 @@ ${header(language)}
       </div>
     </section>
 
-    <section class="visual-band">
-      <div class="shell image-grid">
-        <picture class="hero-image">
-          <source srcset="/assets/ayt-ride-transfer.webp" type="image/webp">
-          <img src="/assets/ayt-ride-transfer.jpg" alt="Private van waiting near Antalya coast and airport route">
-        </picture>
-        <div class="promise-grid">
-          <article><span class="icon-dot">WA</span><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></article>
-          <article><span class="icon-dot">FLT</span><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></article>
-          <article><span class="icon-dot">PAY</span><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></article>
-          <article><span class="icon-dot">€</span><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></article>
-        </div>
-      </div>
-    </section>
-    ${confidenceBand(language)}
-
     <section class="routes-section" id="routes">
       <div class="shell">
         <div class="section-head route-head">
@@ -723,6 +707,22 @@ ${header(language)}
         <div class="route-grid" id="routeGrid">${staticRouteCards(language)}</div>
       </div>
     </section>
+
+    <section class="visual-band">
+      <div class="shell image-grid">
+        <picture class="hero-image">
+          <source srcset="/assets/ayt-ride-transfer.webp" type="image/webp">
+          <img src="/assets/ayt-ride-transfer.jpg" alt="Private van waiting near Antalya coast and airport route">
+        </picture>
+        <div class="promise-grid">
+          <article><span class="icon-dot">WA</span><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></article>
+          <article><span class="icon-dot">FLT</span><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></article>
+          <article><span class="icon-dot">PAY</span><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></article>
+          <article><span class="icon-dot">€</span><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></article>
+        </div>
+      </div>
+    </section>
+    ${confidenceBand(language)}
 
     <section class="blog-preview">
       <div class="shell">
