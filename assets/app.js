@@ -1159,12 +1159,12 @@
     }
   }
 
-  function renderAdminBookings(bookings, archivedBookings = []) {
+  function renderAdminBookings(bookings) {
     const list = document.querySelector("#adminBookings");
     const count = document.querySelector("#bookingCount");
     if (!list || !count) return;
     count.textContent = `${bookings.length} kayıt`;
-    const bookingCard = (item, archived = false) => `
+    const bookingCard = (item) => `
       <article class="booking-item" data-status="${escapeHtml(item.status || "pending")}">
         <div class="booking-item-head">
           <div>
@@ -1191,22 +1191,17 @@
         <p class="booking-note"><b>Not:</b> ${escapeHtml(item.notes || "-")}</p>
         ${item.confirmedAt ? `<p class="booking-note"><b>Doğrulama:</b> ${escapeHtml(formatAdminDate(item.confirmedAt))}</p>` : ""}
         <div class="booking-actions">
-          ${archived
-            ? `<button class="admin-btn soft" type="button" data-booking-action="restore" data-reference="${escapeHtml(item.reference)}">Arşivden geri al</button>`
-            : item.status === "confirmed"
+          ${item.status === "confirmed"
             ? `<button class="admin-btn soft" type="button" data-booking-action="pending" data-reference="${escapeHtml(item.reference)}">Beklemeye al</button>`
             : `<button class="admin-btn success" type="button" data-booking-action="confirm" data-reference="${escapeHtml(item.reference)}">Doğrula ve ciroya ekle</button>`}
-          ${archived ? "" : `<button class="admin-btn danger" type="button" data-booking-action="delete" data-reference="${escapeHtml(item.reference)}">Sil</button>`}
+          <button class="admin-btn danger" type="button" data-booking-action="delete" data-reference="${escapeHtml(item.reference)}">Sil</button>
         </div>
       </article>
     `;
     const activeMarkup = bookings.length
       ? bookings.map((item) => bookingCard(item)).join("")
-      : "<div class=\"booking-empty\"><strong>Henüz aktif rezervasyon yok.</strong><p>Yeni talepler burada görünür; silinen kayıtlar aşağıdaki arşivde tutulur.</p></div>";
-    const archiveMarkup = archivedBookings.length
-      ? `<section class="booking-archive"><div class="booking-archive-head"><strong>Silinen kayıtlar</strong><span>${archivedBookings.length} arşiv kaydı</span></div>${archivedBookings.map((item) => bookingCard(item, true)).join("")}</section>`
-      : "";
-    list.innerHTML = `${activeMarkup}${archiveMarkup}`;
+      : "<div class=\"booking-empty\"><strong>Henüz aktif rezervasyon yok.</strong><p>Yeni talepler burada görünür.</p></div>";
+    list.innerHTML = activeMarkup;
   }
 
   function renderAdminBlogs(posts) {
@@ -1290,7 +1285,7 @@
     ]);
     renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
     renderAdminSettings(bookingsData.settings || {});
-    renderAdminBookings(bookingsData.bookings || [], bookingsData.archivedBookings || []);
+    renderAdminBookings(bookingsData.bookings || []);
     renderAdminPrices(pricesData || {});
     renderAdminBlogs(blogData.posts || []);
     renderAdminAnalytics(analyticsData || {}, bookingsData.bookings || []);
@@ -1325,7 +1320,7 @@
     async function syncRecentBookings() {
       const data = await adminRequest("/api/admin/bookings");
       renderAdminStats(data.summary || {}, data.settings || {});
-      renderAdminBookings(data.bookings || [], data.archivedBookings || []);
+      renderAdminBookings(data.bookings || []);
       const status = document.querySelector("#bookingSyncStatus");
       if (status) status.textContent = `Son kontrol: ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}. Yeni talepler her 20 saniyede bir alınır.`;
     }

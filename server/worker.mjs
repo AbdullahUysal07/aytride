@@ -487,24 +487,12 @@ async function listAdminBookings(request, env, cors) {
     limit 200
   `).all();
 
-  const archivedRows = await env.DB.prepare(`
-    select reference, language, route_id, trip_type, pickup, dropoff, pickup_date, pickup_time,
-      return_date, return_time, flight_number, hotel_address, vehicle_id, passengers,
-      luggage, child_seats, guest_name, guest_phone, guest_email, notes, public_total_eur,
-      quote_only, private_vehicle_price_eur, attribution_json, status, confirmed_at, deleted_at, updated_at, created_at
-    from bookings
-    where deleted_at is not null
-    order by deleted_at desc
-    limit 100
-  `).all();
-
   const liveCatalog = await catalogForEnv(env);
   const settings = await adminFinanceSettings(env);
   const bookings = (rows.results || []).map((row) => adminBooking(row, liveCatalog, settings));
 
   return json({
     bookings,
-    archivedBookings: (archivedRows.results || []).map((row) => adminBooking(row, liveCatalog, settings)),
     summary: adminSummary(bookings),
     settings
   }, 200, cors);

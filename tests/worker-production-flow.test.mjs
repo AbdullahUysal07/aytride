@@ -400,8 +400,7 @@ test("admin can update public route prices and soft-delete bookings", async () =
   }), env);
   const adminBody = await adminResponse.json();
   assert.equal(adminBody.bookings.length, 0);
-  assert.equal(adminBody.archivedBookings.length, 1);
-  assert.equal(adminBody.archivedBookings[0].reference, "AYT-PRICE-OVERRIDE-BELEK-001");
+  assert.equal(adminBody.archivedBookings, undefined);
 
   const restoreResponse = await worker.fetch(request("/api/admin/bookings/AYT-PRICE-OVERRIDE-BELEK-001/restore", {
     method: "POST",
@@ -416,7 +415,7 @@ test("admin can update public route prices and soft-delete bookings", async () =
   }), env);
   const restoredBody = await restoredResponse.json();
   assert.equal(restoredBody.bookings.length, 1);
-  assert.equal(restoredBody.archivedBookings.length, 0);
+  assert.equal(restoredBody.archivedBookings, undefined);
 });
 
 test("admin can update driver cost settings used by revenue calculations", async () => {
