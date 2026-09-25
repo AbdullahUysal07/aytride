@@ -16,7 +16,7 @@ export const publicCatalog = {
   },
   "analytics": {
     "gtmId": "",
-    "ga4MeasurementId": "G-444H4RB03N",
+    "ga4MeasurementId": "G-K8REM1KSV7",
     "googleAdsId": "",
     "googleAdsBookingLabel": ""
   },
