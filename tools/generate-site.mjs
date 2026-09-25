@@ -358,7 +358,7 @@ function confidenceBand(language) {
   const item = content[language] || content.en;
   return `<section class="guest-confidence" aria-label="${escapeHtml(item.kicker)}">
       <div class="shell confidence-grid">
-        <div class="confidence-stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="confidence-stars" aria-label="Five star service"><span class="star-row" aria-hidden="true">★★★★★</span><small>+8,500 users</small></div>
         <div><p class="mini-label">${escapeHtml(item.kicker)}</p><h2>${escapeHtml(item.title)}</h2></div>
         <ul class="confidence-list">${item.items.map((label) => `<li>${escapeHtml(label)}</li>`).join("")}</ul>
       </div>
