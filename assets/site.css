@@ -2623,9 +2623,9 @@ form {
 
 .analytics-kpis {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .analytics-grid {
@@ -2641,14 +2641,29 @@ form {
   padding: 14px;
 }
 
+.analytics-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
 .analytics-panel h3 {
-  font-size: .95rem;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.analytics-panel p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
 }
 
 .analytics-day,
 .analytics-source {
   display: grid;
-  grid-template-columns: minmax(88px, 1.2fr) repeat(4, minmax(74px, 1fr));
+  grid-template-columns: minmax(76px, 1.15fr) repeat(4, minmax(68px, 1fr));
   gap: 8px;
   align-items: center;
   border-top: 1px solid var(--line);
@@ -2662,8 +2677,38 @@ form {
   color: var(--navy);
 }
 
+.analytics-day-heading {
+  border-top: 0;
+  padding: 0 0 8px;
+  color: #718096;
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .analytics-source {
   grid-template-columns: minmax(0, 1fr) auto;
+  padding: 12px 0;
+}
+
+.analytics-source div {
+  display: grid;
+  gap: 3px;
+}
+
+.analytics-source span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.analytics-source b {
+  min-width: 40px;
+  border-radius: 999px;
+  background: #eaf4ff;
+  color: var(--blue-2);
+  padding: 5px 7px;
+  text-align: center;
+  font-size: .78rem;
 }
 
 @media (max-width: 980px) {
@@ -2702,6 +2747,15 @@ form {
 
   .analytics-day {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .analytics-day-heading {
+    display: none;
+  }
+
+  .analytics-day span {
+    font-size: .78rem;
   }
 }
 

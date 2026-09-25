@@ -6,7 +6,7 @@
   <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260925-admin-diagnostic">
+  <link rel="stylesheet" href="/assets/site.css?v=20260925-admin-clean">
   <script src="/assets/catalog.js?v=20260925-admin-diagnostic"></script>
 </head>
 <body>
@@ -58,15 +58,19 @@
           <section class="admin-overview" id="adminAnalytics">
             <div class="admin-section-title">
               <div>
-                <p class="mini-label">Site ölçüm istatistikleri</p>
+                <p class="mini-label">Site özeti</p>
                 <h2>Bugün ve son 7 gün</h2>
               </div>
               <button class="admin-btn soft" id="refreshAnalytics" type="button">İstatistikleri yenile</button>
             </div>
             <div class="analytics-kpis" id="analyticsStats"></div>
             <div class="analytics-grid">
-              <section class="analytics-panel"><h3>Günlük özet</h3><div id="analyticsDays"></div></section>
-              <section class="analytics-panel"><h3>Kaynaklar</h3><div id="analyticsSources"></div></section>
+              <section class="analytics-panel analytics-days-panel">
+                <div class="analytics-panel-head"><div><h3>Son 7 gün</h3><p>Günlük ziyaret ve talep akışı</p></div></div>
+                <div class="analytics-day analytics-day-heading"><span>Tarih</span><span>Ziyaretçi*</span><span>Görüntüleme*</span><span>Teklif*</span><span>Rezervasyon</span></div>
+                <div id="analyticsDays"></div>
+              </section>
+              <section class="analytics-panel analytics-sources-panel"><div class="analytics-panel-head"><div><h3>Geliş kaynakları</h3><p>Son 7 gündeki görüntülemeler</p></div></div><div id="analyticsSources"></div></section>
             </div>
             <p class="admin-note" id="analyticsNote">Bu özet, analitik izni veren ziyaretçilerin sitedeki ölçüm olaylarını gösterir. GA4 raporu değildir.</p>
           </section>
@@ -207,7 +211,7 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260925-analyticsfix"></script>
+  <script src="/assets/app.js?v=20260925-admin-clean"></script>
   <script>
     window.addEventListener("load", function () {
       if (!window.AYTRideAdminReady) {

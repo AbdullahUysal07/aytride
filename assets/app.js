@@ -1075,28 +1075,32 @@
     const weekBookings = dayKeys.reduce((sum, day) => sum + (bookingCounts.get(day) || 0), 0);
     const analyticsDays = new Map((data?.days || []).map((item) => [item.date, item]));
     stats.innerHTML = [
-      ["Bugün ziyaretçi*", today.visitors, "Analitik izni veren, kayıt altına alınmış ziyaretçiler"],
-      ["Bugün görüntüleme*", today.pageViews, "Analitik izni veren ziyaretçilerin görüntülemeleri"],
-      ["7 günde ziyaretçi*", week.visitors, "Analitik izni veren tekil ziyaretçiler"],
-      ["Teklif başlangıcı*", week.quoteStarts, "Analitik izni veren ziyaretçiler"],
-      ["D1 rezervasyon talebi", weekBookings, "Son 7 gün • bekleyen ve doğrulanan kayıtlar"],
-      ["Bugün D1 rezervasyon", bookingCounts.get(currentDay) || 0, "Türkiye saatine göre"],
+      ["Bugünkü ziyaretçi*", today.visitors, "İzin veren ziyaretçiler"],
+      ["Bugünkü görüntüleme*", today.pageViews, "Sayfa görüntülemeleri"],
+      ["7 günlük rezervasyon", weekBookings, "D1'e kaydedilen talepler"],
+      ["Bugünkü rezervasyon", bookingCounts.get(currentDay) || 0, "Türkiye saatine göre"],
     ].map(([label, value, description]) => `
       <article class="kpi-card"><small>${escapeHtml(label)}</small><strong>${Number(value || 0)}</strong><span>${escapeHtml(description)}</span></article>
     `).join("");
     days.innerHTML = dayKeys.map((day) => {
       const item = analyticsDays.get(day) || {};
       return `<div class="analytics-day">
-        <strong>${escapeHtml(day)}</strong>
+        <strong>${escapeHtml(new Intl.DateTimeFormat("tr-TR", { day: "2-digit", month: "short" }).format(new Date(`${day}T12:00:00Z`)))}</strong>
         <span>${Number(item.visitors || 0)} ziyaretçi*</span>
         <span>${Number(item.pageViews || 0)} görüntüleme*</span>
         <span>${Number(item.quoteStarts || 0)} teklif*</span>
         <span>${Number(bookingCounts.get(day) || 0)} D1 rezervasyon</span>
       </div>`;
     }).join("");
-    sources.innerHTML = (data?.sources || []).map((item) => `
-      <div class="analytics-source"><strong>${escapeHtml(item.source || "direct")}</strong><span>${Number(item.pageViews || 0)} görüntüleme*</span></div>
-    `).join("") || "<p class=\"admin-note\">Kaynak verisi, analitik izni veren ziyaretçiler geldikçe görünür.</p>";
+    const sourceTotal = (data?.sources || []).reduce((sum, item) => sum + Number(item.pageViews || 0), 0);
+    sources.innerHTML = (data?.sources || []).map((item) => {
+      const pageViews = Number(item.pageViews || 0);
+      const share = sourceTotal ? Math.round((pageViews / sourceTotal) * 100) : 0;
+      return `<div class="analytics-source">
+        <div><strong>${escapeHtml(item.source || "direct")}</strong><span>${pageViews} görüntüleme*</span></div>
+        <b>${share}%</b>
+      </div>`;
+    }).join("") || "<p class=\"admin-note\">Kaynak verisi, analitik izni veren ziyaretçiler geldikçe görünür.</p>";
     note.textContent = "D1 rezervasyonları doğrudan veritabanından alınır; WhatsApp üzerinden elle alınan ve D1'e kaydedilmeyen talepler dahil değildir. * Ziyaret, görüntüleme ve teklif sayıları yalnızca analitik izni veren ziyaretçileri kapsar; önceki kayıp veriler geri getirilemez. Bu özet GA4 raporu değildir.";
   }
 
