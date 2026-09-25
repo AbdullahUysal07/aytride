@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260924-analytics";
+const buildStamp = "20260925-mobile-booking";
 const buildDate = "2026-09-24";
 
 const languages = {
@@ -456,6 +456,9 @@ function counter(id, label, value) {
 
 function bookingForm(language, routeId = "") {
   const l = languages[language];
+  const route = catalog.routes.find((item) => item.id === routeId);
+  const places = [...new Set(catalog.routes.flatMap((item) => [item.origin, item.destination]))];
+  const options = (selected) => places.map((place) => `<option value="${escapeHtml(place)}"${place === selected ? " selected" : ""}>${escapeHtml(place)}</option>`).join("");
   return `
     <section class="booking-card" id="booking" aria-labelledby="bookingTitle">
       <div class="booking-card-head">
@@ -476,12 +479,12 @@ function bookingForm(language, routeId = "") {
           <div class="route-fields">
             <label>
               <span>${l.pickup}</span>
-              <select id="pickup" name="pickup" required></select>
+              <select id="pickup" name="pickup" required>${options(route?.origin || "Antalya Airport (AYT)")}</select>
             </label>
             <button class="swap-btn" type="button" id="swapRoute" aria-label="Swap pickup and destination" title="Swap route">↔</button>
             <label>
               <span>${l.destination}</span>
-              <select id="dropoff" name="dropoff" required></select>
+              <select id="dropoff" name="dropoff" required>${options(route?.destination || "Lara / Kundu")}</select>
             </label>
           </div>
           <div class="custom-route hidden" id="customRouteFields">
@@ -717,7 +720,7 @@ ${header(language)}
           <span>Standard Sedan + VIP Van</span>
           <span>${l.perVehicle}</span>
         </div>
-        <div class="route-grid" id="routeGrid"></div>
+        <div class="route-grid" id="routeGrid">${staticRouteCards(language)}</div>
       </div>
     </section>
 
@@ -738,6 +741,26 @@ ${footer(language)}
   <script src="/assets/app.js?v=${buildStamp}"></script>
 </body>
 </html>`;
+}
+
+function staticRouteCards(language) {
+  return catalog.routes.filter((route) => route.available && !route.quoteOnly).slice(0, 6).map((route) => {
+    const sedan = route.prices["standard-sedan"];
+    const vip = route.prices["vip-van"];
+    const slug = route.slugs?.[language] || route.slugs?.en;
+    const guide = slug ? (language === "en" ? `/${slug}/` : `/${language}/${slug}/`) : "";
+    return `<article class="route-card">
+      <button type="button" data-route="${route.id}" aria-label="Select ${escapeHtml(route.destination)}">
+        <span class="route-thumb"><img src="${escapeHtml(route.image || "/assets/ayt-ride-transfer.jpg")}" alt="${escapeHtml(route.imageAlt || route.destination)}" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €${sedan}</span></span>
+        <strong>${escapeHtml(route.destination)}</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€${sedan}</b></span><span><small>VIP Van</small><b>€${vip}</b></span></span>
+        <span class="route-stats"><small>${route.distanceKm} km</small><small>${route.durationMin} min</small></span>
+        <span class="route-card-action">${escapeHtml(languages[language].selectRoute)}</span>
+      </button>
+      ${guide ? `<a href="${guide}">${escapeHtml(languages[language].routeGuide)}</a>` : ""}
+    </article>`;
+  }).join("");
 }
 
 function routeSchema(route, language) {
