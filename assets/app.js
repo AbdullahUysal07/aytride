@@ -1281,6 +1281,7 @@
     const panel = document.querySelector("#adminPanel");
     const output = document.querySelector("#adminOutput");
     const submitButton = login.querySelector('button[type="submit"]');
+    let bookingRefreshTimer = 0;
     window.AYTRideAdminReady = true;
 
     function loginErrorMessage(error) {
@@ -1297,6 +1298,25 @@
       output.textContent = "Panel verileri yükleniyor...";
       await reloadAdminDashboard();
       output.textContent = "Rezervasyonlar güncellendi.";
+    }
+
+    async function syncRecentBookings() {
+      const data = await adminRequest("/api/admin/bookings");
+      renderAdminStats(data.summary || {}, data.settings || {});
+      renderAdminBookings(data.bookings || []);
+      const status = document.querySelector("#bookingSyncStatus");
+      if (status) status.textContent = `Son kontrol: ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}. Yeni talepler her 20 saniyede bir alınır.`;
+    }
+
+    function startBookingRefresh() {
+      window.clearInterval(bookingRefreshTimer);
+      bookingRefreshTimer = window.setInterval(() => {
+        if (panel.classList.contains("hidden")) return;
+        syncRecentBookings().catch(() => {
+          const status = document.querySelector("#bookingSyncStatus");
+          if (status) status.textContent = "Otomatik kontrol yapılamadı. Rezervasyonları yenile düğmesini kullanın.";
+        });
+      }, 20000);
     }
 
     login.addEventListener("submit", async (event) => {
@@ -1318,6 +1338,7 @@
         panel.classList.remove("hidden");
         try {
           await loadBookings();
+          startBookingRefresh();
         } catch (error) {
           output.textContent = "Giriş başarılı, ancak panel verileri alınamadı: " + loginErrorMessage(error);
         }
@@ -1503,6 +1524,7 @@
       }
       panel.classList.add("hidden");
       login.classList.remove("hidden");
+      window.clearInterval(bookingRefreshTimer);
       sessionStorage.removeItem(adminSessionKey);
       output.textContent = "Oturum kapatıldı.";
     });
@@ -1516,6 +1538,7 @@
         login.classList.remove("hidden");
         output.textContent = "Oturum süresi doldu. Lütfen yeniden giriş yapın.";
       });
+      startBookingRefresh();
     }
   }
 
