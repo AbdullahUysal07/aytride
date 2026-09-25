@@ -1487,8 +1487,9 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    await loadLiveCatalog();
+  document.addEventListener("DOMContentLoaded", () => {
+    // Never hold the booking form or route cards hostage to a slow Worker API.
+    // The bundled catalog is a complete, immediately usable fallback on mobile.
     initConsent();
     initGuideBookingCta();
     initBooking();
@@ -1496,6 +1497,20 @@
     initBlogLists();
     initBlogArticle();
     initAdmin();
+
+    // Refresh prices and destinations only after the live catalog arrives.
+    loadLiveCatalog().then(() => {
+      const e = els();
+      if (!e.form) return;
+      const pickup = e.pickup?.value;
+      const dropoff = e.dropoff?.value;
+      fillSelect(e.pickup, pickup);
+      fillSelect(e.dropoff, dropoff);
+      renderRoutes();
+      update();
+    }).catch(() => {
+      // Static pricing and the initialized form remain available.
+    });
   });
 
   window.AYTRide = { catalog, calculate, getRouteById, getRouteByPlaces };
