@@ -15,7 +15,7 @@ function visit(dir) {
     }
     if (!entry.isFile() || !entry.name.endsWith(".html")) continue;
     const old = fs.readFileSync(file, "utf8");
-    const next = old.replace(/\\/assets\\/app\\.js\\?v=[^"'<>\\s]+/g, `/assets/app.js?v=${version}`);
+    const next = old.replace(/\/assets\/app\.js\?v=[^"'<>\s]+/g, `/assets/app.js?v=${version}`);
     if (next !== old) {
       fs.writeFileSync(file, next, "utf8");
       changed++;
