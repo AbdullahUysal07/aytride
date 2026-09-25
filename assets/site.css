@@ -2061,6 +2061,115 @@ details p {
   .home-page .blog-preview { padding: 50px 0; }
 }
 
+/* Transfer-price-guide inspired composition, expressed in AYT Ride's own visual language. */
+.home-page .hero {
+  padding: 94px 0 82px;
+  background:
+    linear-gradient(90deg, rgba(18, 48, 91, .98) 0%, rgba(18, 48, 91, .98) 38%, rgba(17, 53, 86, .73) 61%, rgba(13, 39, 62, .54) 100%),
+    url("/assets/ayt-ride-transfer.jpg") center / cover;
+}
+
+.home-page .hero-grid {
+  grid-template-columns: minmax(0, .92fr) minmax(460px, .98fr);
+  gap: 72px;
+  align-items: center;
+}
+
+.home-page .hero-copy { max-width: 560px; }
+
+.home-page .hero-title {
+  max-width: 580px;
+  font-size: clamp(3.25rem, 5vw, 4.85rem);
+  line-height: .98;
+  letter-spacing: 0;
+}
+
+.home-page .hero-title-sub {
+  margin-top: 15px;
+  color: #7be8cb;
+  font-size: .5em;
+}
+
+.home-page .lead {
+  max-width: 520px;
+  margin-top: 22px;
+  color: #edf6fc;
+}
+
+.home-page .trust-strip {
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.home-page .trust-strip span {
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e9f5ff;
+  font-size: .76rem;
+  font-weight: 800;
+}
+
+.home-page .trust-strip span::before {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: rgba(136, 229, 200, .2);
+  color: #8be7c5;
+  content: "•";
+  font-size: 1.2rem;
+}
+
+.home-page .hero-proof { display: none; }
+
+.home-page .booking-card {
+  max-width: 610px;
+  margin-left: auto;
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 12px;
+  box-shadow: 0 28px 70px rgba(5, 20, 38, .38);
+}
+
+.home-page .booking-card-head {
+  padding: 24px 28px 18px;
+  background: linear-gradient(105deg, #fff, #f5faff);
+}
+
+.home-page #booking form { padding: 22px 28px 28px; }
+
+.home-page .routes-section { padding-top: 72px; }
+
+@media (max-width: 900px) {
+  .home-page .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(390px, .85fr); gap: 36px; }
+  .home-page .hero-title { font-size: clamp(2.8rem, 6vw, 4rem); }
+  .home-page .trust-strip { gap: 8px; }
+}
+
+@media (max-width: 720px) {
+  .home-page .hero {
+    padding: 48px 0 34px;
+    background:
+      linear-gradient(180deg, rgba(18, 48, 91, .96) 0%, rgba(18, 48, 91, .88) 52%, rgba(13, 39, 62, .79) 100%),
+      url("/assets/ayt-ride-transfer.jpg") 58% center / cover;
+  }
+
+  .home-page .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+  .home-page .hero-copy { max-width: none; }
+  .home-page .hero-title { max-width: 360px; font-size: clamp(2.85rem, 13vw, 4rem); }
+  .home-page .lead { margin-top: 18px; }
+  .home-page .trust-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; }
+  .home-page .trust-strip span { min-width: 0; font-size: .72rem; }
+  .home-page .trust-strip span::before { width: 17px; height: 17px; margin-right: 4px; }
+  .home-page .booking-card { max-width: none; margin: 0; border-radius: 10px; }
+  .home-page .booking-card-head { padding: 20px 18px 16px; }
+  .home-page #booking form { padding: 18px; }
+}
+
 .booking-item-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

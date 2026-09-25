@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260925-premium";
+const buildStamp = "20260925-layout";
 const buildDate = "2026-09-24";
 
 const languages = {
