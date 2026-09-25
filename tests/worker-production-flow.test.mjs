@@ -68,10 +68,12 @@ class FakeD1 {
             }
           }
           if (/update bookings\s+set status = 'pending'/i.test(sql)) {
-            const row = this.rows.find((item) => item.reference === values[1] && !item.deleted_at);
+            const restoring = /deleted_at is not null/i.test(sql);
+            const row = this.rows.find((item) => item.reference === values[1] && (restoring ? item.deleted_at : !item.deleted_at));
             if (row) {
               row.status = "pending";
               row.confirmed_at = null;
+              if (restoring) row.deleted_at = null;
               row.updated_at = values[0];
             }
           }
@@ -149,6 +151,7 @@ class FakeD1 {
       return [...this.blogs];
     }
     if (/from analytics_events/i.test(sql)) return [...this.analyticsEvents];
+    if (/where deleted_at is not null/i.test(sql)) return this.sortedRows().filter((row) => row.deleted_at);
     if (/where deleted_at is null/i.test(sql)) return this.sortedRows().filter((row) => !row.deleted_at);
     return this.sortedRows();
   }
@@ -397,6 +400,23 @@ test("admin can update public route prices and soft-delete bookings", async () =
   }), env);
   const adminBody = await adminResponse.json();
   assert.equal(adminBody.bookings.length, 0);
+  assert.equal(adminBody.archivedBookings.length, 1);
+  assert.equal(adminBody.archivedBookings[0].reference, "AYT-PRICE-OVERRIDE-BELEK-001");
+
+  const restoreResponse = await worker.fetch(request("/api/admin/bookings/AYT-PRICE-OVERRIDE-BELEK-001/restore", {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(restoreResponse.status, 200);
+
+  const restoredResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const restoredBody = await restoredResponse.json();
+  assert.equal(restoredBody.bookings.length, 1);
+  assert.equal(restoredBody.archivedBookings.length, 0);
 });
 
 test("admin can update driver cost settings used by revenue calculations", async () => {

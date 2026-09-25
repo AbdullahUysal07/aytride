@@ -298,7 +298,15 @@
     const date = (e.pickupDate.value || todayIso()).replace(/\D/g, "");
     const time = (e.pickupTime.value || "0000").replace(/\D/g, "");
     const routeCode = (selectedRoute()?.id || "custom").toUpperCase();
-    return `AYT-${date}-${time}-${routeCode}`;
+    // Date, time and route help operations but cannot identify one request.
+    const bytes = new Uint32Array(1);
+    window.crypto?.getRandomValues?.(bytes);
+    const suffix = (bytes[0] || Math.floor(Math.random() * 0xFFFFFF))
+      .toString(36)
+      .toUpperCase()
+      .padStart(5, "0")
+      .slice(-5);
+    return `AYT-${date}-${time}-${routeCode}-${suffix}`;
   }
 
   function bookingMessage(reference, quote) {
@@ -1142,16 +1150,12 @@
     }
   }
 
-  function renderAdminBookings(bookings) {
+  function renderAdminBookings(bookings, archivedBookings = []) {
     const list = document.querySelector("#adminBookings");
     const count = document.querySelector("#bookingCount");
     if (!list || !count) return;
     count.textContent = `${bookings.length} kayıt`;
-    if (!bookings.length) {
-      list.innerHTML = "<div class=\"booking-empty\"><strong>Henüz rezervasyon yok.</strong><p>Backend aktif olduğunda tüm cihazlardan gelen kayıtlar burada görünecek.</p></div>";
-      return;
-    }
-    list.innerHTML = bookings.map((item) => `
+    const bookingCard = (item, archived = false) => `
       <article class="booking-item" data-status="${escapeHtml(item.status || "pending")}">
         <div class="booking-item-head">
           <div>
@@ -1178,13 +1182,22 @@
         <p class="booking-note"><b>Not:</b> ${escapeHtml(item.notes || "-")}</p>
         ${item.confirmedAt ? `<p class="booking-note"><b>Doğrulama:</b> ${escapeHtml(formatAdminDate(item.confirmedAt))}</p>` : ""}
         <div class="booking-actions">
-          ${item.status === "confirmed"
+          ${archived
+            ? `<button class="admin-btn soft" type="button" data-booking-action="restore" data-reference="${escapeHtml(item.reference)}">Arşivden geri al</button>`
+            : item.status === "confirmed"
             ? `<button class="admin-btn soft" type="button" data-booking-action="pending" data-reference="${escapeHtml(item.reference)}">Beklemeye al</button>`
             : `<button class="admin-btn success" type="button" data-booking-action="confirm" data-reference="${escapeHtml(item.reference)}">Doğrula ve ciroya ekle</button>`}
-          <button class="admin-btn danger" type="button" data-booking-action="delete" data-reference="${escapeHtml(item.reference)}">Sil</button>
+          ${archived ? "" : `<button class="admin-btn danger" type="button" data-booking-action="delete" data-reference="${escapeHtml(item.reference)}">Sil</button>`}
         </div>
       </article>
-    `).join("");
+    `;
+    const activeMarkup = bookings.length
+      ? bookings.map((item) => bookingCard(item)).join("")
+      : "<div class=\"booking-empty\"><strong>Henüz aktif rezervasyon yok.</strong><p>Yeni talepler burada görünür; silinen kayıtlar aşağıdaki arşivde tutulur.</p></div>";
+    const archiveMarkup = archivedBookings.length
+      ? `<section class="booking-archive"><div class="booking-archive-head"><strong>Silinen kayıtlar</strong><span>${archivedBookings.length} arşiv kaydı</span></div>${archivedBookings.map((item) => bookingCard(item, true)).join("")}</section>`
+      : "";
+    list.innerHTML = `${activeMarkup}${archiveMarkup}`;
   }
 
   function renderAdminBlogs(posts) {
@@ -1268,7 +1281,7 @@
     ]);
     renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
     renderAdminSettings(bookingsData.settings || {});
-    renderAdminBookings(bookingsData.bookings || []);
+    renderAdminBookings(bookingsData.bookings || [], bookingsData.archivedBookings || []);
     renderAdminPrices(pricesData || {});
     renderAdminBlogs(blogData.posts || []);
     renderAdminAnalytics(analyticsData || {}, bookingsData.bookings || []);
@@ -1303,7 +1316,7 @@
     async function syncRecentBookings() {
       const data = await adminRequest("/api/admin/bookings");
       renderAdminStats(data.summary || {}, data.settings || {});
-      renderAdminBookings(data.bookings || []);
+      renderAdminBookings(data.bookings || [], data.archivedBookings || []);
       const status = document.querySelector("#bookingSyncStatus");
       if (status) status.textContent = `Son kontrol: ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}. Yeni talepler her 20 saniyede bir alınır.`;
     }

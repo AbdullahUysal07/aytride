@@ -1892,6 +1892,25 @@ details p {
   background: #dff7ec;
 }
 
+.booking-archive {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.booking-archive-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.booking-archive-head span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .booking-item-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

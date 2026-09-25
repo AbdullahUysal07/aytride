@@ -59,7 +59,7 @@ export default {
         return await listAdminAnalytics(request, env, cors);
       }
 
-      const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete)$/);
+      const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete|restore)$/);
       if (bookingAction && request.method === "POST") {
         return await updateAdminBookingStatus(request, env, cors, decodeURIComponent(bookingAction[1]), bookingAction[2]);
       }
@@ -487,12 +487,24 @@ async function listAdminBookings(request, env, cors) {
     limit 200
   `).all();
 
+  const archivedRows = await env.DB.prepare(`
+    select reference, language, route_id, trip_type, pickup, dropoff, pickup_date, pickup_time,
+      return_date, return_time, flight_number, hotel_address, vehicle_id, passengers,
+      luggage, child_seats, guest_name, guest_phone, guest_email, notes, public_total_eur,
+      quote_only, private_vehicle_price_eur, attribution_json, status, confirmed_at, deleted_at, updated_at, created_at
+    from bookings
+    where deleted_at is not null
+    order by deleted_at desc
+    limit 100
+  `).all();
+
   const liveCatalog = await catalogForEnv(env);
   const settings = await adminFinanceSettings(env);
   const bookings = (rows.results || []).map((row) => adminBooking(row, liveCatalog, settings));
 
   return json({
     bookings,
+    archivedBookings: (archivedRows.results || []).map((row) => adminBooking(row, liveCatalog, settings)),
     summary: adminSummary(bookings),
     settings
   }, 200, cors);
@@ -571,7 +583,7 @@ async function updateAdminBookingStatus(request, env, cors, reference, action) {
           updated_at = ?
       where reference = ? and deleted_at is null
     `).bind(now, reference).run();
-  } else {
+  } else if (action === "delete") {
     result = await env.DB.prepare(`
       update bookings
       set status = 'deleted',
@@ -579,6 +591,14 @@ async function updateAdminBookingStatus(request, env, cors, reference, action) {
           updated_at = ?
       where reference = ?
     `).bind(now, now, reference).run();
+  } else {
+    result = await env.DB.prepare(`
+      update bookings
+      set status = 'pending',
+          deleted_at = null,
+          updated_at = ?
+      where reference = ? and deleted_at is not null
+    `).bind(now, reference).run();
   }
 
   if (!result?.success) return json({ error: "Booking could not be updated." }, 500, cors);
