@@ -1043,7 +1043,15 @@
     `;
   }
 
-  function renderAdminAnalytics(data) {
+  function istanbulDay(value) {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Istanbul", year: "numeric", month: "2-digit", day: "2-digit"
+    }).formatToParts(new Date(value));
+    const get = (type) => parts.find((part) => part.type === type)?.value || "";
+    return `${get("year")}-${get("month")}-${get("day")}`;
+  }
+
+  function renderAdminAnalytics(data, bookings = []) {
     const stats = document.querySelector("#analyticsStats");
     const days = document.querySelector("#analyticsDays");
     const sources = document.querySelector("#analyticsSources");
@@ -1051,24 +1059,45 @@
     if (!stats || !days || !sources || !note) return;
     const today = data?.today || {};
     const week = data?.week || {};
+    // D1 is authoritative for saved booking requests. Consent-based browser events are not.
+    const siteBookings = bookings.filter((item) => item.createdAt && item.status !== "deleted");
+    const bookingCounts = new Map();
+    siteBookings.forEach((item) => {
+      const day = istanbulDay(item.createdAt);
+      bookingCounts.set(day, (bookingCounts.get(day) || 0) + 1);
+    });
+    const dayKeys = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date();
+      date.setUTCDate(date.getUTCDate() - (6 - index));
+      return istanbulDay(date);
+    });
+    const currentDay = dayKeys[6];
+    const weekBookings = dayKeys.reduce((sum, day) => sum + (bookingCounts.get(day) || 0), 0);
+    const analyticsDays = new Map((data?.days || []).map((item) => [item.date, item]));
     stats.innerHTML = [
-      ["Bugün ziyaretçi", today.visitors, "Tekil, analitik izni veren ziyaretçi"],
-      ["Bugün görüntüleme", today.pageViews, "Sayfa görüntüleme"],
-      ["7 günde ziyaretçi", week.visitors, "Tekil ziyaretçi"],
-      ["Teklif başlangıcı", week.quoteStarts, "Son 7 gün"],
-      ["Rezervasyon", week.bookings, "Onay sayfasına ulaşan kayıt"],
+      ["Bugün ziyaretçi*", today.visitors, "Analitik izni veren, kayıt altına alınmış ziyaretçiler"],
+      ["Bugün görüntüleme*", today.pageViews, "Analitik izni veren ziyaretçilerin görüntülemeleri"],
+      ["7 günde ziyaretçi*", week.visitors, "Analitik izni veren tekil ziyaretçiler"],
+      ["Teklif başlangıcı*", week.quoteStarts, "Analitik izni veren ziyaretçiler"],
+      ["D1 rezervasyon talebi", weekBookings, "Son 7 gün • bekleyen ve doğrulanan kayıtlar"],
+      ["Bugün D1 rezervasyon", bookingCounts.get(currentDay) || 0, "Türkiye saatine göre"],
     ].map(([label, value, description]) => `
       <article class="kpi-card"><small>${escapeHtml(label)}</small><strong>${Number(value || 0)}</strong><span>${escapeHtml(description)}</span></article>
     `).join("");
-    days.innerHTML = (data?.days || []).map((item) => `
-      <div class="analytics-day"><strong>${escapeHtml(item.date)}</strong><span>${Number(item.visitors || 0)} ziyaretçi</span><span>${Number(item.pageViews || 0)} görüntüleme</span><span>${Number(item.quoteStarts || 0)} teklif</span><span>${Number(item.bookings || 0)} rezervasyon</span></div>
-    `).join("") || "<p class=\"admin-note\">Henüz ziyaret verisi yok.</p>";
+    days.innerHTML = dayKeys.map((day) => {
+      const item = analyticsDays.get(day) || {};
+      return `<div class="analytics-day">
+        <strong>${escapeHtml(day)}</strong>
+        <span>${Number(item.visitors || 0)} ziyaretçi*</span>
+        <span>${Number(item.pageViews || 0)} görüntüleme*</span>
+        <span>${Number(item.quoteStarts || 0)} teklif*</span>
+        <span>${Number(bookingCounts.get(day) || 0)} D1 rezervasyon</span>
+      </div>`;
+    }).join("");
     sources.innerHTML = (data?.sources || []).map((item) => `
-      <div class="analytics-source"><strong>${escapeHtml(item.source || "direct")}</strong><span>${Number(item.pageViews || 0)} görüntüleme</span></div>
-    `).join("") || "<p class=\"admin-note\">Kaynak verisi, ilk analitik izinli ziyaretten sonra görünür.</p>";
-    note.textContent = data?.collectedFrom
-      ? `Veriler ${data.collectedFrom} tarihinden itibaren, analitik izni veren ziyaretçilerden toplanır. GA4 raporlarıyla karşılaştırmak için aynı olay adları kullanılır.`
-      : "Analitik izni veren ziyaretçiler için veri toplama bu yayınla başlar; ilk ziyaretlerden sonra burada görünür.";
+      <div class="analytics-source"><strong>${escapeHtml(item.source || "direct")}</strong><span>${Number(item.pageViews || 0)} görüntüleme*</span></div>
+    `).join("") || "<p class=\"admin-note\">Kaynak verisi, analitik izni veren ziyaretçiler geldikçe görünür.</p>";
+    note.textContent = "D1 rezervasyonları doğrudan veritabanından alınır; WhatsApp üzerinden elle alınan ve D1'e kaydedilmeyen talepler dahil değildir. * Ziyaret, görüntüleme ve teklif sayıları yalnızca analitik izni veren ziyaretçileri kapsar; önceki kayıp veriler geri getirilemez. Ziyaretçi olaylarının gün sınırı sunucuda UTC, D1 rezervasyonlarınınki Türkiye saatidir.";
   }
 
   function renderAdminSettings(settings) {
@@ -1216,7 +1245,7 @@
     renderAdminBookings(bookingsData.bookings || []);
     renderAdminPrices(pricesData || {});
     renderAdminBlogs(blogData.posts || []);
-    renderAdminAnalytics(analyticsData || {});
+    renderAdminAnalytics(analyticsData || {}, bookingsData.bookings || []);
   }
 
   function initAdmin() {
@@ -1272,6 +1301,16 @@
         submitButton.disabled = false;
         submitButton.textContent = "Giriş yap";
       }
+    });
+
+    document.querySelector("#refreshAnalytics")?.addEventListener("click", () => {
+      loadBookings().catch((error) => { output.textContent = error.message || "İstatistikler yenilenemedi."; });
+    });
+
+    root.querySelector(".admin-sidebar")?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-admin-scroll]");
+      const target = button && document.getElementById(button.dataset.adminScroll);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     document.querySelector("#refreshBookings")?.addEventListener("click", () => {
@@ -1468,6 +1507,7 @@
     });
     if (saved === "accepted") {
       loadMarketingTags();
+      if (!document.querySelector("#adminApp")) recordAnalyticsEvent("page_view");
       return;
     }
     if (saved === "essential") return;
@@ -1478,7 +1518,10 @@
       const button = event.target.closest("[data-consent]");
       if (!button) return;
       localStorage.setItem(consentKey, button.dataset.consent);
-      if (button.dataset.consent === "accepted") loadMarketingTags();
+      if (button.dataset.consent === "accepted") {
+        loadMarketingTags();
+        if (!document.querySelector("#adminApp")) recordAnalyticsEvent("page_view");
+      }
       banner.remove();
     });
     document.body.appendChild(banner);
@@ -1493,17 +1536,6 @@
       analytics_storage: "granted"
     });
 
-    document.querySelector("#refreshAnalytics")?.addEventListener("click", () => {
-      loadBookings().catch((error) => { output.textContent = error.message || "İstatistikler yenilenemedi."; });
-    });
-
-    root.querySelector(".admin-sidebar")?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-admin-scroll]");
-      const target = button && document.querySelector(`#${button.dataset.adminScroll}`);
-      if (!target) return;
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    recordAnalyticsEvent("page_view");
     const tagId = ids.gtmId || ids.ga4MeasurementId || ids.googleAdsId;
     if (!tagId || document.querySelector("[data-ayt-tag]")) return;
     const script = document.createElement("script");
