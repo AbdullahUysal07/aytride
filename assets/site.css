@@ -16,6 +16,90 @@
   color-scheme: light;
 }
 
+/* Homepage visual system: a deliberate, booking-first transfer identity. */
+.home-page { background: #f4f7fb; }
+.home-page .topbar { position: relative; z-index: 5; background: #fff; border-bottom: 1px solid #e3eaf1; }
+.home-page .nav-cta { background: #10263f; border-color: #10263f; border-radius: 6px; }
+.home-page .hero {
+  isolation: isolate; padding: 70px 0 66px; border: 0;
+  background: linear-gradient(90deg, rgba(7,27,50,.96) 0%, rgba(7,27,50,.90) 45%, rgba(9,50,76,.69) 100%), url("/assets/ayt-ride-transfer.jpg") center / cover;
+}
+.home-page .hero::before { z-index: -1; top: auto; right: 0; bottom: 0; left: 0; width: auto; height: 6px; background: linear-gradient(90deg, #1c83d8, #16a77b 70%, #f0ac15); }
+.home-page .hero-grid { gap: 54px; align-items: center; }
+.home-page .hero-copy { padding-top: 0; }
+.home-page .eyebrow { color: #6dd4ff; letter-spacing: .08em; }
+.home-page .hero-title { max-width: 650px; color: #fff; font-size: clamp(3rem, 5.2vw, 5.25rem); line-height: .95; }
+.home-page .hero-title-main { display: block; }
+.home-page .hero-title-sub { display: inline-block; margin-top: 18px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: #8be7c5; font-size: .48em; line-height: 1.1; }
+.home-page .lead { max-width: 590px; color: #d7e4f0; font-size: 1.08rem; line-height: 1.65; }
+.home-page .trust-strip { gap: 8px; margin-top: 26px; }
+.home-page .trust-strip span { min-height: 34px; border: 1px solid rgba(196,224,244,.25); border-radius: 5px; background: rgba(255,255,255,.1); box-shadow: none; color: #f7fbff; font-weight: 750; }
+.home-page .hero-proof { gap: 10px; margin-top: 26px; }
+.home-page .hero-proof article, .home-page .hero-proof article:first-child, .home-page .hero-proof article:nth-child(2), .home-page .hero-proof article:last-child { min-height: 122px; padding: 16px; border: 1px solid rgba(197,224,241,.24); border-top: 1px solid rgba(197,224,241,.24); border-radius: 6px; background: rgba(6,25,46,.43); box-shadow: none; }
+.home-page .hero-proof span { background: rgba(123,223,190,.14); color: #93ebcd; }
+.home-page .hero-proof strong { color: #fff; }
+.home-page .hero-proof small { color: #c4d3e1; }
+.home-page .booking-card { border: 0; border-radius: 10px; box-shadow: 0 28px 70px rgba(0,11,26,.36); }
+.home-page .booking-card-head { padding: 22px 26px 18px; background: #fff; }
+.home-page .booking-card-head::after { right: 26px; left: 26px; background: linear-gradient(90deg, #187ac9 0%, #1aa878 58%, transparent 58%); }
+.home-page #booking form { padding: 22px 26px 26px; }
+.home-page .segment.active { background: #1478cc; }
+.home-page .price-btn { min-height: 58px; border: 0; border-radius: 6px; background: linear-gradient(100deg, #087b59, #0e9b6b); box-shadow: 0 12px 24px rgba(11,132,92,.28); }
+.home-page .routes-section { padding: 66px 0 72px; background: #f4f7fb; }
+.home-page .section-head { margin-bottom: 28px; }
+.home-page .section-head h2, .home-page .blog-preview h2 { max-width: 720px; color: #112942; font-size: clamp(2rem, 3.3vw, 3.2rem); line-height: 1.04; }
+.home-page .route-toolbar span { border-radius: 5px; background: #e9f7f1; color: #087452; box-shadow: none; }
+.home-page .route-grid { gap: 20px; }
+.home-page .route-card { border: 1px solid #d6e2ec; border-radius: 8px; box-shadow: 0 14px 30px rgba(24,49,77,.08); }
+.home-page .route-card > button { padding: 0 18px 16px; }
+.home-page .route-card > a { margin: 0 18px 18px; border-radius: 5px; background: #edf6ff; }
+.home-page .route-card-top { margin-top: 16px; }
+.home-page .route-code { border-radius: 5px; }
+.home-page .route-price { border-radius: 5px; background: #e7f8f0; color: #087452; }
+.home-page .route-fares span { min-height: 70px; border-radius: 5px; background: #f6fbf8; }
+.home-page .visual-band { padding: 76px 0; background: #102940; }
+.home-page .hero-image { border: 0; border-radius: 8px; box-shadow: 0 22px 48px rgba(0,0,0,.24); }
+.home-page .promise-grid article { border: 1px solid rgba(193,220,236,.16); border-radius: 7px; background: rgba(255,255,255,.06); box-shadow: none; }
+.home-page .promise-grid h3 { color: #fff; }
+.home-page .promise-grid p { color: #cad8e5; }
+.home-page .promise-grid article::after { height: 2px; }
+.home-page .guest-confidence { padding: 38px 0; background: #f4f7fb; }
+.home-page .confidence-grid { grid-template-columns: 185px minmax(0,1fr) auto; gap: 28px; min-height: 124px; border: 0; border-radius: 8px; background: #fff; box-shadow: 0 16px 34px rgba(25,49,75,.09); }
+.home-page .confidence-stars { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-width: 0; padding-right: 24px; border-right: 1px solid #dbe6ee; }
+.home-page .confidence-stars .star-row { display: block; color: #f1ad0b; font-size: 1.45rem; letter-spacing: 3px; line-height: 1; white-space: nowrap !important; }
+.home-page .confidence-stars small { margin-top: 8px; color: #5d7084; font-size: .82rem; }
+.home-page .confidence-list li { min-height: 38px; border-radius: 5px; color: #165786; }
+.home-page .blog-preview { padding: 70px 0 76px; background: #fff; }
+.home-page .post-card { min-height: 238px; border-radius: 7px; background: #f9fbfd; box-shadow: none; }
+.home-page .footer { border: 0; background: #10263f; color: #dbe7f0; }
+.home-page .footer a, .home-page .footer strong { color: #fff; }
+.home-page .footer p { color: #afc1d1; }
+
+@media (max-width: 720px) {
+  .home-page .hero { padding: 42px 0 34px; background-position: 63% center; }
+  .home-page .hero-grid { gap: 30px; }
+  .home-page .hero-title { font-size: clamp(2.85rem, 13vw, 4rem); line-height: .96; }
+  .home-page .hero-title-sub { margin-top: 12px; font-size: .45em; }
+  .home-page .lead { font-size: .98rem; line-height: 1.55; }
+  .home-page .trust-strip { margin-top: 20px; }
+  .home-page .trust-strip span { min-height: 32px; padding: 0 9px; font-size: .74rem; }
+  .home-page .booking-card-head { padding: 20px 18px 16px; }
+  .home-page .booking-card-head::after { right: 18px; left: 18px; }
+  .home-page #booking form { padding: 18px; }
+  .home-page .routes-section, .home-page .blog-preview { padding: 44px 0; }
+  .home-page .section-head h2, .home-page .blog-preview h2 { font-size: clamp(1.9rem, 9vw, 2.5rem); }
+  .home-page .route-grid { gap: 14px; }
+  .home-page .route-card > button { padding: 0 14px 14px; }
+  .home-page .route-card > a { margin: 0 14px 14px; }
+  .home-page .visual-band { padding: 46px 0; }
+  .home-page .promise-grid article { background: rgba(255,255,255,.08); }
+  .home-page .guest-confidence { padding: 26px 0; }
+  .home-page .confidence-grid { grid-template-columns: 1fr; gap: 16px; padding: 22px 18px; }
+  .home-page .confidence-stars { flex-direction: row; align-items: center; gap: 12px; padding: 0 0 14px; border-right: 0; border-bottom: 1px solid #dbe6ee; }
+  .home-page .confidence-stars small { margin-top: 0; }
+  .home-page .confidence-list { gap: 8px; }
+}
+
 /* Generated production booking flow */
 .booking-step {
   display: grid;
