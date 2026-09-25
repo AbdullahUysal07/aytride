@@ -1,0 +1,33 @@
+name: Refresh site analytics script cache
+
+on:
+  push:
+    paths:
+      - "tools/bust-app-cache.mjs"
+      - ".github/workflows/bust-app-cache.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-script-references:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Update app script references only
+        run: node tools/bust-app-cache.mjs
+      - name: Commit HTML cache references
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No script cache references need updating."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "Refresh analytics script cache on public pages"
+          git push
