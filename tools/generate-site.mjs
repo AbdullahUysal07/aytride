@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260925-analyticsfix";
+const buildStamp = "20260925-premium";
 const buildDate = "2026-09-24";
 
 const languages = {
@@ -668,7 +668,7 @@ function homePage(language) {
   <script src="/assets/catalog.js?v=${buildStamp}"></script>
   <script type="application/ld+json">${homeSchema(language)}</script>
 </head>
-<body>
+<body class="home-page">
 ${header(language)}
   <main>
     <section class="hero">
@@ -963,16 +963,21 @@ function confirmationPage(language = "en") {
 ${header(language)}
   <main class="page-hero">
     <section class="shell confirmation" id="confirmationPage">
+      <div class="confirmation-kicker"><span aria-hidden="true">✓</span><b>Request saved</b></div>
       <p class="eyebrow">AYT Ride</p>
       <h1>${l.confirmationTitle}</h1>
-      <p>${l.confirmationLead}</p>
+      <p class="confirmation-lead">Your request is with AYT Ride. We confirm vehicle availability, the exact meeting point and final pickup status before your journey.</p>
       <div class="confirmation-grid">
         <article><span>Reference</span><strong data-confirmation-ref>AYT</strong></article>
         <article><span>${l.confirmationRoute}</span><strong data-confirmation-route>-</strong></article>
         <article><span>${l.confirmationVehicle}</span><strong data-confirmation-vehicle>-</strong></article>
         <article><span>${l.confirmationPrice}</span><strong data-confirmation-price>-</strong></article>
       </div>
-      <a class="primary-btn" href="/#booking">${l.navBook}</a>
+      <div class="confirmation-actions">
+        <a class="primary-btn" data-confirmation-whatsapp target="_blank" rel="noopener">Open WhatsApp</a>
+        <a class="secondary-btn" href="/#booking">Make another booking</a>
+      </div>
+      <p class="confirmation-help">WhatsApp did not open automatically? Use the button above to continue with your request.</p>
     </section>
   </main>
 ${footer(language)}
