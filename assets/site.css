@@ -2378,11 +2378,11 @@ details p {
 .home-page .promise-copy {
   grid-area: copy;
   min-width: 0;
-  display: grid;
-  gap: 4px;
+  display: block;
 }
 
 .home-page .promise-copy > small {
+  display: block;
   color: #4ba889;
   font-size: .68rem;
   font-weight: 950;
@@ -2390,13 +2390,17 @@ details p {
 }
 
 .home-page .promise-copy h3 {
+  grid-area: auto;
   margin: 0;
+  margin-top: 4px;
   font-size: 1.05rem;
   line-height: 1.18;
 }
 
 .home-page .promise-copy p {
+  grid-area: auto;
   margin: 0;
+  margin-top: 5px;
   font-size: .86rem;
   line-height: 1.42;
 }
