@@ -1097,7 +1097,7 @@
     sources.innerHTML = (data?.sources || []).map((item) => `
       <div class="analytics-source"><strong>${escapeHtml(item.source || "direct")}</strong><span>${Number(item.pageViews || 0)} görüntüleme*</span></div>
     `).join("") || "<p class=\"admin-note\">Kaynak verisi, analitik izni veren ziyaretçiler geldikçe görünür.</p>";
-    note.textContent = "D1 rezervasyonları doğrudan veritabanından alınır; WhatsApp üzerinden elle alınan ve D1'e kaydedilmeyen talepler dahil değildir. * Ziyaret, görüntüleme ve teklif sayıları yalnızca analitik izni veren ziyaretçileri kapsar; önceki kayıp veriler geri getirilemez. Ziyaretçi olaylarının gün sınırı sunucuda UTC, D1 rezervasyonlarınınki Türkiye saatidir.";
+    note.textContent = "D1 rezervasyonları doğrudan veritabanından alınır; WhatsApp üzerinden elle alınan ve D1'e kaydedilmeyen talepler dahil değildir. * Ziyaret, görüntüleme ve teklif sayıları yalnızca analitik izni veren ziyaretçileri kapsar; önceki kayıp veriler geri getirilemez. Bu özet GA4 raporu değildir.";
   }
 
   function renderAdminSettings(settings) {
