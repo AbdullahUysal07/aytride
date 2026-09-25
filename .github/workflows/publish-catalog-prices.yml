@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - data/public-catalog.json
+      - tools/generate-site.mjs
+      - assets/site.css
+      - assets/app.js
       - .github/workflows/publish-catalog-prices.yml
   workflow_dispatch:
 
