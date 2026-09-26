@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260925-confidence-mobile";
+const buildStamp = "20260925-service-panel";
 const buildDate = "2026-09-24";
 
 const languages = {
@@ -345,24 +345,6 @@ function altRouteTags(route) {
 
 function favicon() {
   return "/favicon.svg";
-}
-
-function confidenceBand(language) {
-  const content = {
-    en: { kicker: "Book with confidence", title: "Clear transfer details before your driver is confirmed.", items: ["WhatsApp confirmation", "Fixed vehicle price", "Pay on arrival"] },
-    de: { kicker: "Mit Vertrauen buchen", title: "Klare Transferdetails vor der Fahrerbestätigung.", items: ["WhatsApp-Bestätigung", "Fester Fahrzeugpreis", "Zahlung bei Ankunft"] },
-    pl: { kicker: "Rezerwuj bez obaw", title: "Jasne szczegóły transferu przed potwierdzeniem kierowcy.", items: ["Potwierdzenie WhatsApp", "Stała cena za pojazd", "Płatność po przyjeździe"] },
-    ru: { kicker: "Бронируйте уверенно", title: "Понятные детали трансфера до подтверждения водителя.", items: ["Подтверждение в WhatsApp", "Фиксированная цена за автомобиль", "Оплата по прибытии"] },
-    nl: { kicker: "Boek met vertrouwen", title: "Duidelijke transferdetails voordat de chauffeur is bevestigd.", items: ["WhatsApp-bevestiging", "Vaste voertuigprijs", "Betalen bij aankomst"] }
-  };
-  const item = content[language] || content.en;
-  return `<section class="guest-confidence" aria-label="${escapeHtml(item.kicker)}">
-      <div class="shell confidence-grid">
-        <div class="confidence-stars" aria-label="Five star service"><span class="star-row" aria-hidden="true">★★★★★</span><small>+8,500 users</small></div>
-        <div><p class="mini-label">${escapeHtml(item.kicker)}</p><h2>${escapeHtml(item.title)}</h2></div>
-        <ul class="confidence-list">${item.items.map((label) => `<li>${escapeHtml(label)}</li>`).join("")}</ul>
-      </div>
-    </section>`;
 }
 
 function hotelAreaShowcase(language) {
@@ -741,21 +723,23 @@ ${header(language)}
 
     ${hotelAreaShowcase(language)}
 
-    <section class="visual-band">
-      <div class="shell image-grid">
-        <picture class="hero-image">
-          <source srcset="/assets/ayt-ride-transfer.webp" type="image/webp">
-          <img src="/assets/ayt-ride-transfer.jpg" alt="Private van waiting near Antalya coast and airport route">
-        </picture>
+    <section class="visual-band" aria-labelledby="servicePanelTitle">
+      <div class="shell">
+        <div class="service-panel-head">
+          <div>
+            <p class="mini-label">PRIVATE TRANSFER SERVICE</p>
+            <h2 id="servicePanelTitle">Everything clear before pickup</h2>
+          </div>
+          <p>Route, vehicle, arrival details and payment are collected in one simple request.</p>
+        </div>
         <div class="promise-grid">
-          <article><span class="icon-dot">WA</span><div class="promise-copy"><small>CONFIRMATION</small><h3>WhatsApp first</h3><p>Every request opens a structured WhatsApp message so the transfer team sees route, flight, vehicle and guest details immediately.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
-          <article><span class="icon-dot">FLT</span><div class="promise-copy"><small>PICKUP READY</small><h3>Flight-aware pickup</h3><p>Flight number and arrival time are sent with the request before the pickup plan is confirmed.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
-          <article><span class="icon-dot">PAY</span><div class="promise-copy"><small>NO ONLINE CARD</small><h3>Clear pay-on-arrival</h3><p>No online card form is needed for the first version. Guests complete the ride first, then pay the driver.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
-          <article><span class="icon-dot">€</span><div class="promise-copy"><small>PRICE FIRST</small><h3>Route-based prices</h3><p>Covered routes show the total vehicle price before the booking step.</p></div><span class="promise-arrow" aria-hidden="true">→</span></article>
+          <article><span class="icon-dot">WA</span><div class="promise-copy"><small>CONFIRMATION</small><h3>WhatsApp first</h3><p>Your request reaches the transfer team with all journey details.</p></div></article>
+          <article><span class="icon-dot">FLT</span><div class="promise-copy"><small>PICKUP READY</small><h3>Flight-aware pickup</h3><p>Flight number and arrival time are included before confirmation.</p></div></article>
+          <article><span class="icon-dot">PAY</span><div class="promise-copy"><small>NO ONLINE CARD</small><h3>Pay on arrival</h3><p>No online checkout is required before your journey.</p></div></article>
+          <article><span class="icon-dot">€</span><div class="promise-copy"><small>PRICE FIRST</small><h3>Fixed route price</h3><p>Covered routes show the total vehicle price before booking.</p></div></article>
         </div>
       </div>
     </section>
-    ${confidenceBand(language)}
 
     <section class="blog-preview">
       <div class="shell">

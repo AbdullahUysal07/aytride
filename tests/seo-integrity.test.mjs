@@ -104,7 +104,8 @@ test("commercial pages retain a booking path and local destination context", () 
 
   assert.match(laraRoute, /id="booking"/);
   assert.match(laraRoute, /Lara Beach/);
-  assert.match(home, /guest-confidence/);
+  assert.match(home, /aria-labelledby="servicePanelTitle"/);
+  assert.doesNotMatch(home, /guest-confidence/);
 });
 
 test("partner landing page is indexed and linked from the sitemap", () => {
