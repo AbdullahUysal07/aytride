@@ -1146,7 +1146,7 @@
         <article class="kpi-card">
           <small>${label}</small>
           <strong>${moneyTry(item?.profitTry || 0)}</strong>
-          <span>${Number(item?.count || 0)} yolculuk • Ciro ${plainEur(item?.revenueEur || 0)} • Şoför ${moneyTry(item?.driverCostTry || 0)}</span>
+          <span>${Number(item?.count || 0)} yolculuk • Ciro ${plainEur(item?.revenueEur || 0)} • Şoför ${moneyTry(item?.driverCostTry || 0)}${Number(item?.affiliateCommissionEur || 0) ? ` • Affiliate ${plainEur(item.affiliateCommissionEur)}` : ""}</span>
         </article>
       `).join("")}
       <article class="kpi-card muted">
@@ -1248,6 +1248,7 @@
             <small>${escapeHtml(item.reference)} • ${escapeHtml(formatAdminDate(item.createdAt))}</small>
           </div>
           <div class="booking-head-actions">
+            ${item.attribution?.affiliate_code ? `<span class="affiliate-booking-badge" title="Bu rezervasyon affiliate partner üzerinden geldi">AFFILIATE • ${escapeHtml(item.attribution.affiliate_code)}</span>` : ""}
             <span class="status-badge ${statusClass(item.status)}">${statusLabel(item.status)}</span>
             <span class="booking-price">${item.quoteOnly ? "Teklif" : money(item.publicTotalEur)}</span>
           </div>
@@ -1263,7 +1264,8 @@
           <p><b>Mesafe</b>${Number(item.distanceKm || 0)} km • ${Number(item.ways || 1)} yön</p>
           <p><b>Satış</b>${item.quoteOnly ? "Teklif bekliyor" : `${money(item.publicTotalEur)} / ${moneyTry(item.revenueTry)}`}</p>
           <p><b>Şoföre verilecek</b>${item.driverCostTry == null ? "Mesafe yok" : `${moneyTry(item.driverCostTry)} (${Number(item.driverRateTryPerKm || 35)} TL/km)`}</p>
-          <p><b>Tahmini kâr</b><span class="${Number(item.profitTry || 0) >= 0 ? "profit-positive" : "profit-negative"}">${item.profitTry == null ? "-" : moneyTry(item.profitTry)}</span></p>
+          ${item.attribution?.affiliate_code ? `<p class="affiliate-cost"><b>Affiliate komisyonu</b>${plainEur(item.affiliateCommissionEur || 0)} / ${moneyTry(item.affiliateCommissionTry || 0)}</p>` : ""}
+          <p><b>Net tahmini kâr</b><span class="${Number(item.profitTry || 0) >= 0 ? "profit-positive" : "profit-negative"}">${item.profitTry == null ? "-" : moneyTry(item.profitTry)}</span></p>
         </div>
         <p class="booking-note"><b>Not:</b> ${escapeHtml(item.notes || "-")}</p>
         ${item.confirmedAt ? `<p class="booking-note"><b>Doğrulama:</b> ${escapeHtml(formatAdminDate(item.confirmedAt))}</p>` : ""}
@@ -1320,6 +1322,7 @@
             <button class="admin-btn" type="button" data-affiliate-action="print" data-code="${escapeHtml(partner.code)}">QR yazdır / PDF</button>
             <button class="admin-btn soft" type="button" data-affiliate-action="download" data-code="${escapeHtml(partner.code)}">QR indir</button>
             <button class="admin-btn ${partner.status === "active" ? "danger" : "success"}" type="button" data-affiliate-action="status" data-id="${partner.id}" data-status="${partner.status === "active" ? "inactive" : "active"}">${partner.status === "active" ? "Pasife al" : "Aktifleştir"}</button>
+            <button class="admin-btn danger" type="button" data-affiliate-action="delete" data-id="${partner.id}" data-name="${escapeHtml(partner.name)}">Sil</button>
           </div>
           <form class="affiliate-payment-form" data-affiliate-payment="${partner.id}">
             <label><span>Ödeme (€)</span><input name="amountEur" type="number" min="0.01" max="${Number(partner.balanceEur || 0)}" step="0.01" placeholder="${Number(partner.balanceEur || 0).toFixed(2)}" ${partner.balanceEur > 0 ? "required" : "disabled"}></label>
@@ -1572,6 +1575,7 @@
 
     document.querySelector("#affiliateEditor")?.addEventListener("submit", async (event) => {
       event.preventDefault();
+      const form = event.currentTarget;
       const submit = event.submitter;
       if (submit) submit.disabled = true;
       output.textContent = "Partner oluşturuluyor...";
@@ -1587,7 +1591,7 @@
             email: document.querySelector("#affiliateEmail")?.value || ""
           })
         });
-        event.currentTarget.reset();
+        form.reset();
         document.querySelector("#affiliateCommission").value = "5";
         await reloadAdminDashboard();
         activateAdminView("affiliates");
@@ -1622,6 +1626,23 @@
           activateAdminView("affiliates");
         } catch (error) {
           output.textContent = error.message || "Partner durumu güncellenemedi.";
+        } finally {
+          button.disabled = false;
+        }
+      } else if (action === "delete") {
+        const name = button.dataset.name || "Bu partner";
+        if (!window.confirm(`${name} silinsin mi? Geçmiş rezervasyonların maliyet kayıtları korunur.`)) return;
+        button.disabled = true;
+        try {
+          await adminRequest(`/api/admin/affiliates/${button.dataset.id}/delete`, {
+            method: "POST",
+            body: "{}"
+          });
+          await reloadAdminDashboard();
+          activateAdminView("affiliates");
+          output.textContent = `${name} silindi. Geçmiş rezervasyon kayıtları korundu.`;
+        } catch (error) {
+          output.textContent = error.message || "Partner silinemedi.";
         } finally {
           button.disabled = false;
         }

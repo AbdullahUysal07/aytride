@@ -142,10 +142,11 @@ class FakeD1 {
             this.affiliatePayments.push({ id: this.affiliatePayments.length + 1, partner_id, amount_eur, note, paid_at, created_at });
           }
           if (/update affiliate_partners set status/i.test(sql)) {
-            const row = this.affiliates.find((item) => item.id === Number(values[2]));
+            const deleting = /status = 'deleted'/i.test(sql);
+            const row = this.affiliates.find((item) => item.id === Number(deleting ? values[1] : values[2]));
             if (row) {
-              row.status = values[0];
-              row.updated_at = values[1];
+              row.status = deleting ? "deleted" : values[0];
+              row.updated_at = deleting ? values[0] : values[1];
             }
           }
           if (/update blog_posts\s+set status = 'deleted'/i.test(sql)) {
@@ -174,7 +175,11 @@ class FakeD1 {
       return [...this.blogs];
     }
     if (/from analytics_events/i.test(sql)) return [...this.analyticsEvents];
-    if (/from affiliate_partners/i.test(sql)) return [...this.affiliates];
+    if (/from affiliate_partners/i.test(sql)) {
+      return /status <> 'deleted'/i.test(sql)
+        ? this.affiliates.filter((row) => row.status !== "deleted")
+        : [...this.affiliates];
+    }
     if (/from affiliate_payments/i.test(sql)) {
       if (/where partner_id = \?/i.test(sql)) return this.affiliatePayments.filter((row) => row.partner_id === Number(values[0]));
       return [...this.affiliatePayments];
@@ -673,6 +678,20 @@ test("affiliate codes accrue commission only after confirmation and payments red
   assert.equal(earned.partners[0].earnedEur, 10);
   assert.equal(earned.partners[0].balanceEur, 10);
 
+  const adminBookingsResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const adminBookings = await adminBookingsResponse.json();
+  const affiliateBooking = adminBookings.bookings[0];
+  assert.equal(affiliateBooking.affiliateCommissionEur, 10);
+  assert.equal(affiliateBooking.affiliateCommissionTry, 450);
+  assert.equal(affiliateBooking.totalCostTry, affiliateBooking.driverCostTry + 450);
+  assert.equal(affiliateBooking.profitTry, affiliateBooking.revenueTry - affiliateBooking.totalCostTry);
+  assert.equal(adminBookings.summary.total.affiliateCommissionEur, 10);
+  assert.equal(adminBookings.summary.total.affiliateCommissionTry, 450);
+  assert.equal(adminBookings.summary.total.profitTry, affiliateBooking.profitTry);
+
   const paymentResponse = await worker.fetch(request(`/api/admin/affiliates/${createBody.partner.id}/payment`, {
     method: "POST",
     headers: { cookie },
@@ -695,4 +714,29 @@ test("affiliate codes accrue commission only after confirmation and payments red
     body: JSON.stringify({ amountEur: 7 })
   }), env);
   assert.equal(overpaymentResponse.status, 400);
+
+  const deleteResponse = await worker.fetch(request(`/api/admin/affiliates/${createBody.partner.id}/delete`, {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(deleteResponse.status, 200);
+
+  const deletedCodeResponse = await worker.fetch(request("/api/public/affiliates/LARA-HOTEL", { method: "GET" }), env);
+  assert.deepEqual(await deletedCodeResponse.json(), { valid: false });
+
+  const partnersAfterDeleteResponse = await worker.fetch(request("/api/admin/affiliates", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const partnersAfterDelete = await partnersAfterDeleteResponse.json();
+  assert.equal(partnersAfterDelete.partners.length, 0);
+
+  const bookingsAfterDeleteResponse = await worker.fetch(request("/api/admin/bookings", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const bookingsAfterDelete = await bookingsAfterDeleteResponse.json();
+  assert.equal(bookingsAfterDelete.bookings[0].affiliateCommissionEur, 10);
+  assert.equal(bookingsAfterDelete.bookings[0].profitTry, affiliateBooking.profitTry);
 });

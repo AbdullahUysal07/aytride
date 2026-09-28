@@ -1860,11 +1860,19 @@ details p {
 }
 
 .booking-price,
-.status-badge {
+.status-badge,
+.affiliate-booking-badge {
   border-radius: var(--radius);
   padding: 6px 9px;
   font-size: .86rem;
   font-weight: 900;
+}
+
+.affiliate-booking-badge {
+  border: 1px solid #f5c96b;
+  background: #fff5d8;
+  color: #8a4b00;
+  white-space: nowrap;
 }
 
 .booking-price {
@@ -2711,6 +2719,17 @@ body.home-page .visual-band {
   padding: 8px;
   color: #334155;
   font-size: .88rem;
+}
+
+.booking-item-grid .affiliate-cost {
+  border-color: #f5c96b;
+  background: #fffaf0;
+  color: #8a4b00;
+  font-weight: 850;
+}
+
+.booking-item-grid .affiliate-cost b {
+  color: #9a5b00;
 }
 
 .booking-item-grid b,

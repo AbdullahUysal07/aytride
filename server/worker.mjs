@@ -82,6 +82,11 @@ export default {
         return await updateAdminAffiliateStatus(request, env, cors, Number(affiliateStatus[1]));
       }
 
+      const affiliateDelete = url.pathname.match(/^\/api\/admin\/affiliates\/(\d+)\/delete$/);
+      if (affiliateDelete && request.method === "POST") {
+        return await deleteAdminAffiliate(request, env, cors, Number(affiliateDelete[1]));
+      }
+
       const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete|restore)$/);
       if (bookingAction && request.method === "POST") {
         return await updateAdminBookingStatus(request, env, cors, decodeURIComponent(bookingAction[1]), bookingAction[2]);
@@ -614,6 +619,7 @@ async function listAdminAffiliates(request, env, cors) {
     env.DB.prepare(`
       select id, code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
       from affiliate_partners
+      where status <> 'deleted'
       order by status asc, name asc
     `).all(),
     env.DB.prepare(`
@@ -716,6 +722,22 @@ async function updateAdminAffiliateStatus(request, env, cors, partnerId) {
   `).bind(status, new Date().toISOString(), partnerId).run();
   if (!result?.success) return json({ error: "Partner status could not be updated." }, 500, cors);
   return json({ ok: true, partnerId, status }, 200, cors);
+}
+
+async function deleteAdminAffiliate(request, env, cors, partnerId) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+  const partner = await env.DB.prepare(`
+    select id, code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
+    from affiliate_partners where id = ?
+  `).bind(partnerId).first();
+  if (!partner || partner.status === "deleted") return json({ error: "Partner not found." }, 404, cors);
+  const result = await env.DB.prepare(`
+    update affiliate_partners set status = 'deleted', updated_at = ? where id = ?
+  `).bind(new Date().toISOString(), partnerId).run();
+  if (!result?.success) return json({ error: "Partner could not be deleted." }, 500, cors);
+  return json({ ok: true, partnerId, status: "deleted" }, 200, cors);
 }
 
 async function affiliateSnapshot(env, partner) {
@@ -1185,10 +1207,16 @@ function adminBooking(row, catalog, settings) {
   const route = catalog.routes.find((item) => item.id === row.route_id);
   const distanceKm = Number(route?.distanceKm || 0);
   const ways = row.trip_type === "return" ? 2 : 1;
+  const attribution = parseAttribution(row.attribution_json);
   const revenueEur = row.quote_only ? 0 : Number(row.public_total_eur || 0);
   const revenueTry = Math.round(revenueEur * settings.eurTryRate);
   const driverCostTry = distanceKm ? Math.round(distanceKm * ways * settings.driverRateTryPerKm) : null;
-  const profitTry = driverCostTry == null ? null : revenueTry - driverCostTry;
+  const affiliateCommissionEur = attribution.affiliate_code
+    ? roundMoney(Number(attribution.affiliate_commission_eur || 5) * ways)
+    : 0;
+  const affiliateCommissionTry = Math.round(affiliateCommissionEur * settings.eurTryRate);
+  const totalCostTry = driverCostTry == null ? null : driverCostTry + affiliateCommissionTry;
+  const profitTry = totalCostTry == null ? null : revenueTry - totalCostTry;
 
   return {
     reference: row.reference,
@@ -1214,7 +1242,7 @@ function adminBooking(row, catalog, settings) {
     publicTotalEur: row.public_total_eur,
     quoteOnly: Boolean(row.quote_only),
     privateVehiclePriceEur: row.private_vehicle_price_eur,
-    attribution: parseAttribution(row.attribution_json),
+    attribution,
     status: row.status || "pending",
     confirmedAt: row.confirmed_at,
     deletedAt: row.deleted_at,
@@ -1224,6 +1252,9 @@ function adminBooking(row, catalog, settings) {
     ways,
     driverRateTryPerKm: settings.driverRateTryPerKm,
     driverCostTry,
+    affiliateCommissionEur,
+    affiliateCommissionTry,
+    totalCostTry,
     revenueTry,
     profitTry
   };
@@ -1327,8 +1358,20 @@ function sumPeriod(bookings, filter) {
     revenueEur: total.revenueEur + Number(item.publicTotalEur || 0),
     revenueTry: total.revenueTry + Number(item.revenueTry || 0),
     driverCostTry: total.driverCostTry + Number(item.driverCostTry || 0),
+    affiliateCommissionEur: total.affiliateCommissionEur + Number(item.affiliateCommissionEur || 0),
+    affiliateCommissionTry: total.affiliateCommissionTry + Number(item.affiliateCommissionTry || 0),
+    totalCostTry: total.totalCostTry + Number(item.totalCostTry || 0),
     profitTry: total.profitTry + Number(item.profitTry || 0)
-  }), { count: 0, revenueEur: 0, revenueTry: 0, driverCostTry: 0, profitTry: 0 });
+  }), {
+    count: 0,
+    revenueEur: 0,
+    revenueTry: 0,
+    driverCostTry: 0,
+    affiliateCommissionEur: 0,
+    affiliateCommissionTry: 0,
+    totalCostTry: 0,
+    profitTry: 0
+  });
 }
 
 function dateKey(date) {
