@@ -6,7 +6,11 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const routeLanguages = ["en", "de", "pl", "ru"];
+const routeLanguages = ["en", "de", "pl", "ru", "nl"];
+
+function routeLanguagesFor(route) {
+  return routeLanguages.filter((language) => route.slugs?.[language] && route.content?.[language]);
+}
 
 function read(file) {
   return fs.readFileSync(path.join(root, file), "utf8");
@@ -34,7 +38,7 @@ function jsonLdBlocks(html) {
 test("route page schema prices match the public catalog", () => {
   const routes = catalog.routes.filter((route) => route.slugs?.en);
   for (const route of routes) {
-    for (const language of routeLanguages) {
+    for (const language of routeLanguagesFor(route)) {
       const html = read(routePath(route, language));
       const graphs = jsonLdBlocks(html).flatMap((block) => block["@graph"] || [block]);
       const service = graphs.find((item) => item["@type"] === "Service");
@@ -83,7 +87,7 @@ test("sitemap contains crawlable commercial URLs and excludes admin", () => {
   assert.equal(sitemap.includes("/blog/article/"), false);
   assert.ok(sitemap.includes("https://aytride.com/"));
   for (const route of catalog.routes.filter((item) => item.slugs?.en)) {
-    for (const language of routeLanguages) {
+    for (const language of routeLanguagesFor(route)) {
       const urlPath = routePath(route, language).replace(/index\.html$/, "");
       assert.ok(sitemap.includes(`${catalog.baseUrl}/${urlPath}`), `${route.id} ${language} missing from sitemap`);
     }
@@ -106,6 +110,29 @@ test("commercial pages retain a booking path and local destination context", () 
   assert.match(laraRoute, /Lara Beach/);
   assert.match(home, /aria-labelledby="servicePanelTitle"/);
   assert.doesNotMatch(home, /guest-confidence/);
+});
+
+test("Kumkoy and Evrenseki routes are available and localized in every site language", () => {
+  const homePages = ["index.html", "de/index.html", "pl/index.html", "ru/index.html", "nl/index.html"];
+
+  for (const routeId of ["kumkoy", "evrenseki"]) {
+    const route = catalog.routes.find((item) => item.id === routeId);
+    assert.ok(route?.available, `${routeId} route is not available`);
+    assert.deepEqual(routeLanguagesFor(route), routeLanguages, `${routeId} is not localized in all languages`);
+
+    for (const language of routeLanguages) {
+      const html = read(routePath(route, language));
+      assert.match(html, /<meta name="robots" content="index,follow">/);
+      assert.match(html, /rel="canonical"/);
+      assert.match(html, /hreflang="x-default"/);
+    }
+  }
+
+  for (const page of homePages) {
+    const html = read(page);
+    assert.match(html, /data-route="kumkoy"/);
+    assert.match(html, /data-route="evrenseki"/);
+  }
 });
 
 test("partner landing page is indexed and linked from the sitemap", () => {

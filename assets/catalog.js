@@ -1,5 +1,5 @@
 window.AYTRideCatalog = {
-  "version": "2026-09-14",
+  "version": "2026-09-28",
   "baseUrl": "https://aytride.com",
   "apiBase": "https://ayt-ride-api.aytride.workers.dev",
   "currency": "EUR",
@@ -476,6 +476,262 @@ window.AYTRideCatalog = {
             [
               "Можно заказать детское кресло?",
               "Да, укажите количество в форме."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "kumkoy",
+      "origin": "Antalya Airport (AYT)",
+      "destination": "Kumköy",
+      "distanceKm": 60,
+      "durationMin": 55,
+      "available": true,
+      "prices": {
+        "standard-sedan": 63,
+        "vip-van": 75
+      },
+      "image": "/assets/ayt-ride-transfer.jpg",
+      "imageAlt": "Private airport transfer vehicle for Kumkoy hotels",
+      "slugs": {
+        "en": "antalya-airport-to-kumkoy-transfer",
+        "de": "flughafen-antalya-kumkoy-transfer",
+        "pl": "transfer-lotnisko-antalya-kumkoy",
+        "ru": "transfer-aeroport-antaliya-kumkoy",
+        "nl": "transfer-luchthaven-antalya-kumkoy"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Kumkoy Transfer - Fixed Price | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport to Kumkoy hotels. Fixed total price per vehicle, WhatsApp confirmation and pay on arrival.",
+          "h1": "Antalya Airport to Kumkoy private transfer",
+          "intro": "Kumkoy is a popular beachfront hotel area west of Side. A private transfer provides a direct ride from Antalya Airport with a fixed vehicle price.",
+          "local": "Add the exact Kumkoy hotel, resort entrance or accommodation address so the meeting and drop-off point can be confirmed accurately.",
+          "faq": [
+            [
+              "How long is Antalya Airport to Kumkoy?",
+              "The journey is usually around 55 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "Is the Kumkoy transfer price fixed?",
+              "Yes. The displayed amount is the total price for the selected vehicle on this covered route."
+            ],
+            [
+              "Can I add my flight number?",
+              "Yes. Include the flight number so the pickup can be planned around the arrival time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Kumköy Transfer | AYT Ride",
+          "description": "Privater Festpreis-Transfer vom Flughafen Antalya zu Hotels in Kumköy. WhatsApp-Bestätigung und Zahlung nach der Fahrt.",
+          "h1": "Privater Transfer vom Flughafen Antalya nach Kumköy",
+          "intro": "Kumköy ist eine beliebte Hotelregion westlich von Side. Der private Transfer fährt direkt vom Flughafen Antalya zum gebuchten Hotel.",
+          "local": "Bitte geben Sie das genaue Hotel, den Resort-Eingang oder die Unterkunft in Kumköy an, damit die Zieladresse bestätigt werden kann.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer nach Kumköy?",
+              "Die Fahrt dauert meist etwa 55 Minuten, abhängig vom Verkehr und Hotel."
+            ],
+            [
+              "Ist der Preis fest?",
+              "Ja. Der angezeigte Betrag ist der Gesamtpreis für das gewählte Fahrzeug."
+            ],
+            [
+              "Kann ich die Flugnummer angeben?",
+              "Ja. Die Flugnummer hilft bei der Planung der Abholung."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Kumkoy | AYT Ride",
+          "description": "Prywatny transfer z lotniska Antalya do hoteli w Kumkoy. Stała cena za pojazd, WhatsApp i płatność po przejeździe.",
+          "h1": "Prywatny transfer z lotniska Antalya do Kumkoy",
+          "intro": "Kumkoy to popularna strefa hoteli przy plaży na zachód od Side. Prywatny transfer zapewnia bezpośredni przejazd z lotniska Antalya.",
+          "local": "Wpisz dokładny hotel, wejście do resortu lub adres zakwaterowania w Kumkoy, aby potwierdzić miejsce docelowe.",
+          "faq": [
+            [
+              "Ile trwa transfer do Kumkoy?",
+              "Przejazd trwa zwykle około 55 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Czy cena jest stała?",
+              "Tak. Wyświetlona kwota jest ceną całkowitą za wybrany pojazd."
+            ],
+            [
+              "Czy mogę podać numer lotu?",
+              "Tak. Numer lotu pomaga zaplanować odbiór po przylocie."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья - Кумкой | AYT Ride",
+          "description": "Частный трансфер из аэропорта Анталья в отели Кумкоя. Фиксированная цена за автомобиль, WhatsApp и оплата после поездки.",
+          "h1": "Частный трансфер из аэропорта Анталья в Кумкой",
+          "intro": "Кумкой - популярный пляжный отельный район к западу от Сиде. Частный трансфер доставит напрямую из аэропорта Анталья.",
+          "local": "Укажите точный отель, въезд в курорт или адрес проживания в Кумкое, чтобы подтвердить место высадки.",
+          "faq": [
+            [
+              "Сколько ехать до Кумкоя?",
+              "Обычно около 55 минут, в зависимости от трафика и расположения отеля."
+            ],
+            [
+              "Цена фиксированная?",
+              "Да. Указана полная стоимость выбранного автомобиля."
+            ],
+            [
+              "Можно добавить номер рейса?",
+              "Да. Номер рейса помогает спланировать встречу по времени прилета."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Transfer Antalya Airport naar Kumkoy | AYT Ride",
+          "description": "Prive transfer van Antalya Airport naar hotels in Kumkoy. Vaste totaalprijs per voertuig, WhatsApp-bevestiging en betalen na de rit.",
+          "h1": "Prive transfer van Antalya Airport naar Kumkoy",
+          "intro": "Kumkoy is een populair hotelgebied aan het strand, ten westen van Side. Een prive transfer brengt u rechtstreeks vanaf Antalya Airport.",
+          "local": "Vermeld het exacte hotel, de resortingang of het verblijfsadres in Kumkoy zodat de bestemming correct kan worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer naar Kumkoy?",
+              "De rit duurt meestal ongeveer 55 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Is de prijs vast?",
+              "Ja. Het getoonde bedrag is de totaalprijs voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik mijn vluchtnummer toevoegen?",
+              "Ja. Het vluchtnummer helpt om de ophaaltijd rond de aankomst te plannen."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "evrenseki",
+      "origin": "Antalya Airport (AYT)",
+      "destination": "Evrenseki",
+      "distanceKm": 58,
+      "durationMin": 55,
+      "available": true,
+      "prices": {
+        "standard-sedan": 63,
+        "vip-van": 75
+      },
+      "image": "/assets/ayt-ride-transfer.jpg",
+      "imageAlt": "Private airport transfer vehicle for Evrenseki hotels",
+      "slugs": {
+        "en": "antalya-airport-to-evrenseki-transfer",
+        "de": "flughafen-antalya-evrenseki-transfer",
+        "pl": "transfer-lotnisko-antalya-evrenseki",
+        "ru": "transfer-aeroport-antaliya-evrenseki",
+        "nl": "transfer-luchthaven-antalya-evrenseki"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Evrenseki Transfer - Fixed Price | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport to Evrenseki hotels. Fixed total vehicle price, WhatsApp confirmation and pay on arrival.",
+          "h1": "Antalya Airport to Evrenseki private transfer",
+          "intro": "Evrenseki is a resort and hotel area between Colakli and Kumkoy. A private transfer gives guests a direct airport pickup and a clear vehicle price.",
+          "local": "Add the exact Evrenseki hotel, resort gate or accommodation address so the driver can confirm the correct drop-off point.",
+          "faq": [
+            [
+              "How long is Antalya Airport to Evrenseki?",
+              "The journey is usually around 55 minutes, depending on traffic and hotel location."
+            ],
+            [
+              "Is the Evrenseki route a fixed price?",
+              "Yes. The listed price is the total for the selected vehicle on this route."
+            ],
+            [
+              "Can I request child seats?",
+              "Yes. Add the required child seats in the booking form before sending the request."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Evrenseki Transfer | AYT Ride",
+          "description": "Privater Festpreis-Transfer vom Flughafen Antalya zu Hotels in Evrenseki. WhatsApp-Bestätigung und Zahlung nach der Fahrt.",
+          "h1": "Privater Transfer vom Flughafen Antalya nach Evrenseki",
+          "intro": "Evrenseki ist eine Hotelregion zwischen Çolaklı und Kumköy. Ein privater Transfer bietet direkte Abholung und einen klaren Fahrzeugpreis.",
+          "local": "Bitte geben Sie das genaue Hotel, das Resort-Tor oder die Unterkunft in Evrenseki an, damit die Zieladresse bestätigt werden kann.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer nach Evrenseki?",
+              "Die Fahrt dauert meist etwa 55 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Ist der Preis fest?",
+              "Ja. Der angezeigte Preis gilt insgesamt für das gewählte Fahrzeug."
+            ],
+            [
+              "Kann ich Kindersitze anfragen?",
+              "Ja. Geben Sie die Anzahl vor dem Absenden im Formular an."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Evrenseki | AYT Ride",
+          "description": "Prywatny transfer z lotniska Antalya do hoteli w Evrenseki. Stała cena za pojazd, WhatsApp i płatność po przejeździe.",
+          "h1": "Prywatny transfer z lotniska Antalya do Evrenseki",
+          "intro": "Evrenseki to strefa hoteli między Colakli i Kumkoy. Prywatny transfer zapewnia bezpośredni odbiór z lotniska i jasną cenę pojazdu.",
+          "local": "Podaj dokładny hotel, bramę resortu lub adres zakwaterowania w Evrenseki, aby potwierdzić miejsce docelowe.",
+          "faq": [
+            [
+              "Ile trwa transfer do Evrenseki?",
+              "Przejazd trwa zwykle około 55 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Czy cena jest stała?",
+              "Tak. Cena obejmuje cały wybrany pojazd na tej trasie."
+            ],
+            [
+              "Czy można zamówić foteliki?",
+              "Tak. Zaznacz liczbę fotelików przed wysłaniem formularza."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья - Эвренсеки | AYT Ride",
+          "description": "Частный трансфер из аэропорта Анталья в отели Эвренсеки. Фиксированная цена за автомобиль, WhatsApp и оплата после поездки.",
+          "h1": "Частный трансфер из аэропорта Анталья в Эвренсеки",
+          "intro": "Эвренсеки - курортный район между Чолаклы и Кумкоем. Частный трансфер обеспечивает прямую встречу и понятную цену автомобиля.",
+          "local": "Укажите точный отель, въезд в курорт или адрес проживания в Эвренсеки, чтобы подтвердить место высадки.",
+          "faq": [
+            [
+              "Сколько ехать до Эвренсеки?",
+              "Обычно около 55 минут, в зависимости от трафика и расположения отеля."
+            ],
+            [
+              "Цена фиксированная?",
+              "Да. Указана полная стоимость выбранного автомобиля на этом маршруте."
+            ],
+            [
+              "Можно заказать детское кресло?",
+              "Да. Укажите количество кресел в форме перед отправкой заявки."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Transfer Antalya Airport naar Evrenseki | AYT Ride",
+          "description": "Prive transfer van Antalya Airport naar hotels in Evrenseki. Vaste totaalprijs per voertuig, WhatsApp-bevestiging en betalen na de rit.",
+          "h1": "Prive transfer van Antalya Airport naar Evrenseki",
+          "intro": "Evrenseki is een resortgebied tussen Colakli en Kumkoy. Een prive transfer biedt een directe luchthavenrit en een duidelijke voertuigprijs.",
+          "local": "Vermeld het exacte hotel, de resortingang of het verblijfsadres in Evrenseki zodat de juiste bestemming kan worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer naar Evrenseki?",
+              "De rit duurt meestal ongeveer 55 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Is de prijs vast?",
+              "Ja. De getoonde prijs geldt voor het volledige gekozen voertuig."
+            ],
+            [
+              "Kan ik kinderzitjes aanvragen?",
+              "Ja. Geef het aantal kinderzitjes op voordat u de aanvraag verstuurt."
             ]
           ]
         }

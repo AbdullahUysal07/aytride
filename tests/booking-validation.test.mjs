@@ -71,6 +71,20 @@ test("keeps Belek sedan fixed price unchanged after step two extras", () => {
   assert.equal(result.payload.publicTotalEur, 40);
 });
 
+test("accepts Kumkoy and Evrenseki as fixed-price booking routes", () => {
+  for (const [routeId, dropoff] of [["kumkoy", "Kumköy"], ["evrenseki", "Evrenseki"]]) {
+    const result = validateBookingPayload(catalog, basePayload({
+      reference: `AYT-20260913-1130-${routeId.toUpperCase()}`,
+      routeId,
+      dropoff
+    }), { today: "2026-09-12" });
+
+    assert.equal(result.ok, true, `${routeId} should be accepted`);
+    assert.equal(result.payload.publicTotalEur, 63);
+    assert.equal(result.payload.quoteOnly, false);
+  }
+});
+
 test("rejects sedan requests that exceed vehicle capacity", () => {
   const result = validateBookingPayload(catalog, basePayload({
     passengers: 4,

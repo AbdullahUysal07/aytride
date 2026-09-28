@@ -5,8 +5,8 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260925-service-panel";
-const buildDate = "2026-09-24";
+const buildStamp = "20260928-side-resorts";
+const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
   en: {
@@ -291,9 +291,13 @@ const languages = {
   }
 };
 
-const routeLanguages = ["en", "de", "pl", "ru"];
+const routeLanguages = Object.keys(languages);
 const commercialRoutes = catalog.routes.filter((route) => route.slugs?.en);
 const visibleRoutes = catalog.routes.filter((route) => route.available && !route.quoteOnly);
+
+function routeLanguagesFor(route) {
+  return routeLanguages.filter((language) => route.slugs?.[language] && route.content?.[language]);
+}
 
 function write(file, content) {
   const target = path.join(root, file);
@@ -335,7 +339,7 @@ function altHomeTags(currentLang) {
 }
 
 function altRouteTags(route) {
-  return routeLanguages.map((code) => {
+  return routeLanguagesFor(route).map((code) => {
     const regional = code === "en" ? "en-GB" : `${code}-${code.toUpperCase()}`;
     const href = `${catalog.baseUrl}${routePath(route, code)}`;
     return `<link rel="alternate" hreflang="${code}" href="${href}">
@@ -357,10 +361,15 @@ function hotelAreaShowcase(language) {
   };
   const item = copy[language] || copy.en;
   const areas = [
-    { label: "Lara & Kundu", detail: "Beach resorts and Aksu hotels", image: "/assets/routes/lara-kundu.jpg", href: "/antalya-airport-to-lara-transfer/" },
-    { label: "Belek & Kadriye", detail: "Golf resorts and family stays", image: "/assets/routes/belek-kadriye.jpg", href: "/antalya-airport-to-belek-transfer/" },
-    { label: "Side & Manavgat", detail: "Coastal hotels and historic Side", image: "/assets/routes/side-manavgat.jpg", href: "/antalya-airport-to-side-transfer/" }
-  ];
+    { id: "lara", label: "Lara & Kundu", detail: "Beach resorts and Aksu hotels", image: "/assets/routes/lara-kundu.jpg" },
+    { id: "belek", label: "Belek & Kadriye", detail: "Golf resorts and family stays", image: "/assets/routes/belek-kadriye.jpg" },
+    { id: "side", label: "Side & Manavgat", detail: "Coastal hotels and historic Side", image: "/assets/routes/side-manavgat.jpg" },
+    { id: "kumkoy", label: "Kumköy", detail: "Beachfront resorts west of Side", image: "/assets/routes/side-manavgat.jpg" },
+    { id: "evrenseki", label: "Evrenseki", detail: "Resort hotels between Çolaklı and Kumköy", image: "/assets/routes/belek-kadriye.jpg" }
+  ].map((area) => {
+    const route = commercialRoutes.find((item) => item.id === area.id);
+    return { ...area, href: routePath(route, language) || routePath(route, "en") };
+  });
   return `<section class="hotel-showcase">
       <div class="shell">
         <div class="section-head hotel-showcase-head">
@@ -384,6 +393,8 @@ function destinationAreas(route, language) {
     belek: ["Belek", "Kadriye", "The Land of Legends area", "Belek golf resorts"],
     kemer: ["Beldibi", "Göynük", "Kemer centre", "Kiriş", "Çamyuva", "Tekirova"],
     side: ["Side", "Evrenseki", "Kumköy", "Çolaklı", "Manavgat", "Titreyengöl"],
+    kumkoy: ["Kumköy", "Ilıca", "Side west hotel zone", "Kumköy Beach"],
+    evrenseki: ["Evrenseki", "Çolaklı", "Evrenseki Beach", "Side west resort zone"],
     alanya: ["Okurcalar", "Avsallar", "Türkler", "Konaklı", "Alanya centre", "Mahmutlar"]
   };
   const copy = {
@@ -761,11 +772,10 @@ ${footer(language)}
 }
 
 function staticRouteCards(language) {
-  return catalog.routes.filter((route) => route.available && !route.quoteOnly).slice(0, 6).map((route) => {
+  return commercialRoutes.filter((route) => route.available && !route.quoteOnly).map((route) => {
     const sedan = route.prices["standard-sedan"];
     const vip = route.prices["vip-van"];
-    const slug = route.slugs?.[language] || route.slugs?.en;
-    const guide = slug ? (language === "en" ? `/${slug}/` : `/${language}/${slug}/`) : "";
+    const guide = routePath(route, language) || routePath(route, "en") || "";
     return `<article class="route-card">
       <button type="button" data-route="${route.id}" aria-label="Select ${escapeHtml(route.destination)}">
         <span class="route-thumb"><img src="${escapeHtml(route.image || "/assets/ayt-ride-transfer.jpg")}" alt="${escapeHtml(route.imageAlt || route.destination)}" loading="lazy"></span>
@@ -774,8 +784,8 @@ function staticRouteCards(language) {
         <span class="route-fares"><span><small>Standard Sedan</small><b>€${sedan}</b></span><span><small>VIP Van</small><b>€${vip}</b></span></span>
         <span class="route-stats"><small>${route.distanceKm} km</small><small>${route.durationMin} min</small></span>
         <span class="route-card-action">${escapeHtml(languages[language].selectRoute)}</span>
-      </button>
-      ${guide ? `<a href="${guide}">${escapeHtml(languages[language].routeGuide)}</a>` : ""}
+      </button>${guide ? `
+      <a href="${guide}">${escapeHtml(languages[language].routeGuide)}</a>` : ""}
     </article>`;
   }).join("");
 }
@@ -820,7 +830,7 @@ function routeSchema(route, language) {
 
 function adjacentRoutes(route, language) {
   return commercialRoutes
-    .filter((item) => item.id !== route.id)
+    .filter((item) => item.id !== route.id && item.slugs?.[language] && item.content?.[language])
     .slice(0, 4)
     .map((item) => `<a href="${routePath(item, language)}">${escapeHtml(item.content[language].h1)}</a>`)
     .join("");
@@ -879,6 +889,19 @@ function routeArticleCopy(language) {
       changesP: "Отправляйте изменения в WhatsApp как можно раньше. AYT Ride подтвердит, можно ли изменить автомобиль и время встречи.",
       faqH: "FAQ",
       nearbyH: "Другие полезные маршруты"
+    },
+    nl: {
+      pickupH: "Ophalen op de luchthaven en ontmoetingspunt",
+      pickupP: "Na de aanvraag bevestigt AYT Ride het exacte ontmoetingspunt via WhatsApp. Voeg het vluchtnummer toe zodat de rit rond de aankomsttijd kan worden gepland.",
+      localH: "Informatie over deze route",
+      capacityH: "Voertuig- en bagagecapaciteit",
+      capacityP: "De Standard Sedan biedt plaats aan maximaal 3 passagiers en 3 koffers. De VIP Van biedt plaats aan maximaal 6 passagiers en 6 koffers en is geschikt voor gezinnen en grotere bagage.",
+      paymentH: "Kinderzitjes, retourrit en betaling",
+      paymentP: "Kinderzitjes en een retourrit kunnen in het formulier worden toegevoegd. Betaling vindt na de rit plaats, tenzij anders bevestigd.",
+      changesH: "Wijzigingen en annulering",
+      changesP: "Stuur wijzigingen zo vroeg mogelijk via WhatsApp. AYT Ride bevestigt of het voertuig en de ophaaltijd kunnen worden aangepast.",
+      faqH: "Veelgestelde vragen",
+      nearbyH: "Andere nuttige routes"
     }
   };
   return content[language] || content.en;
@@ -1161,7 +1184,7 @@ function sitemap() {
   const urls = [
     "/",
     ...Object.values(languages).filter((item) => item.homePath !== "/").map((item) => item.homePath),
-    ...commercialRoutes.flatMap((route) => routeLanguages.map((language) => routePath(route, language))),
+    ...commercialRoutes.flatMap((route) => routeLanguagesFor(route).map((language) => routePath(route, language))),
     "/blog/",
     ...blogPosts.map((post) => `/blog/${post.slug}/`),
     "/blog/antalya-airport-to-alanya-distance-transfer-time/",
@@ -1202,7 +1225,7 @@ Object.keys(languages).forEach((language) => {
 });
 
 commercialRoutes.forEach((route) => {
-  routeLanguages.forEach((language) => {
+  routeLanguagesFor(route).forEach((language) => {
     const p = routePath(route, language).replace(/^\//, "");
     write(`${p}index.html`, routePage(route, language));
   });
@@ -1281,7 +1304,7 @@ AYT Ride is a private Antalya airport transfer booking website.
 - Website: ${catalog.baseUrl}
 - WhatsApp: ${catalog.business.displayWhatsapp}
 - Email: ${catalog.business.bookingEmail}
-- Main routes: Lara / Kundu, Belek / Kadriye, Kemer, Side / Manavgat, Alanya
+- Main routes: Lara / Kundu, Belek / Kadriye, Kemer, Side / Manavgat, Kumkoy, Evrenseki, Alanya
 - Payment promise: pay on arrival after the ride unless otherwise confirmed
 - Vehicle options: Standard Sedan and VIP Van
 

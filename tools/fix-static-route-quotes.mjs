@@ -9,7 +9,8 @@ const languagePrefixes = {
   en: "",
   de: "de",
   pl: "pl",
-  ru: "ru"
+  ru: "ru",
+  nl: "nl"
 };
 
 let changed = 0;

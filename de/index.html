@@ -26,8 +26,8 @@
   <link rel="alternate" hreflang="nl-NL" href="https://aytride.com/nl/">
   <link rel="alternate" hreflang="x-default" href="https://aytride.com/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260925-service-panel">
-  <script src="/assets/catalog.js?v=20260925-service-panel"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260928-side-resorts">
+  <script src="/assets/catalog.js?v=20260928-side-resorts"></script>
   <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@graph": [
@@ -96,9 +96,9 @@
         },
         {
           "@type": "Offer",
-          "name": "Antalya Airport (AYT) to Alanya",
+          "name": "Antalya Airport (AYT) to Kumköy",
           "priceCurrency": "EUR",
-          "price": 105,
+          "price": 63,
           "availability": "https://schema.org/InStock"
         }
       ]
@@ -164,12 +164,12 @@
           <div class="route-fields">
             <label>
               <span>Abholung</span>
-              <select id="pickup" name="pickup" required><option value="Antalya Airport (AYT)" selected>Antalya Airport (AYT)</option><option value="Lara / Kundu">Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
+              <select id="pickup" name="pickup" required><option value="Antalya Airport (AYT)" selected>Antalya Airport (AYT)</option><option value="Lara / Kundu">Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Kumköy">Kumköy</option><option value="Evrenseki">Evrenseki</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
             </label>
             <button class="swap-btn" type="button" id="swapRoute" aria-label="Swap pickup and destination" title="Swap route">↔</button>
             <label>
               <span>Ziel</span>
-              <select id="dropoff" name="dropoff" required><option value="Antalya Airport (AYT)">Antalya Airport (AYT)</option><option value="Lara / Kundu" selected>Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
+              <select id="dropoff" name="dropoff" required><option value="Antalya Airport (AYT)">Antalya Airport (AYT)</option><option value="Lara / Kundu" selected>Lara / Kundu</option><option value="Belek / Kadriye">Belek / Kadriye</option><option value="Kemer">Kemer</option><option value="Side / Manavgat">Side / Manavgat</option><option value="Kumköy">Kumköy</option><option value="Evrenseki">Evrenseki</option><option value="Alanya">Alanya</option><option value="Kaleici / Old Town">Kaleici / Old Town</option><option value="Konyaalti">Konyaalti</option><option value="Other hotel or address">Other hotel or address</option></select>
             </label>
           </div>
           <div class="custom-route hidden" id="customRouteFields">
@@ -362,6 +362,26 @@
       </button>
       <a href="/de/flughafen-antalya-side-transfer/">Routeninfos</a>
     </article><article class="route-card">
+      <button type="button" data-route="kumkoy" aria-label="Select Kumköy">
+        <span class="route-thumb"><img src="/assets/ayt-ride-transfer.jpg" alt="Private airport transfer vehicle for Kumkoy hotels" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €63</span></span>
+        <strong>Kumköy</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€63</b></span><span><small>VIP Van</small><b>€75</b></span></span>
+        <span class="route-stats"><small>60 km</small><small>55 min</small></span>
+        <span class="route-card-action">Route wählen</span>
+      </button>
+      <a href="/de/flughafen-antalya-kumkoy-transfer/">Routeninfos</a>
+    </article><article class="route-card">
+      <button type="button" data-route="evrenseki" aria-label="Select Evrenseki">
+        <span class="route-thumb"><img src="/assets/ayt-ride-transfer.jpg" alt="Private airport transfer vehicle for Evrenseki hotels" loading="lazy"></span>
+        <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €63</span></span>
+        <strong>Evrenseki</strong>
+        <span class="route-fares"><span><small>Standard Sedan</small><b>€63</b></span><span><small>VIP Van</small><b>€75</b></span></span>
+        <span class="route-stats"><small>58 km</small><small>55 min</small></span>
+        <span class="route-card-action">Route wählen</span>
+      </button>
+      <a href="/de/flughafen-antalya-evrenseki-transfer/">Routeninfos</a>
+    </article><article class="route-card">
       <button type="button" data-route="alanya" aria-label="Select Alanya">
         <span class="route-thumb"><img src="/assets/routes/alanya.jpg" alt="Alanya harbor and castle coastline" loading="lazy"></span>
         <span class="route-card-top"><span class="route-code">AYT</span><span class="route-price">From €105</span></span>
@@ -392,18 +412,26 @@
           <p class="section-copy">Wählen Sie zuerst die Hotelregion und geben Sie danach Hotel, Lobby oder Villa im Formular an.</p>
         </div>
         <div class="hotel-card-grid">
-          <a class="hotel-area-card" href="/antalya-airport-to-lara-transfer/">
+          <a class="hotel-area-card" href="/de/flughafen-antalya-lara-transfer/">
             <img src="/assets/routes/lara-kundu.jpg" alt="Lara &amp; Kundu hotel transfer area" loading="lazy">
             <span class="hotel-area-overlay"></span>
             <span class="hotel-area-content"><small>Hotel-Abholgebiete</small><strong>Lara &amp; Kundu</strong><em>Beach resorts and Aksu hotels</em><b>Route ansehen <span aria-hidden="true">→</span></b></span>
-          </a><a class="hotel-area-card" href="/antalya-airport-to-belek-transfer/">
+          </a><a class="hotel-area-card" href="/de/flughafen-antalya-belek-transfer/">
             <img src="/assets/routes/belek-kadriye.jpg" alt="Belek &amp; Kadriye hotel transfer area" loading="lazy">
             <span class="hotel-area-overlay"></span>
             <span class="hotel-area-content"><small>Hotel-Abholgebiete</small><strong>Belek &amp; Kadriye</strong><em>Golf resorts and family stays</em><b>Route ansehen <span aria-hidden="true">→</span></b></span>
-          </a><a class="hotel-area-card" href="/antalya-airport-to-side-transfer/">
+          </a><a class="hotel-area-card" href="/de/flughafen-antalya-side-transfer/">
             <img src="/assets/routes/side-manavgat.jpg" alt="Side &amp; Manavgat hotel transfer area" loading="lazy">
             <span class="hotel-area-overlay"></span>
             <span class="hotel-area-content"><small>Hotel-Abholgebiete</small><strong>Side &amp; Manavgat</strong><em>Coastal hotels and historic Side</em><b>Route ansehen <span aria-hidden="true">→</span></b></span>
+          </a><a class="hotel-area-card" href="/de/flughafen-antalya-kumkoy-transfer/">
+            <img src="/assets/routes/side-manavgat.jpg" alt="Kumköy hotel transfer area" loading="lazy">
+            <span class="hotel-area-overlay"></span>
+            <span class="hotel-area-content"><small>Hotel-Abholgebiete</small><strong>Kumköy</strong><em>Beachfront resorts west of Side</em><b>Route ansehen <span aria-hidden="true">→</span></b></span>
+          </a><a class="hotel-area-card" href="/de/flughafen-antalya-evrenseki-transfer/">
+            <img src="/assets/routes/belek-kadriye.jpg" alt="Evrenseki hotel transfer area" loading="lazy">
+            <span class="hotel-area-overlay"></span>
+            <span class="hotel-area-content"><small>Hotel-Abholgebiete</small><strong>Evrenseki</strong><em>Resort hotels between Çolaklı and Kumköy</em><b>Route ansehen <span aria-hidden="true">→</span></b></span>
           </a>
         </div>
       </div>
@@ -457,6 +485,6 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260925-service-panel"></script>
+  <script src="/assets/app.js?v=20260928-side-resorts"></script>
 </body>
 </html>
