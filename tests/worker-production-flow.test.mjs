@@ -38,6 +38,8 @@ class FakeD1 {
     this.settings = [];
     this.blogs = [];
     this.analyticsEvents = [];
+    this.affiliates = [];
+    this.affiliatePayments = [];
   }
 
   prepare(sql) {
@@ -46,6 +48,12 @@ class FakeD1 {
         first: async () => {
           if (/select reference from bookings/i.test(sql)) {
             return this.rows.find((row) => row.reference === values[0]) ? { reference: values[0] } : null;
+          }
+          if (/from affiliate_partners/i.test(sql)) {
+            if (/where code = \?/i.test(sql)) {
+              return this.affiliates.find((row) => row.code === values[0] && (!/status = 'active'/i.test(sql) || row.status === "active")) || null;
+            }
+            if (/where id = \?/i.test(sql)) return this.affiliates.find((row) => row.id === Number(values[0])) || null;
           }
           return null;
         },
@@ -125,6 +133,21 @@ class FakeD1 {
             const [event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at] = values;
             this.analyticsEvents.push({ event_type, visitor_id, path, source, medium, campaign, referrer_host, route_id, created_at });
           }
+          if (/insert into affiliate_partners/i.test(sql)) {
+            const [code, name, contact_name, phone, email, commission_eur, created_at, updated_at] = values;
+            this.affiliates.push({ id: this.affiliates.length + 1, code, name, contact_name, phone, email, commission_eur, status: "active", created_at, updated_at });
+          }
+          if (/insert into affiliate_payments/i.test(sql)) {
+            const [partner_id, amount_eur, note, paid_at, created_at] = values;
+            this.affiliatePayments.push({ id: this.affiliatePayments.length + 1, partner_id, amount_eur, note, paid_at, created_at });
+          }
+          if (/update affiliate_partners set status/i.test(sql)) {
+            const row = this.affiliates.find((item) => item.id === Number(values[2]));
+            if (row) {
+              row.status = values[0];
+              row.updated_at = values[1];
+            }
+          }
           if (/update blog_posts\s+set status = 'deleted'/i.test(sql)) {
             const row = this.blogs.find((item) => item.slug === values[2]);
             if (row) {
@@ -135,13 +158,13 @@ class FakeD1 {
           }
           return { success: true };
         },
-        all: async () => ({ results: this.resultsFor(sql) })
+        all: async () => ({ results: this.resultsFor(sql, values) })
       }),
       all: async () => ({ results: this.resultsFor(sql) })
     };
   }
 
-  resultsFor(sql) {
+  resultsFor(sql, values = []) {
     if (/from route_prices/i.test(sql)) return [...this.prices];
     if (/from admin_settings/i.test(sql)) return [...this.settings];
     if (/from blog_posts/i.test(sql)) {
@@ -151,6 +174,14 @@ class FakeD1 {
       return [...this.blogs];
     }
     if (/from analytics_events/i.test(sql)) return [...this.analyticsEvents];
+    if (/from affiliate_partners/i.test(sql)) return [...this.affiliates];
+    if (/from affiliate_payments/i.test(sql)) {
+      if (/where partner_id = \?/i.test(sql)) return this.affiliatePayments.filter((row) => row.partner_id === Number(values[0]));
+      return [...this.affiliatePayments];
+    }
+    if (/from bookings/i.test(sql) && /status = 'confirmed'/i.test(sql)) {
+      return this.sortedRows().filter((row) => row.status === "confirmed" && !row.deleted_at);
+    }
     if (/where deleted_at is not null/i.test(sql)) return this.sortedRows().filter((row) => row.deleted_at);
     if (/where deleted_at is null/i.test(sql)) return this.sortedRows().filter((row) => !row.deleted_at);
     return this.sortedRows();
@@ -556,4 +587,112 @@ test("admin can create, publish and delete blog posts backed by D1", async () =>
   const afterDeleteResponse = await worker.fetch(request("/api/public/blog-posts", { method: "GET" }), env);
   const afterDelete = await afterDeleteResponse.json();
   assert.equal(afterDelete.posts.some((post) => post.slug === slug), false);
+});
+
+test("affiliate codes accrue commission only after confirmation and payments reduce the balance", async () => {
+  const db = new FakeD1();
+  const env = makeEnv(db);
+  const cookie = await adminCookie(env);
+
+  const createResponse = await worker.fetch(request("/api/admin/affiliates", {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({
+      name: "Lara Partner Hotel",
+      contactName: "Partner Manager",
+      code: "LARA-HOTEL",
+      commissionEur: 5,
+      phone: "+905000000003"
+    })
+  }), env);
+  const createBody = await createResponse.json();
+  assert.equal(createResponse.status, 201);
+  assert.equal(createBody.partner.code, "LARA-HOTEL");
+
+  const publicResponse = await worker.fetch(request("/api/public/affiliates/lara-hotel", { method: "GET" }), env);
+  const publicBody = await publicResponse.json();
+  assert.deepEqual(publicBody, { valid: true, code: "LARA-HOTEL", name: "Lara Partner Hotel" });
+
+  const reference = "AYT-AFFILIATE-RETURN-001";
+  const bookingResponse = await worker.fetch(request("/api/bookings", {
+    method: "POST",
+    body: JSON.stringify({
+      reference,
+      language: "en",
+      routeId: "belek",
+      tripType: "return",
+      pickup: "Antalya Airport (AYT)",
+      dropoff: "Belek / Kadriye",
+      pickupDate: "2026-10-15",
+      pickupTime: "13:30",
+      returnDate: "2026-10-20",
+      returnTime: "10:00",
+      flightNumber: "TK2420",
+      hotelAddress: "Lara Partner Hotel",
+      vehicleId: "standard-sedan",
+      passengers: 2,
+      luggage: 2,
+      childSeats: 0,
+      guestName: "Affiliate Guest",
+      guestPhone: "+905000000004",
+      guestEmail: "",
+      notes: "",
+      publicTotalEur: 80,
+      quoteOnly: false,
+      affiliateCode: "lara-hotel",
+      attribution: { source: "partner-qr" }
+    })
+  }), env);
+  assert.equal(bookingResponse.status, 201);
+  const storedAttribution = JSON.parse(db.rows[0].attribution_json);
+  assert.equal(storedAttribution.affiliate_code, "LARA-HOTEL");
+  assert.equal(storedAttribution.affiliate_commission_eur, 5);
+
+  const beforeConfirmResponse = await worker.fetch(request("/api/admin/affiliates", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const beforeConfirm = await beforeConfirmResponse.json();
+  assert.equal(beforeConfirm.partners[0].earnedEur, 0);
+  assert.equal(beforeConfirm.partners[0].balanceEur, 0);
+
+  const confirmResponse = await worker.fetch(request(`/api/admin/bookings/${reference}/confirm`, {
+    method: "POST",
+    headers: { cookie },
+    body: "{}"
+  }), env);
+  assert.equal(confirmResponse.status, 200);
+
+  const earnedResponse = await worker.fetch(request("/api/admin/affiliates", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const earned = await earnedResponse.json();
+  assert.equal(earned.partners[0].bookings, 1);
+  assert.equal(earned.partners[0].rides, 2);
+  assert.equal(earned.partners[0].earnedEur, 10);
+  assert.equal(earned.partners[0].balanceEur, 10);
+
+  const paymentResponse = await worker.fetch(request(`/api/admin/affiliates/${createBody.partner.id}/payment`, {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({ amountEur: 4, paidAt: "2026-10-21", note: "Bank transfer" })
+  }), env);
+  assert.equal(paymentResponse.status, 201);
+
+  const afterPaymentResponse = await worker.fetch(request("/api/admin/affiliates", {
+    method: "GET",
+    headers: { cookie }
+  }), env);
+  const afterPayment = await afterPaymentResponse.json();
+  assert.equal(afterPayment.partners[0].paidEur, 4);
+  assert.equal(afterPayment.partners[0].balanceEur, 6);
+  assert.equal(afterPayment.partners[0].payments[0].note, "Bank transfer");
+
+  const overpaymentResponse = await worker.fetch(request(`/api/admin/affiliates/${createBody.partner.id}/payment`, {
+    method: "POST",
+    headers: { cookie },
+    body: JSON.stringify({ amountEur: 7 })
+  }), env);
+  assert.equal(overpaymentResponse.status, 400);
 });

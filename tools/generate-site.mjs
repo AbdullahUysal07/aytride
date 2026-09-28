@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260928-side-resorts";
+const buildStamp = "20260928-affiliates";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -42,6 +42,8 @@ const languages = {
     phone: "WhatsApp number",
     email: "Email optional",
     notes: "Notes",
+    affiliate: "Partner code (optional)",
+    affiliatePlaceholder: "Enter partner code",
     confirm: "Confirm booking",
     copy: "Copy details",
     returnUpsell: "Add return trip and save on the second ride",
@@ -98,6 +100,8 @@ const languages = {
     phone: "WhatsApp Nummer",
     email: "E-Mail optional",
     notes: "Notizen",
+    affiliate: "Partnercode (optional)",
+    affiliatePlaceholder: "Partnercode eingeben",
     confirm: "Buchung bestätigen",
     copy: "Details kopieren",
     returnUpsell: "Rückfahrt hinzufügen und bei der zweiten Fahrt sparen",
@@ -154,6 +158,8 @@ const languages = {
     phone: "Numer WhatsApp",
     email: "E-mail opcjonalnie",
     notes: "Notatki",
+    affiliate: "Kod partnera (opcjonalnie)",
+    affiliatePlaceholder: "Wpisz kod partnera",
     confirm: "Potwierdź rezerwację",
     copy: "Kopiuj szczegóły",
     returnUpsell: "Dodaj powrót i oszczędź na drugim przejeździe",
@@ -210,6 +216,8 @@ const languages = {
     phone: "WhatsApp номер",
     email: "E-mail опционально",
     notes: "Примечания",
+    affiliate: "Код партнера (необязательно)",
+    affiliatePlaceholder: "Введите код партнера",
     confirm: "Подтвердить заявку",
     copy: "Копировать детали",
     returnUpsell: "Добавить обратный трансфер и сэкономить",
@@ -266,6 +274,8 @@ const languages = {
     phone: "WhatsApp nummer",
     email: "E-mail optioneel",
     notes: "Notities",
+    affiliate: "Partnercode (optioneel)",
+    affiliatePlaceholder: "Voer partnercode in",
     confirm: "Boeking bevestigen",
     copy: "Details kopieren",
     returnUpsell: "Voeg retour toe en bespaar op de tweede rit",
@@ -594,6 +604,11 @@ function bookingForm(language, routeId = "") {
           <label>
             <span>${l.email}</span>
             <input id="guestEmail" name="email" autocomplete="email" type="email" placeholder="you@example.com">
+          </label>
+          <label class="affiliate-code-field">
+            <span>${l.affiliate}</span>
+            <input id="affiliateCode" name="affiliate_code" autocomplete="off" maxlength="32" placeholder="${l.affiliatePlaceholder}">
+            <small id="affiliateCodeStatus" aria-live="polite"></small>
           </label>
           <label>
             <span>${l.notes}</span>

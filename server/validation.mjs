@@ -86,6 +86,7 @@ export function sanitizeBookingPayload(input) {
     guestPhone: normalizePhone(input.guestPhone),
     guestEmail: cleanText(input.guestEmail, 180).toLowerCase(),
     notes: cleanText(input.notes, 600),
+    affiliateCode: cleanText(input.affiliateCode || input.attribution?.affiliate_code, 32).toUpperCase(),
     attribution: input.attribution && typeof input.attribution === "object" ? input.attribution : {}
   };
 }

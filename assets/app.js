@@ -50,6 +50,9 @@
       whatsappOnly: "WhatsApp opened. Booking record and email need the production API connection.",
       serverMissing: "Booking record was not saved because the production booking API is not connected yet. Send the WhatsApp request to book now.",
       required: "Please complete the required fields.",
+      partnerValid: "Partner code applied",
+      partnerInvalid: "Partner code is not valid or active.",
+      partnerCheck: "Checking partner code. Confirm again when it is approved.",
       copied: "Booking details copied.",
       copyFailed: "Copy failed.",
       returnAdded: "Return trip added.",
@@ -72,6 +75,9 @@
       whatsappOnly: "WhatsApp wurde geöffnet. Speicherung braucht die Produktions-API.",
       serverMissing: "Der Buchungsserver ist noch nicht aktiv. Senden Sie die WhatsApp-Anfrage.",
       required: "Bitte Pflichtfelder ausfüllen.",
+      partnerValid: "Partnercode angewendet",
+      partnerInvalid: "Der Partnercode ist ungültig oder nicht aktiv.",
+      partnerCheck: "Partnercode wird geprüft. Nach Bestätigung erneut buchen.",
       copied: "Buchungsdetails kopiert.",
       copyFailed: "Kopieren fehlgeschlagen.",
       returnAdded: "Rückfahrt hinzugefügt.",
@@ -94,6 +100,9 @@
       whatsappOnly: "WhatsApp otwarty. Zapis wymaga API produkcyjnego.",
       serverMissing: "Serwer rezerwacji nie jest jeszcze aktywny. Wyślij zapytanie WhatsApp.",
       required: "Uzupełnij wymagane pola.",
+      partnerValid: "Kod partnera zastosowany",
+      partnerInvalid: "Kod partnera jest nieprawidłowy lub nieaktywny.",
+      partnerCheck: "Sprawdzamy kod partnera. Po zatwierdzeniu potwierdź ponownie.",
       copied: "Szczegóły skopiowane.",
       copyFailed: "Kopiowanie nieudane.",
       returnAdded: "Dodano transfer powrotny.",
@@ -116,6 +125,9 @@
       whatsappOnly: "WhatsApp открыт. Сохранение требует production API.",
       serverMissing: "Сервер бронирования еще не активен. Отправьте заявку в WhatsApp.",
       required: "Заполните обязательные поля.",
+      partnerValid: "Код партнера применен",
+      partnerInvalid: "Код партнера недействителен или неактивен.",
+      partnerCheck: "Проверяем код партнера. После подтверждения нажмите еще раз.",
       copied: "Детали скопированы.",
       copyFailed: "Не удалось скопировать.",
       returnAdded: "Обратный трансфер добавлен.",
@@ -138,6 +150,9 @@
       whatsappOnly: "WhatsApp geopend. Opslaan vereist de productie-API.",
       serverMissing: "De boekingsserver is nog niet actief. Stuur de WhatsApp-aanvraag.",
       required: "Vul de verplichte velden in.",
+      partnerValid: "Partnercode toegepast",
+      partnerInvalid: "De partnercode is ongeldig of niet actief.",
+      partnerCheck: "Partnercode wordt gecontroleerd. Bevestig opnieuw na goedkeuring.",
       copied: "Boekingsdetails gekopieerd.",
       copyFailed: "Kopiëren mislukt.",
       returnAdded: "Retourrit toegevoegd.",
@@ -224,6 +239,8 @@
       guestPhone: document.querySelector("#guestPhone"),
       guestEmail: document.querySelector("#guestEmail"),
       notes: document.querySelector("#notes"),
+      affiliateCode: document.querySelector("#affiliateCode"),
+      affiliateCodeStatus: document.querySelector("#affiliateCodeStatus"),
       bookStep: document.querySelector("#bookStep"),
       quotePanel: document.querySelector("#quotePanel"),
       quoteTotal: document.querySelector("#quoteTotal"),
@@ -341,6 +358,7 @@
       `- Price: ${priceLine}`,
       "- Payment: Pay on arrival / cash to driver",
       "- Online payment: Not required",
+      e.affiliateCode?.value ? `- Partner code: ${text(e.affiliateCode.value).toUpperCase()}` : "",
       "",
       "*Notes*",
       text(e.notes.value) || "No extra notes",
@@ -474,6 +492,7 @@
       guestPhone: normalizePhone(e.guestPhone.value),
       guestEmail: text(e.guestEmail.value),
       notes: text(e.notes.value),
+      affiliateCode: text(e.affiliateCode?.value).toUpperCase(),
       publicTotalEur: quote.total,
       quoteOnly: quote.quoteOnly,
       attribution: readAttribution()
@@ -494,8 +513,8 @@
       body: JSON.stringify(payload)
     });
     if (!response.ok) {
-      const detail = await response.text();
-      throw new Error(detail || "Booking API unavailable");
+      const detail = await response.json().catch(() => ({}));
+      throw new Error(detail.error || "Booking API unavailable");
     }
     return response.json();
   }
@@ -597,6 +616,10 @@
         changed = true;
       }
     });
+    if (params.has("partner")) {
+      current.affiliate_code = String(params.get("partner") || "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 32);
+      changed = true;
+    }
     if (!current.landingPage) {
       current.landingPage = `${location.pathname}${location.search}`.slice(0, 500);
       changed = true;
@@ -617,6 +640,40 @@
       changed = true;
     }
     if (changed) localStorage.setItem(attributionKey, JSON.stringify(current));
+  }
+
+  function normalizeAffiliateCode(value) {
+    return String(value || "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 32);
+  }
+
+  async function validateAffiliateField() {
+    const e = els();
+    if (!e.affiliateCode) return true;
+    const code = normalizeAffiliateCode(e.affiliateCode.value);
+    e.affiliateCode.value = code;
+    if (!code) {
+      e.affiliateCode.dataset.validCode = "";
+      if (e.affiliateCodeStatus) e.affiliateCodeStatus.textContent = "";
+      return true;
+    }
+    if (e.affiliateCodeStatus) e.affiliateCodeStatus.textContent = t("partnerCheck");
+    try {
+      const response = await fetch(`${catalog.apiBase}/api/public/affiliates/${encodeURIComponent(code)}`, {
+        headers: { accept: "application/json" }
+      });
+      const data = await response.json();
+      if (!response.ok || !data.valid) throw new Error("INVALID_PARTNER");
+      e.affiliateCode.dataset.validCode = data.code;
+      if (e.affiliateCodeStatus) e.affiliateCodeStatus.textContent = `${t("partnerValid")}: ${data.name}`;
+      const attribution = readAttribution();
+      attribution.affiliate_code = data.code;
+      localStorage.setItem(attributionKey, JSON.stringify(attribution));
+      return true;
+    } catch {
+      e.affiliateCode.dataset.validCode = "";
+      if (e.affiliateCodeStatus) e.affiliateCodeStatus.textContent = t("partnerInvalid");
+      return false;
+    }
   }
 
   function renderVehicles() {
@@ -721,6 +778,11 @@
     const e = els();
     if (!e.form) return;
     preserveAttribution();
+    const savedAffiliateCode = normalizeAffiliateCode(readAttribution().affiliate_code);
+    if (e.affiliateCode && savedAffiliateCode) {
+      e.affiliateCode.value = savedAffiliateCode;
+      validateAffiliateField();
+    }
     const routeDefaults = routeSelectionDefaults();
     fillSelect(e.pickup, routeDefaults.pickup);
     fillSelect(e.dropoff, routeDefaults.dropoff);
@@ -751,6 +813,12 @@
       update();
     });
     e.form.addEventListener("change", update);
+    e.affiliateCode?.addEventListener("input", () => {
+      e.affiliateCode.value = normalizeAffiliateCode(e.affiliateCode.value);
+      e.affiliateCode.dataset.validCode = "";
+      if (e.affiliateCodeStatus) e.affiliateCodeStatus.textContent = "";
+    });
+    e.affiliateCode?.addEventListener("blur", validateAffiliateField);
 
     document.querySelector("#seeFixedPrice")?.addEventListener("click", () => {
       const error = validateStepOne();
@@ -816,6 +884,12 @@
         showToast(error);
         return;
       }
+      const affiliateCode = normalizeAffiliateCode(e.affiliateCode?.value);
+      if (affiliateCode && e.affiliateCode.dataset.validCode !== affiliateCode) {
+        showToast(t("partnerCheck"));
+        validateAffiliateField();
+        return;
+      }
       state.submitting = true;
       e.confirmBooking.disabled = true;
       const q = calculate();
@@ -838,10 +912,11 @@
         aytEvent("whatsapp_clicked", { language: lang(), route: payload.routeId, trip_type: payload.tripType, vehicle: payload.vehicleId });
         showToast(t("whatsappOpened"));
         location.href = confirmationUrl(finalReference, payload);
-      } catch {
+      } catch (error) {
         aytEvent("whatsapp_clicked", { language: lang(), route: payload.routeId, trip_type: payload.tripType, vehicle: payload.vehicleId });
-        setStatus(t("serverMissing"), "warning");
-        showToast(t("whatsappOnly"));
+        const invalidPartner = String(error?.message || "").includes("Partner code");
+        setStatus(invalidPartner ? t("partnerInvalid") : t("serverMissing"), "warning");
+        showToast(invalidPartner ? t("partnerInvalid") : t("whatsappOnly"));
         state.submitting = false;
         e.confirmBooking.disabled = false;
       }
@@ -1000,7 +1075,8 @@
   const adminState = {
     priceRoutes: [],
     priceVehicles: [],
-    blogPosts: []
+    blogPosts: [],
+    affiliates: []
   };
 
   function formatAdminDate(value) {
@@ -1183,6 +1259,7 @@
           <p><b>Telefon</b>${escapeHtml(item.guestPhone)}</p>
           <p><b>E-posta</b>${escapeHtml(item.guestEmail || "-")}</p>
           <p><b>Kaynak</b>${escapeHtml(item.attribution?.source || item.attribution?.utm_source || item.attribution?.referrerHost || "Kaynak kaydı yok")}</p>
+          <p><b>Partner</b>${item.attribution?.affiliate_code ? `${escapeHtml(item.attribution.affiliate_partner || item.attribution.affiliate_code)} • ${escapeHtml(item.attribution.affiliate_code)} • ${plainEur(item.attribution.affiliate_commission_eur || 5)}/yön` : "-"}</p>
           <p><b>Mesafe</b>${Number(item.distanceKm || 0)} km • ${Number(item.ways || 1)} yön</p>
           <p><b>Satış</b>${item.quoteOnly ? "Teklif bekliyor" : `${money(item.publicTotalEur)} / ${moneyTry(item.revenueTry)}`}</p>
           <p><b>Şoföre verilecek</b>${item.driverCostTry == null ? "Mesafe yok" : `${moneyTry(item.driverCostTry)} (${Number(item.driverRateTryPerKm || 35)} TL/km)`}</p>
@@ -1202,6 +1279,57 @@
       ? bookings.map((item) => bookingCard(item)).join("")
       : "<div class=\"booking-empty\"><strong>Henüz aktif rezervasyon yok.</strong><p>Yeni talepler burada görünür.</p></div>";
     list.innerHTML = activeMarkup;
+  }
+
+  function renderAdminAffiliates(data) {
+    adminState.affiliates = data.partners || [];
+    const list = document.querySelector("#affiliateList");
+    const stats = document.querySelector("#affiliateStats");
+    const count = document.querySelector("#affiliateCount");
+    if (!list || !stats || !count) return;
+    const totals = data.totals || {};
+    count.textContent = `${Number(totals.partners || 0)} partner`;
+    stats.innerHTML = `
+      <article class="kpi-card"><small>Toplam yolculuk</small><strong>${Number(totals.rides || 0)}</strong><span>Doğrulanan partner yolculukları</span></article>
+      <article class="kpi-card"><small>Toplam hakediş</small><strong>${plainEur(totals.earnedEur || 0)}</strong><span>Partnerlere yazılan toplam</span></article>
+      <article class="kpi-card"><small>Ödenen</small><strong>${plainEur(totals.paidEur || 0)}</strong><span>Kaydedilen partner ödemeleri</span></article>
+      <article class="kpi-card"><small>Kalan bakiye</small><strong>${plainEur(totals.balanceEur || 0)}</strong><span>Ödenmesi gereken tutar</span></article>
+    `;
+    if (!adminState.affiliates.length) {
+      list.innerHTML = "<div class=\"booking-empty\"><strong>Henüz partner yok.</strong><p>Yukarıdaki formdan ilk partner kodunu oluşturabilirsiniz.</p></div>";
+      return;
+    }
+    list.innerHTML = adminState.affiliates.map((partner) => {
+      const url = `${catalog.baseUrl}/?partner=${encodeURIComponent(partner.code)}#booking`;
+      return `
+        <article class="affiliate-item" data-affiliate-id="${partner.id}">
+          <div class="affiliate-item-head">
+            <div><small>${partner.status === "active" ? "Aktif partner" : "Pasif partner"}</small><h3>${escapeHtml(partner.name)}</h3><code>${escapeHtml(partner.code)}</code></div>
+            <span class="status-badge ${partner.status === "active" ? "confirmed" : "deleted"}">${partner.status === "active" ? "Aktif" : "Pasif"}</span>
+          </div>
+          <div class="affiliate-metrics">
+            <p><span>Yolculuk</span><strong>${Number(partner.rides || 0)}</strong></p>
+            <p><span>Hakediş</span><strong>${plainEur(partner.earnedEur || 0)}</strong></p>
+            <p><span>Ödenen</span><strong>${plainEur(partner.paidEur || 0)}</strong></p>
+            <p class="affiliate-balance"><span>Kalan</span><strong>${plainEur(partner.balanceEur || 0)}</strong></p>
+          </div>
+          <p class="affiliate-contact">${escapeHtml([partner.contactName, partner.phone, partner.email].filter(Boolean).join(" • ") || "İletişim bilgisi eklenmedi")}</p>
+          <p class="affiliate-link">${escapeHtml(url)}</p>
+          <div class="affiliate-actions">
+            <button class="admin-btn soft" type="button" data-affiliate-action="copy" data-code="${escapeHtml(partner.code)}">Bağlantıyı kopyala</button>
+            <button class="admin-btn" type="button" data-affiliate-action="print" data-code="${escapeHtml(partner.code)}">QR yazdır / PDF</button>
+            <button class="admin-btn soft" type="button" data-affiliate-action="download" data-code="${escapeHtml(partner.code)}">QR indir</button>
+            <button class="admin-btn ${partner.status === "active" ? "danger" : "success"}" type="button" data-affiliate-action="status" data-id="${partner.id}" data-status="${partner.status === "active" ? "inactive" : "active"}">${partner.status === "active" ? "Pasife al" : "Aktifleştir"}</button>
+          </div>
+          <form class="affiliate-payment-form" data-affiliate-payment="${partner.id}">
+            <label><span>Ödeme (€)</span><input name="amountEur" type="number" min="0.01" max="${Number(partner.balanceEur || 0)}" step="0.01" placeholder="${Number(partner.balanceEur || 0).toFixed(2)}" ${partner.balanceEur > 0 ? "required" : "disabled"}></label>
+            <label><span>Ödeme tarihi</span><input name="paidAt" type="date" value="${todayIso()}" ${partner.balanceEur > 0 ? "required" : "disabled"}></label>
+            <label><span>Not</span><input name="note" maxlength="240" placeholder="Havale, nakit..." ${partner.balanceEur > 0 ? "" : "disabled"}></label>
+            <button class="admin-btn success" type="submit" ${partner.balanceEur > 0 ? "" : "disabled"}>Ödemeyi kaydet</button>
+          </form>
+          ${partner.payments?.length ? `<details class="affiliate-history"><summary>Ödeme geçmişi (${partner.payments.length})</summary>${partner.payments.map((payment) => `<p><strong>${plainEur(payment.amountEur)}</strong><span>${escapeHtml(formatAdminDate(payment.paidAt))}${payment.note ? ` • ${escapeHtml(payment.note)}` : ""}</span></p>`).join("")}</details>` : ""}
+        </article>`;
+    }).join("");
   }
 
   function renderAdminBlogs(posts) {
@@ -1277,11 +1405,12 @@
   }
 
   async function reloadAdminDashboard() {
-    const [bookingsData, pricesData, blogData, analyticsData] = await Promise.all([
+    const [bookingsData, pricesData, blogData, analyticsData, affiliatesData] = await Promise.all([
       adminRequest("/api/admin/bookings"),
       adminRequest("/api/admin/prices"),
       adminRequest("/api/admin/blog-posts"),
-      adminRequest("/api/admin/analytics")
+      adminRequest("/api/admin/analytics"),
+      adminRequest("/api/admin/affiliates")
     ]);
     renderAdminStats(bookingsData.summary || {}, bookingsData.settings || {});
     renderAdminSettings(bookingsData.settings || {});
@@ -1289,6 +1418,71 @@
     renderAdminPrices(pricesData || {});
     renderAdminBlogs(blogData.posts || []);
     renderAdminAnalytics(analyticsData || {}, bookingsData.bookings || []);
+    renderAdminAffiliates(affiliatesData || {});
+  }
+
+  function affiliateByCode(code) {
+    return adminState.affiliates.find((partner) => partner.code === code);
+  }
+
+  function affiliateUrl(code) {
+    return `${catalog.baseUrl}/?partner=${encodeURIComponent(code)}#booking`;
+  }
+
+  function buildAffiliateQr(target, code, size = 240) {
+    if (!target || typeof window.QRCode !== "function") throw new Error("QR oluşturucu yüklenemedi.");
+    target.innerHTML = "";
+    new window.QRCode(target, {
+      text: affiliateUrl(code),
+      width: size,
+      height: size,
+      colorDark: "#0f2942",
+      colorLight: "#ffffff",
+      correctLevel: window.QRCode.CorrectLevel.H
+    });
+    return target.querySelector("canvas");
+  }
+
+  function printAffiliate(partner) {
+    const sheet = document.querySelector("#affiliatePrintSheet");
+    if (!sheet) return;
+    document.querySelector("#affiliatePrintName").textContent = partner.name;
+    document.querySelector("#affiliatePrintCode").textContent = partner.code;
+    document.querySelector("#affiliatePrintUrl").textContent = affiliateUrl(partner.code);
+    buildAffiliateQr(document.querySelector("#affiliatePrintQr"), partner.code, 260);
+    sheet.setAttribute("aria-hidden", "false");
+    document.body.classList.add("printing-affiliate");
+    window.setTimeout(() => {
+      window.print();
+      document.body.classList.remove("printing-affiliate");
+      sheet.setAttribute("aria-hidden", "true");
+    }, 80);
+  }
+
+  function downloadAffiliateQr(partner) {
+    const host = document.createElement("div");
+    host.className = "qr-download-host";
+    document.body.appendChild(host);
+    const canvas = buildAffiliateQr(host, partner.code, 900);
+    window.setTimeout(() => {
+      const link = document.createElement("a");
+      link.download = `ayt-ride-${partner.code}-qr.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      host.remove();
+    }, 50);
+  }
+
+  function activateAdminView(view) {
+    document.querySelectorAll("[data-admin-panel]").forEach((panel) => {
+      panel.classList.toggle("admin-panel-hidden", panel.dataset.adminPanel !== view);
+    });
+    document.querySelectorAll("[data-admin-view-target]").forEach((button) => {
+      const active = button.dataset.adminViewTarget === view;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-current", active ? "page" : "false");
+    });
+    document.querySelector(".admin-views")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function initAdmin() {
@@ -1372,9 +1566,92 @@
     });
 
     root.querySelector(".admin-sidebar")?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-admin-scroll]");
-      const target = button && document.getElementById(button.dataset.adminScroll);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      const button = event.target.closest("[data-admin-view-target]");
+      if (button) activateAdminView(button.dataset.adminViewTarget);
+    });
+
+    document.querySelector("#affiliateEditor")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submit = event.submitter;
+      if (submit) submit.disabled = true;
+      output.textContent = "Partner oluşturuluyor...";
+      try {
+        const data = await adminRequest("/api/admin/affiliates", {
+          method: "POST",
+          body: JSON.stringify({
+            name: document.querySelector("#affiliateName")?.value || "",
+            contactName: document.querySelector("#affiliateContact")?.value || "",
+            code: document.querySelector("#affiliateCodeAdmin")?.value || "",
+            commissionEur: document.querySelector("#affiliateCommission")?.value || "5",
+            phone: document.querySelector("#affiliatePhone")?.value || "",
+            email: document.querySelector("#affiliateEmail")?.value || ""
+          })
+        });
+        event.currentTarget.reset();
+        document.querySelector("#affiliateCommission").value = "5";
+        await reloadAdminDashboard();
+        activateAdminView("affiliates");
+        output.textContent = `${data.partner.name} için ${data.partner.code} kodu oluşturuldu.`;
+      } catch (error) {
+        output.textContent = error.message || "Partner oluşturulamadı.";
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+
+    document.querySelector("#affiliateList")?.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-affiliate-action]");
+      if (!button) return;
+      const partner = affiliateByCode(button.dataset.code);
+      const action = button.dataset.affiliateAction;
+      if (action === "copy" && partner) {
+        await navigator.clipboard.writeText(affiliateUrl(partner.code));
+        output.textContent = `${partner.code} bağlantısı kopyalandı.`;
+      } else if (action === "print" && partner) {
+        printAffiliate(partner);
+      } else if (action === "download" && partner) {
+        downloadAffiliateQr(partner);
+      } else if (action === "status") {
+        button.disabled = true;
+        try {
+          await adminRequest(`/api/admin/affiliates/${button.dataset.id}/status`, {
+            method: "POST",
+            body: JSON.stringify({ status: button.dataset.status })
+          });
+          await reloadAdminDashboard();
+          activateAdminView("affiliates");
+        } catch (error) {
+          output.textContent = error.message || "Partner durumu güncellenemedi.";
+        } finally {
+          button.disabled = false;
+        }
+      }
+    });
+
+    document.querySelector("#affiliateList")?.addEventListener("submit", async (event) => {
+      const form = event.target.closest("[data-affiliate-payment]");
+      if (!form) return;
+      event.preventDefault();
+      const submit = event.submitter;
+      if (submit) submit.disabled = true;
+      const formData = new FormData(form);
+      try {
+        await adminRequest(`/api/admin/affiliates/${form.dataset.affiliatePayment}/payment`, {
+          method: "POST",
+          body: JSON.stringify({
+            amountEur: formData.get("amountEur"),
+            paidAt: formData.get("paidAt"),
+            note: formData.get("note")
+          })
+        });
+        await reloadAdminDashboard();
+        activateAdminView("affiliates");
+        output.textContent = "Partner ödemesi kaydedildi ve kalan bakiyeden düşüldü.";
+      } catch (error) {
+        output.textContent = error.message || "Ödeme kaydedilemedi.";
+      } finally {
+        if (submit) submit.disabled = false;
+      }
     });
 
     document.querySelector("#refreshBookings")?.addEventListener("click", () => {

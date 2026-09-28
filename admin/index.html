@@ -6,8 +6,8 @@
   <title>AYT Ride Yönetim Paneli</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/site.css?v=20260925-admin-layout">
-  <script src="/assets/catalog.js?v=20260925-admin-diagnostic"></script>
+  <link rel="stylesheet" href="/assets/site.css?v=20260928-affiliates">
+  <script src="/assets/catalog.js?v=20260928-side-resorts"></script>
 </head>
 <body>
   <header class="topbar">
@@ -28,8 +28,8 @@
       <aside class="admin-card">
         <p class="mini-label">Operasyon</p>
         <h1>Yönetim paneli</h1>
-        <p class="admin-note">Rezervasyonlar Cloudflare D1 veritabanından gelir. Doğrulanan kayıtlar ciroya dönüşür; bekleyen talepler gelir hesabına eklenmez.</p>
-        <p class="admin-note">Şoför maliyeti varsayılan olarak kilometre başına 35 TL hesaplanır. Euro gelir, paneldeki tahmini kurla TL kâra çevrilir.</p>
+        <p class="admin-note">Rezervasyon, gelir, partner ve içerik işlemleri tek panelden yönetilir.</p>
+        <p class="admin-note">Partner hakedişi yalnızca doğrulanan yolculuklarda oluşur. Bekleyen talepler bakiyeye eklenmez.</p>
       </aside>
 
       <section class="admin-card">
@@ -49,13 +49,15 @@
         <div id="adminPanel" class="hidden">
           <div class="admin-workspace">
             <nav class="admin-sidebar" aria-label="Yönetim bölümleri">
-              <button type="button" data-admin-scroll="adminAnalytics">İstatistik</button>
-              <button type="button" data-admin-scroll="adminBookingsSection">Rezervasyonlar</button>
-              <button type="button" data-admin-scroll="priceEditor">Fiyatlar</button>
-              <button type="button" data-admin-scroll="blogEditor">Blog</button>
+              <button class="active" type="button" data-admin-view-target="overview">Genel bakış</button>
+              <button type="button" data-admin-view-target="bookings">Rezervasyonlar</button>
+              <button type="button" data-admin-view-target="affiliates">Partnerler</button>
+              <button type="button" data-admin-view-target="prices">Fiyatlar</button>
+              <button type="button" data-admin-view-target="costs">Maliyetler</button>
+              <button type="button" data-admin-view-target="content">Blog</button>
             </nav>
             <div class="admin-views">
-          <section class="admin-overview" id="adminAnalytics">
+          <section class="admin-overview" id="adminAnalytics" data-admin-panel="overview">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Site özeti</p>
@@ -74,7 +76,7 @@
             <p class="admin-note" id="analyticsNote">Bu özet, analitik izni veren ziyaretçilerin sitedeki ölçüm olaylarını gösterir. GA4 raporu değildir.</p>
           </section>
 
-          <section class="admin-overview">
+          <section class="admin-overview" data-admin-panel="overview">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Ciro ve kâr</p>
@@ -84,7 +86,7 @@
             <div class="admin-kpis" id="adminStats"></div>
           </section>
 
-          <section class="admin-bookings" id="adminBookingsSection">
+          <section class="admin-bookings admin-panel-hidden" id="adminBookingsSection" data-admin-panel="bookings">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Rezervasyonlar</p>
@@ -100,7 +102,47 @@
             </div>
           </section>
 
-          <section class="admin-archive">
+          <section class="admin-affiliates admin-panel-hidden" id="adminAffiliatesSection" data-admin-panel="affiliates">
+            <div class="admin-section-title">
+              <div>
+                <p class="mini-label">Affiliate yönetimi</p>
+                <h2>Partnerler ve hakedişler</h2>
+              </div>
+              <span id="affiliateCount" class="admin-count">0 partner</span>
+            </div>
+            <div class="affiliate-kpis" id="affiliateStats"></div>
+            <form class="affiliate-editor" id="affiliateEditor">
+              <label>
+                <span>Partner / işletme adı</span>
+                <input id="affiliateName" type="text" maxlength="120" placeholder="Otel veya acente adı" required>
+              </label>
+              <label>
+                <span>Yetkili kişi</span>
+                <input id="affiliateContact" type="text" maxlength="120" placeholder="Ad soyad">
+              </label>
+              <label>
+                <span>Partner kodu</span>
+                <input id="affiliateCodeAdmin" type="text" maxlength="32" placeholder="Boş bırakırsanız otomatik oluşur">
+              </label>
+              <label>
+                <span>Yolculuk başı komisyon</span>
+                <input id="affiliateCommission" type="number" min="0.01" max="1000" step="0.01" value="5" required>
+              </label>
+              <label>
+                <span>Telefon</span>
+                <input id="affiliatePhone" type="tel" maxlength="40" placeholder="+90 ...">
+              </label>
+              <label>
+                <span>E-posta</span>
+                <input id="affiliateEmail" type="email" maxlength="180" placeholder="partner@example.com">
+              </label>
+              <button class="primary-btn" type="submit">Partner ve kod oluştur</button>
+            </form>
+            <p class="admin-note">QR bağlantısı veya rezervasyon formuna girilen kod partneri kayda bağlar. Hakediş, rezervasyon doğrulandığında yolculuk yönü başına yazılır.</p>
+            <div class="affiliate-list" id="affiliateList"></div>
+          </section>
+
+          <section class="admin-archive admin-panel-hidden" data-admin-panel="costs">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Maliyet ayarı</p>
@@ -125,7 +167,7 @@
             <p class="admin-note">Kâr hesabı normalde otomatik EUR/TRY kuru ile yapılır. Kur servisine ulaşılamazsa paneldeki yedek kur kullanılır.</p>
           </section>
 
-          <section class="admin-archive">
+          <section class="admin-archive admin-panel-hidden" data-admin-panel="prices">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Fiyat yönetimi</p>
@@ -151,7 +193,7 @@
             <div class="price-list" id="priceList"></div>
           </section>
 
-          <section class="admin-archive">
+          <section class="admin-archive admin-panel-hidden" data-admin-panel="content">
             <div class="admin-section-title">
               <div>
                 <p class="mini-label">Blog yönetimi</p>
@@ -198,6 +240,16 @@
     </div>
   </main>
 
+  <section class="affiliate-print-sheet" id="affiliatePrintSheet" aria-hidden="true">
+    <div class="affiliate-print-brand"><span>AYT</span><strong>AYT Ride</strong></div>
+    <p>ANTALYA PRIVATE TRANSFER</p>
+    <h1 id="affiliatePrintName">Partner</h1>
+    <div id="affiliatePrintQr"></div>
+    <h2 id="affiliatePrintCode">CODE</h2>
+    <p>Scan to book your airport transfer</p>
+    <small id="affiliatePrintUrl"></small>
+  </section>
+
   <footer class="footer">
     <div class="shell footer-grid">
       <div>
@@ -211,7 +263,8 @@
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/assets/app.js?v=20260925-deleted-bookings"></script>
+  <script src="/assets/qrcode.min.js?v=1.0.0"></script>
+  <script src="/assets/app.js?v=20260928-affiliates"></script>
   <script>
     window.addEventListener("load", function () {
       if (!window.AYTRideAdminReady) {

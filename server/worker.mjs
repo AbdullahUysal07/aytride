@@ -22,6 +22,11 @@ export default {
         return json(await catalogForEnv(env), 200, cors);
       }
 
+      const publicAffiliate = url.pathname.match(/^\/api\/public\/affiliates\/([^/]+)$/);
+      if (publicAffiliate && request.method === "GET") {
+        return await getPublicAffiliate(env, cors, decodeURIComponent(publicAffiliate[1]));
+      }
+
       if (url.pathname === "/api/public/blog-posts" && request.method === "GET") {
         return await listPublicBlogPosts(env, cors);
       }
@@ -57,6 +62,24 @@ export default {
 
       if (url.pathname === "/api/admin/analytics" && request.method === "GET") {
         return await listAdminAnalytics(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/affiliates" && request.method === "GET") {
+        return await listAdminAffiliates(request, env, cors);
+      }
+
+      if (url.pathname === "/api/admin/affiliates" && request.method === "POST") {
+        return await createAdminAffiliate(request, env, cors);
+      }
+
+      const affiliatePayment = url.pathname.match(/^\/api\/admin\/affiliates\/(\d+)\/payment$/);
+      if (affiliatePayment && request.method === "POST") {
+        return await createAdminAffiliatePayment(request, env, cors, Number(affiliatePayment[1]));
+      }
+
+      const affiliateStatus = url.pathname.match(/^\/api\/admin\/affiliates\/(\d+)\/status$/);
+      if (affiliateStatus && request.method === "POST") {
+        return await updateAdminAffiliateStatus(request, env, cors, Number(affiliateStatus[1]));
       }
 
       const bookingAction = url.pathname.match(/^\/api\/admin\/bookings\/([^/]+)\/(confirm|pending|delete|restore)$/);
@@ -162,10 +185,24 @@ async function createBooking(request, env, cors) {
 
   const privatePricing = parsePrivatePricing(env);
   const privatePrice = privateVehiclePrice(privatePricing, result.payload);
+  const affiliate = result.payload.affiliateCode
+    ? await findAffiliateByCode(env, result.payload.affiliateCode, true)
+    : null;
+  if (result.payload.affiliateCode && !affiliate) {
+    return json({ error: "Partner code is not valid or active." }, 400, cors);
+  }
+  const attribution = {
+    ...(result.payload.attribution || {}),
+    ...(affiliate ? {
+      affiliate_code: affiliate.code,
+      affiliate_partner: affiliate.name,
+      affiliate_commission_eur: Number(affiliate.commission_eur || 5)
+    } : {})
+  };
   const record = {
     ...result.payload,
     privateVehiclePriceEur: privatePrice,
-    attributionJson: JSON.stringify(result.payload.attribution || {}),
+    attributionJson: JSON.stringify(attribution),
     createdAt: new Date().toISOString()
   };
 
@@ -218,6 +255,7 @@ async function createBooking(request, env, cors) {
     ok: true,
     reference: record.reference,
     publicTotalEur: record.publicTotalEur,
+    affiliateCode: affiliate?.code || "",
     quoteOnly: record.quoteOnly,
     emailStatus
   }, 201, cors);
@@ -546,6 +584,213 @@ async function listAdminAnalytics(request, env, cors) {
   `).bind(since.toISOString()).all();
 
   return json(analyticsSummary(rows.results || []), 200, cors);
+}
+
+async function getPublicAffiliate(env, cors, rawCode) {
+  if (!env.DB) return json({ valid: false }, 200, cors);
+  const partner = await findAffiliateByCode(env, rawCode, true);
+  return json(partner
+    ? { valid: true, code: partner.code, name: partner.name }
+    : { valid: false }, 200, cors);
+}
+
+async function findAffiliateByCode(env, rawCode, activeOnly = false) {
+  const code = normalizeAffiliateCode(rawCode);
+  if (!code || !env.DB) return null;
+  const statusClause = activeOnly ? " and status = 'active'" : "";
+  return env.DB.prepare(`
+    select id, code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
+    from affiliate_partners
+    where code = ?${statusClause}
+  `).bind(code).first();
+}
+
+async function listAdminAffiliates(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const [partnersResult, bookingsResult, paymentsResult] = await Promise.all([
+    env.DB.prepare(`
+      select id, code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
+      from affiliate_partners
+      order by status asc, name asc
+    `).all(),
+    env.DB.prepare(`
+      select reference, trip_type, attribution_json, confirmed_at
+      from bookings
+      where status = 'confirmed' and deleted_at is null
+      order by confirmed_at desc
+      limit 5000
+    `).all(),
+    env.DB.prepare(`
+      select id, partner_id, amount_eur, note, paid_at, created_at
+      from affiliate_payments
+      order by paid_at desc, id desc
+      limit 5000
+    `).all()
+  ]);
+
+  const bookings = bookingsResult.results || [];
+  const payments = paymentsResult.results || [];
+  const partners = (partnersResult.results || []).map((partner) => affiliateAdminRecord(partner, bookings, payments));
+  const totals = partners.reduce((sum, partner) => ({
+    partners: sum.partners + 1,
+    rides: sum.rides + partner.rides,
+    earnedEur: sum.earnedEur + partner.earnedEur,
+    paidEur: sum.paidEur + partner.paidEur,
+    balanceEur: sum.balanceEur + partner.balanceEur
+  }), { partners: 0, rides: 0, earnedEur: 0, paidEur: 0, balanceEur: 0 });
+
+  return json({ partners, totals }, 200, cors);
+}
+
+async function createAdminAffiliate(request, env, cors) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+
+  const body = await readJson(request);
+  const name = cleanAffiliateText(body.name, 120);
+  const code = normalizeAffiliateCode(body.code) || generateAffiliateCode(name);
+  const contactName = cleanAffiliateText(body.contactName, 120);
+  const phone = cleanAffiliateText(body.phone, 40);
+  const email = cleanAffiliateText(body.email, 180).toLowerCase();
+  const commissionEur = Number(body.commissionEur ?? 5);
+  if (!name) return json({ error: "Partner name is required." }, 400, cors);
+  if (!code || code.length < 3) return json({ error: "Partner code must contain at least 3 characters." }, 400, cors);
+  if (!Number.isFinite(commissionEur) || commissionEur <= 0 || commissionEur > 1000) {
+    return json({ error: "Commission must be between EUR 0 and EUR 1000." }, 400, cors);
+  }
+
+  const existing = await findAffiliateByCode(env, code);
+  if (existing) return json({ error: "This partner code is already in use." }, 409, cors);
+  const now = new Date().toISOString();
+  const result = await env.DB.prepare(`
+    insert into affiliate_partners (
+      code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
+    ) values (?, ?, ?, ?, ?, ?, 'active', ?, ?)
+  `).bind(code, name, contactName, phone, email, commissionEur, now, now).run();
+  if (!result?.success) return json({ error: "Partner could not be created." }, 500, cors);
+  const partner = await findAffiliateByCode(env, code);
+  return json({ ok: true, partner: affiliateAdminRecord(partner, [], []) }, 201, cors);
+}
+
+async function createAdminAffiliatePayment(request, env, cors, partnerId) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+  const partner = await env.DB.prepare(`
+    select id, code, name, contact_name, phone, email, commission_eur, status, created_at, updated_at
+    from affiliate_partners where id = ?
+  `).bind(partnerId).first();
+  if (!partner) return json({ error: "Partner not found." }, 404, cors);
+  const body = await readJson(request);
+  const amountEur = Number(body.amountEur);
+  if (!Number.isFinite(amountEur) || amountEur <= 0) return json({ error: "Payment amount must be positive." }, 400, cors);
+
+  const snapshot = await affiliateSnapshot(env, partner);
+  if (amountEur > snapshot.balanceEur + 0.001) {
+    return json({ error: `Payment cannot exceed the EUR ${snapshot.balanceEur.toFixed(2)} balance.` }, 400, cors);
+  }
+  const now = new Date().toISOString();
+  const paidAt = /^\d{4}-\d{2}-\d{2}$/.test(String(body.paidAt || ""))
+    ? `${body.paidAt}T12:00:00.000Z`
+    : now;
+  const result = await env.DB.prepare(`
+    insert into affiliate_payments (partner_id, amount_eur, note, paid_at, created_at)
+    values (?, ?, ?, ?, ?)
+  `).bind(partnerId, amountEur, cleanAffiliateText(body.note, 240), paidAt, now).run();
+  if (!result?.success) return json({ error: "Payment could not be recorded." }, 500, cors);
+  return json({ ok: true, partnerId, amountEur }, 201, cors);
+}
+
+async function updateAdminAffiliateStatus(request, env, cors, partnerId) {
+  if (!env.DB) return json({ error: "Booking database is not configured." }, 503, cors);
+  const session = await requireAdmin(request, env, cors);
+  if (session instanceof Response) return session;
+  const body = await readJson(request);
+  const status = body.status === "inactive" ? "inactive" : "active";
+  const result = await env.DB.prepare(`
+    update affiliate_partners set status = ?, updated_at = ? where id = ?
+  `).bind(status, new Date().toISOString(), partnerId).run();
+  if (!result?.success) return json({ error: "Partner status could not be updated." }, 500, cors);
+  return json({ ok: true, partnerId, status }, 200, cors);
+}
+
+async function affiliateSnapshot(env, partner) {
+  const [bookingsResult, paymentsResult] = await Promise.all([
+    env.DB.prepare(`
+      select reference, trip_type, attribution_json, confirmed_at
+      from bookings where status = 'confirmed' and deleted_at is null
+    `).all(),
+    env.DB.prepare(`
+      select id, partner_id, amount_eur, note, paid_at, created_at
+      from affiliate_payments where partner_id = ? order by paid_at desc, id desc
+    `).bind(partner.id).all()
+  ]);
+  return affiliateAdminRecord(partner, bookingsResult.results || [], paymentsResult.results || []);
+}
+
+function affiliateAdminRecord(partner, bookingRows, paymentRows) {
+  const code = normalizeAffiliateCode(partner.code);
+  const linkedBookings = bookingRows.filter((row) => normalizeAffiliateCode(parseAttribution(row.attribution_json).affiliate_code) === code);
+  const rides = linkedBookings.reduce((total, row) => total + (row.trip_type === "return" ? 2 : 1), 0);
+  const earnedEur = linkedBookings.reduce((total, row) => {
+    const attribution = parseAttribution(row.attribution_json);
+    const commission = Number(attribution.affiliate_commission_eur ?? partner.commission_eur ?? 5);
+    return total + commission * (row.trip_type === "return" ? 2 : 1);
+  }, 0);
+  const payments = paymentRows
+    .filter((row) => Number(row.partner_id) === Number(partner.id))
+    .map((row) => ({
+      id: row.id,
+      amountEur: Number(row.amount_eur || 0),
+      note: row.note || "",
+      paidAt: row.paid_at,
+      createdAt: row.created_at
+    }));
+  const paidEur = payments.reduce((total, payment) => total + payment.amountEur, 0);
+  return {
+    id: Number(partner.id),
+    code,
+    name: partner.name,
+    contactName: partner.contact_name || "",
+    phone: partner.phone || "",
+    email: partner.email || "",
+    commissionEur: Number(partner.commission_eur || 5),
+    status: partner.status || "active",
+    createdAt: partner.created_at,
+    updatedAt: partner.updated_at,
+    rides,
+    bookings: linkedBookings.length,
+    earnedEur,
+    paidEur,
+    balanceEur: Math.max(0, earnedEur - paidEur),
+    payments
+  };
+}
+
+function normalizeAffiliateCode(value) {
+  return String(value || "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 32);
+}
+
+function cleanAffiliateText(value, maxLength) {
+  return String(value || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, maxLength);
+}
+
+function generateAffiliateCode(name) {
+  const base = String(name || "PARTNER")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 16) || "PARTNER";
+  const bytes = new Uint8Array(2);
+  crypto.getRandomValues(bytes);
+  const suffix = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+  return `${base}-${suffix}`;
 }
 
 async function updateAdminBookingStatus(request, env, cors, reference, action) {
