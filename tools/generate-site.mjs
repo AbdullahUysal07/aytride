@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260928-affiliate-profit";
+const buildStamp = "20260929-multilingual-route-seo";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -415,6 +415,27 @@ function destinationAreas(route, language) {
   };
   const item = copy[language] || copy.en;
   return `<h2>${item.title}</h2><p>${item.text}</p><div class="area-links">${(areas[route.id] || []).map((area) => `<span>${escapeHtml(area)}</span>`).join("")}</div>`;
+}
+
+function routeQuickFacts(route, language) {
+  const copy = {
+    en: { title: "Route at a glance", distance: "Distance", time: "Typical transfer time", sedan: "Sedan from", vip: "VIP Van from", price: "Fixed price per vehicle" },
+    de: { title: "Route auf einen Blick", distance: "Entfernung", time: "Übliche Fahrzeit", sedan: "Sedan ab", vip: "VIP Van ab", price: "Festpreis pro Fahrzeug" },
+    pl: { title: "Trasa w skrócie", distance: "Odległość", time: "Typowy czas przejazdu", sedan: "Sedan od", vip: "VIP Van od", price: "Stała cena za pojazd" },
+    ru: { title: "Маршрут кратко", distance: "Расстояние", time: "Обычное время в пути", sedan: "Sedan от", vip: "VIP Van от", price: "Фиксированная цена за автомобиль" },
+    nl: { title: "Route in het kort", distance: "Afstand", time: "Gebruikelijke reistijd", sedan: "Sedan vanaf", vip: "VIP Van vanaf", price: "Vaste prijs per voertuig" }
+  };
+  const t = copy[language] || copy.en;
+  return `<section class="route-facts" aria-label="${escapeHtml(t.title)}">
+    <h2>${escapeHtml(t.title)}</h2>
+    <div class="route-price-band">
+      <span><small>${escapeHtml(t.distance)}</small><strong>${route.distanceKm} km</strong></span>
+      <span><small>${escapeHtml(t.time)}</small><strong>~${route.durationMin} min</strong></span>
+      <span><small>${escapeHtml(t.sedan)}</small><strong>${money(route.prices["standard-sedan"])}</strong></span>
+      <span><small>${escapeHtml(t.vip)}</small><strong>${money(route.prices["vip-van"])}</strong></span>
+    </div>
+    <p><strong>${escapeHtml(t.price)}</strong></p>
+  </section>`;
 }
 
 function routeVisual(route) {
@@ -972,6 +993,7 @@ ${header(language)}
     </section>
     <section class="article-wrap">
       <article class="article route-article">
+        ${routeQuickFacts(route, language)}
         <h2>${article.pickupH}</h2>
         <p>${article.pickupP}</p>
         <h2>${article.localH}</h2>
