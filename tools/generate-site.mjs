@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260929-multilingual-route-seo";
+const buildStamp = "20260929-seo-hubs-v1";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -943,6 +943,17 @@ function routeArticleCopy(language) {
   return content[language] || content.en;
 }
 
+function routeSeoHubLinks(language) {
+  const links = {
+    en: [["/antalya-airport-transfer-prices/","Antalya Airport transfer prices 2026"],["/antalya-airport-taxi-vs-private-transfer/","Taxi vs private transfer"]],
+    de: [["/de/flughafen-antalya-transfer-preise/","Flughafen Antalya Transfer Preise 2026"],["/de/flughafen-antalya-taxi-oder-privattransfer/","Taxi oder Privattransfer"]],
+    pl: [["/pl/ceny-transferow-lotnisko-antalya/","Ceny transferów z lotniska Antalya 2026"],["/pl/taksowka-czy-prywatny-transfer-antalya/","Taksówka czy prywatny transfer"]],
+    ru: [["/ru/ceny-transfera-aeroport-antaliya/","Цены на трансфер из аэропорта Антальи 2026"],["/ru/taksi-ili-chastnyy-transfer-aeroport-antaliya/","Такси или частный трансфер"]],
+    nl: [["/nl/antalya-airport-transfer-prijzen/","Antalya Airport transfer prijzen 2026"],["/nl/antalya-airport-taxi-of-prive-transfer/","Taxi of privétransfer"]]
+  };
+  return `<div class="adjacent-links">${(links[language] || links.en).map(([href,label]) => `<a href="${href}">${escapeHtml(label)}</a>`).join("")}</div>`;
+}
+
 function routePage(route, language) {
   const l = languages[language];
   const page = route.content[language];
@@ -994,6 +1005,7 @@ ${header(language)}
     <section class="article-wrap">
       <article class="article route-article">
         ${routeQuickFacts(route, language)}
+        ${routeSeoHubLinks(language)}
         <h2>${article.pickupH}</h2>
         <p>${article.pickupP}</p>
         <h2>${article.localH}</h2>
