@@ -512,7 +512,7 @@ function counter(id, label, value) {
 function bookingForm(language, routeId = "") {
   const l = languages[language];
   const route = catalog.routes.find((item) => item.id === routeId);
-  const places = [...new Set(catalog.routes.flatMap((item) => [item.origin, item.destination]))];
+  const places = [...new Set(catalog.routes.flatMap((item) => [item.origin || "Antalya Airport (AYT)", item.destination]).filter(Boolean))];
   const options = (selected) => places.map((place) => `<option value="${escapeHtml(place)}"${place === selected ? " selected" : ""}>${escapeHtml(place)}</option>`).join("");
   return `
     <section class="booking-card" id="booking" aria-labelledby="bookingTitle">
