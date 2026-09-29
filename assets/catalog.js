@@ -78,23 +78,31 @@ window.AYTRideCatalog = {
       },
       "content": {
         "en": {
-          "title": "Antalya Airport to Lara Transfer - Fixed Price | AYT Ride",
-          "description": "Book a fixed-price private transfer from Antalya Airport to Lara and Kundu. Sedan and VIP van options, WhatsApp confirmation and pay on arrival.",
-          "h1": "Antalya Airport to Lara private transfer",
-          "intro": "Lara and Kundu are close to Antalya Airport, so this route is ideal for a fast hotel transfer after landing. AYT Ride gives you a private vehicle, a fixed total price per vehicle and WhatsApp confirmation before pickup.",
-          "local": "Most hotels in Lara and Kundu sit east of the city, around the resort strip and beach hotels. Share the exact hotel block or lobby name so the driver can confirm the cleanest meeting point.",
+          "title": "Antalya Airport to Lara Transfer | Price, Time & Taxi Alternative | AYT Ride",
+          "description": "Antalya Airport to Lara transfer: about 14 km and 20 minutes. Private sedan from €27, VIP van from €35. Fixed vehicle price, flight details and pay on arrival.",
+          "h1": "Antalya Airport to Lara Transfer — Price, Distance & Transfer Time",
+          "intro": "Travel from Antalya Airport (AYT) to Lara or Kundu in a private vehicle with a fixed total price. The route is about 14 km and usually takes around 20 minutes, depending on your hotel and traffic. Choose a sedan or VIP van and pay after the ride unless another arrangement is confirmed.",
+          "local": "Lara Beach and Kundu are among the closest resort areas to Antalya Airport. Most hotels are around 14–18 km from AYT. Enter your exact hotel or lobby name so the pickup and drop-off can be confirmed accurately.",
           "faq": [
             [
-              "How long is Antalya Airport to Lara?",
-              "The journey is usually around 20 minutes for Lara and Kundu hotels, depending on hotel location and traffic."
+              "How long is the transfer from Antalya Airport to Lara Beach?",
+              "The private transfer usually takes around 20 minutes. Journey time can vary with traffic and the exact Lara or Kundu hotel."
             ],
             [
-              "Is the price per person?",
-              "No. The displayed price is a fixed total price per vehicle for the selected route and vehicle."
+              "How far is Lara from Antalya Airport?",
+              "AYT Ride uses about 14 km for the main Lara / Kundu route. The exact distance depends on your hotel."
             ],
             [
-              "Can I book a return from Lara to Antalya Airport?",
-              "Yes. Choose return transfer in the booking form and add your return date and time."
+              "How much is a private transfer from Antalya Airport to Lara?",
+              "AYT Ride currently lists the Standard Sedan from €27 total per vehicle and the VIP Van from €35 total per vehicle for the Lara / Kundu route."
+            ],
+            [
+              "Is the transfer price per person?",
+              "No. The displayed route price is the total for the selected vehicle, not a per-person fare."
+            ],
+            [
+              "Can I book Lara to Antalya Airport as a return transfer?",
+              "Yes. Select a return transfer and add your return pickup date and time in the booking form."
             ]
           ]
         },
@@ -184,23 +192,31 @@ window.AYTRideCatalog = {
       },
       "content": {
         "en": {
-          "title": "Antalya Airport to Belek Transfer - Golf Resort Transfer | AYT Ride",
-          "description": "Fixed-price private transfer from Antalya Airport to Belek and Kadriye hotels. Sedan and VIP van options for families and golf luggage.",
-          "h1": "Antalya Airport to Belek private transfer",
-          "intro": "Belek and Kadriye are popular with resort guests and golf groups. AYT Ride confirms the vehicle, luggage space and pickup plan by WhatsApp before your ride.",
-          "local": "Belek hotels and golf resorts often have separate security gates. Add hotel name, golf bags and child seat needs in the booking notes.",
+          "title": "Antalya Airport to Belek Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Antalya Airport to Belek transfer: about 33 km and 35 minutes. Private sedan from €40, VIP van from €50. Fixed price, Kadriye hotels and golf luggage.",
+          "h1": "Antalya Airport to Belek Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Belek or Kadriye with a fixed total vehicle price. The route is about 33 km and usually takes around 35 minutes in normal traffic. Sedan and VIP van options are available for hotel guests, families and golf travellers.",
+          "local": "Belek and Kadriye resorts are spread between golf courses and hotel zones east of Antalya Airport. Exact journey time varies by resort entrance and traffic. Add the hotel name, golf bags and child-seat needs to your request.",
           "faq": [
             [
+              "How long is the transfer from Antalya Airport to Belek?",
+              "The journey is usually around 35 minutes in normal traffic, depending on your hotel in Belek or Kadriye."
+            ],
+            [
+              "How far is Belek from Antalya Airport?",
+              "The main AYT Ride Belek / Kadriye route is about 33 km from Antalya Airport."
+            ],
+            [
+              "How much is a private transfer from Antalya Airport to Belek?",
+              "AYT Ride currently lists the Standard Sedan from €40 total per vehicle and the VIP Van from €50 total per vehicle."
+            ],
+            [
               "Is a VIP van better for Belek golf resorts?",
-              "For golf bags or larger groups, the VIP Van gives more luggage space than the sedan."
+              "A VIP van offers more luggage space and is usually the more practical option for golf bags, families or larger groups."
             ],
             [
-              "How long is the Belek transfer?",
-              "The usual journey time is around 35 minutes from Antalya Airport."
-            ],
-            [
-              "Can the driver track my flight?",
-              "Share your flight number in the form so the operator can plan the pickup around arrival time."
+              "Can I book Belek to Antalya Airport?",
+              "Yes. A return airport transfer can be added in the booking form."
             ]
           ]
         },
@@ -290,19 +306,27 @@ window.AYTRideCatalog = {
       },
       "content": {
         "en": {
-          "title": "Antalya Airport to Kemer Transfer - Fixed Price | AYT Ride",
-          "description": "Private transfer from Antalya Airport to Kemer with fixed total price, WhatsApp confirmation, sedan and VIP van options.",
-          "h1": "Antalya Airport to Kemer private transfer",
-          "intro": "Kemer transfers follow the coastal road west of Antalya. A private transfer avoids shared shuttle waiting and keeps the luggage plan clear.",
-          "local": "For Beldibi, Goynuk, Kiris, Camyuva or Tekirova, write the exact hotel or area in the notes so the operator can confirm the route.",
+          "title": "Antalya Airport to Kemer Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Antalya Airport to Kemer transfer: about 58 km and 65 minutes. Private sedan from €57, VIP van from €70. Fixed vehicle price and pay on arrival.",
+          "h1": "Antalya Airport to Kemer Transfer — Price, Distance & Transfer Time",
+          "intro": "Travel from Antalya Airport (AYT) to Kemer by private sedan or VIP van with a fixed total vehicle price. The main Kemer route is about 58 km and usually takes around 65 minutes, depending on traffic and your resort area.",
+          "local": "Kemer's resort corridor includes Beldibi, Göynük, Kemer centre, Kiriş, Çamyuva and Tekirova. Journey distance and time change by hotel, so enter the exact resort or accommodation when booking.",
           "faq": [
             [
-              "How long does Kemer take?",
-              "Kemer is usually around 65 minutes from Antalya Airport."
+              "How long is the transfer from Antalya Airport to Kemer?",
+              "The main Kemer transfer usually takes around 65 minutes. Beldibi can be shorter, while Çamyuva and Tekirova can take longer."
             ],
             [
-              "Do you cover Kemer resort areas?",
-              "Yes. Add the exact hotel or area such as Beldibi, Goynuk or Camyuva."
+              "How far is Kemer from Antalya Airport?",
+              "The main AYT Ride Kemer route is about 58 km. Exact distance depends on the resort area."
+            ],
+            [
+              "How much is a private transfer from Antalya Airport to Kemer?",
+              "AYT Ride currently lists the Standard Sedan from €57 total per vehicle and the VIP Van from €70 total per vehicle."
+            ],
+            [
+              "Which Kemer resort areas do you cover?",
+              "You can request Beldibi, Göynük, Kemer centre, Kiriş, Çamyuva or Tekirova by entering the exact hotel or area."
             ],
             [
               "Can I pay after the ride?",
@@ -396,23 +420,31 @@ window.AYTRideCatalog = {
       },
       "content": {
         "en": {
-          "title": "Antalya Airport to Side Transfer - Fixed Price | AYT Ride",
-          "description": "Book a private transfer from Antalya Airport to Side and Manavgat. Fixed total price per vehicle, WhatsApp confirmation and pay on arrival.",
-          "h1": "Antalya Airport to Side private transfer",
-          "intro": "Side and Manavgat need a longer eastbound transfer from Antalya Airport. A private ride keeps the route, vehicle and price clear before departure.",
-          "local": "Side has resort zones around Kumkoy, Evrenseki, Colakli and Sorgun. Add the exact hotel area to help confirm pickup timing.",
+          "title": "Antalya Airport to Side Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Antalya Airport to Side transfer: about 65 km and 60 minutes. Private sedan from €63, VIP van from €75. Side, Kumköy, Evrenseki and Manavgat.",
+          "h1": "Antalya Airport to Side Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private Antalya Airport (AYT) to Side transfer with a fixed total vehicle price. The main route is about 65 km and typically takes around 60 minutes in normal traffic. Choose a sedan or VIP van for Side, Kumköy, Evrenseki, Çolaklı or Manavgat.",
+          "local": "Side and Manavgat's hotel zones stretch along the D400 corridor, including Kumköy, Evrenseki, Çolaklı and Titreyengöl. Exact transfer time depends on the hotel zone and seasonal traffic, so enter your accommodation when booking.",
           "faq": [
             [
-              "How long is Antalya Airport to Side?",
-              "The trip is usually around 60 minutes, depending on the hotel zone and traffic."
+              "How long is the transfer from Antalya Airport to Side?",
+              "The main Side route usually takes around 60 minutes in normal traffic. The exact time depends on traffic and your hotel zone."
             ],
             [
-              "Does the price include Manavgat?",
-              "The Side / Manavgat route is covered in the fixed-price route group."
+              "How far is Side from Antalya Airport?",
+              "The main AYT Ride Antalya Airport to Side route is about 65 km."
             ],
             [
-              "Can I request child seats?",
-              "Yes. Add child seats in the booking form before confirming."
+              "How much is a private transfer from Antalya Airport to Side?",
+              "AYT Ride currently lists the Standard Sedan from €63 total per vehicle and the VIP Van from €75 total per vehicle."
+            ],
+            [
+              "Do you cover Kumköy, Evrenseki and Manavgat?",
+              "Yes. Enter your exact hotel or area in the booking form so the route can be confirmed."
+            ],
+            [
+              "Can I book Side to Antalya Airport?",
+              "Yes. You can add a return transfer and enter your hotel pickup time."
             ]
           ]
         },
@@ -758,23 +790,31 @@ window.AYTRideCatalog = {
       },
       "content": {
         "en": {
-          "title": "Antalya Airport to Alanya Transfer - Fixed Price | AYT Ride",
-          "description": "Private transfer from Antalya Airport to Alanya with fixed total price, flight details, WhatsApp confirmation and pay on arrival.",
-          "h1": "Antalya Airport to Alanya private transfer",
-          "intro": "Alanya is one of the longest popular routes from Antalya Airport. Booking in advance gives your group a direct private ride and a confirmed price before departure.",
-          "local": "For Okurcalar, Avsallar, Turkler, Konakli, Mahmutlar or central Alanya, write the exact hotel or apartment address in the notes.",
+          "title": "Antalya Airport to Alanya Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Antalya Airport to Alanya transfer: about 125 km and 120 minutes. Private sedan €105, VIP van €115. Fixed vehicle price, hotel pickup and pay on arrival.",
+          "h1": "Antalya Airport to Alanya Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Alanya with a fixed total vehicle price. The main route is about 125 km and typically takes around 120 minutes, depending on traffic and your hotel area. Choose a sedan or VIP van and travel directly to your accommodation.",
+          "local": "The Alanya transfer corridor includes Okurcalar, Avsallar, Türkler, Konaklı, Alanya centre and Mahmutlar. These areas cover a long coastline, so the exact distance and journey time depend on your hotel. Enter the accommodation name for an accurate pickup plan.",
           "faq": [
             [
-              "How long is the Alanya transfer?",
-              "The journey is usually around 120 minutes, depending on the exact hotel area."
+              "How long is the transfer from Antalya Airport to Alanya?",
+              "The main Alanya route usually takes around 120 minutes. Hotels in Okurcalar or Avsallar can be reached sooner, while central and eastern Alanya can take longer."
             ],
             [
-              "Is the price fixed?",
-              "For the listed Antalya Airport to Alanya route, the displayed price is the total per selected vehicle."
+              "How far is Alanya from Antalya Airport?",
+              "The main AYT Ride route is about 125 km, although the exact distance varies by hotel area."
             ],
             [
-              "Can I book late-night arrival?",
-              "Yes. Add the flight number and pickup time so the operator can confirm the plan."
+              "How much is a private transfer from Antalya Airport to Alanya?",
+              "AYT Ride currently lists the Standard Sedan at €105 total per vehicle and the VIP Van at €115 total per vehicle."
+            ],
+            [
+              "Is a private transfer direct to my Alanya hotel?",
+              "Yes. Enter the exact hotel or accommodation so the transfer can be planned door to door where vehicle access is available."
+            ],
+            [
+              "Can I book Alanya to Antalya Airport for my return?",
+              "Yes. Add a return transfer and provide your hotel pickup date and time."
             ]
           ]
         },
