@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260929-booking-audit-v2";
+const buildStamp = "20260929-quote-layout-v3";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -616,9 +616,11 @@ function bookingForm(language, routeId = "") {
         </div>
 
         <div class="quote-panel hidden" id="quotePanel" aria-live="polite">
-          <span>${l.perVehicle}</span>
-          <strong id="quoteTotal">€30 TOTAL</strong>
-          <small id="quoteMeta">Standard Sedan / per vehicle</small>
+          <div class="quote-summary">
+            <span>${l.perVehicle}</span>
+            <strong id="quoteTotal">€30 TOTAL</strong>
+            <small id="quoteMeta">Standard Sedan / per vehicle</small>
+          </div>
           <button class="upsell-btn hidden" type="button" id="returnUpsell">${l.returnUpsell}</button>
         </div>
 

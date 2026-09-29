@@ -38,3 +38,8 @@ test("return trip controls resolve the booking form before reading return fields
   assert.match(returnControls, /const e = els\(\);/);
   assert.match(returnControls, /e\.returnDate/);
 });
+
+test("quote summary keeps price copy grouped away from the return upsell", () => {
+  assert.match(generator, /class="quote-summary"/);
+  assert.match(generator, /class="upsell-btn hidden"/);
+});

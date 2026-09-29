@@ -143,9 +143,9 @@
 
 .quote-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px 12px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+  align-items: stretch;
   border: 1px solid #bfe7d7;
   border-radius: var(--radius);
   background:
@@ -154,28 +154,42 @@
   padding: 15px;
 }
 
+.quote-summary {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 3px 0;
+}
+
 .quote-panel span,
 .quote-panel small {
+  display: block;
   color: var(--muted);
   font-weight: 850;
+  line-height: 1.35;
 }
 
 .quote-panel strong {
+  display: block;
   color: var(--green-2);
   font-size: 1.55rem;
-  line-height: 1.05;
+  line-height: 1.1;
 }
 
 .upsell-btn {
-  grid-row: span 2;
-  min-height: 42px;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
   border: 1px solid #bfe7d7;
   border-radius: var(--radius);
   background: #fff;
   color: var(--green-2);
-  padding: 0 12px;
+  padding: 10px 14px;
   cursor: pointer;
   font-weight: 900;
+  line-height: 1.3;
+  white-space: normal;
 }
 
 .booking-status {
@@ -386,10 +400,6 @@
   .quote-panel,
   .consent-bar {
     grid-template-columns: 1fr;
-  }
-
-  .upsell-btn {
-    grid-row: auto;
   }
 
   .route-card > button {
