@@ -207,8 +207,9 @@
 
   function getRouteByPlaces(origin, destination) {
     return catalog.routes.find((route) => {
-      return (route.origin === origin && route.destination === destination) ||
-        (route.origin === destination && route.destination === origin);
+      const routeOrigin = route.origin || "Antalya Airport (AYT)";
+      return (routeOrigin === origin && route.destination === destination) ||
+        (routeOrigin === destination && route.destination === origin);
     });
   }
 
@@ -763,6 +764,7 @@
     document.querySelectorAll("[data-trip]").forEach((button) => {
       button.addEventListener("click", () => {
         state.tripType = button.dataset.trip;
+        if (state.tripType === "return" && e.returnDate && !e.returnDate.value) e.returnDate.value = e.pickupDate?.value || todayIso();
         document.querySelectorAll("[data-trip]").forEach((item) => {
           const active = item === button;
           item.classList.toggle("active", active);
@@ -786,10 +788,14 @@
     const routeDefaults = routeSelectionDefaults();
     fillSelect(e.pickup, routeDefaults.pickup);
     fillSelect(e.dropoff, routeDefaults.dropoff);
-    e.pickupDate.min = todayIso();
-    e.pickupDate.value = e.pickupDate.value || todayIso();
+    const today = todayIso();
+    e.pickupDate.min = today;
+    e.pickupDate.value = today;
     e.pickupTime.value = e.pickupTime.value || "11:30";
-    if (e.returnDate) e.returnDate.min = todayIso();
+    if (e.returnDate) {
+      e.returnDate.min = today;
+      e.returnDate.value = e.returnDate.value || today;
+    }
 
     initTripButtons();
     renderRoutes();
