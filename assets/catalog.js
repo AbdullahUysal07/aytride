@@ -226,6 +226,173 @@ window.AYTRideCatalog = {
       }
     },
     {
+      "id": "kundu",
+      "destination": "Kundu",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Kundu",
+      "distanceKm": 16,
+      "durationMin": 22,
+      "image": "/assets/routes/lara-kundu.jpg",
+      "prices": {
+        "standard-sedan": 27,
+        "vip-van": 35
+      },
+      "slugs": {
+        "en": "antalya-airport-to-kundu-transfer",
+        "de": "flughafen-antalya-kundu-transfer",
+        "pl": "transfer-lotnisko-antalya-kundu",
+        "ru": "transfer-aeroport-antaliya-kundu",
+        "nl": "antalya-airport-kundu-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Kundu Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Kundu with a fixed total vehicle price. The route is approximately 16 km and typically takes around 22 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Kundu Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Kundu with a fixed total vehicle price. The route is approximately 16 km and typically takes around 22 minutes, depending on traffic and your exact hotel.",
+          "local": "Kundu is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Kundu?",
+              "The journey is typically around 22 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Kundu from Antalya Airport?",
+              "The approximate route distance is 16 km."
+            ],
+            [
+              "How much is a private transfer to Kundu?",
+              "The current route price is from €27 for a Standard Sedan and €35 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Kundu Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kundu zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 16 km und dauert normalerweise rund 22 Minuten.",
+          "h1": "Flughafen Antalya nach Kundu Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kundu zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 16 km und dauert normalerweise rund 22 Minuten.",
+          "local": "Kundu gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Kundu?",
+              "Die Fahrt dauert normalerweise rund 22 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Kundu vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 16 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Kundu?",
+              "Aktuell ab €27 für einen Standard Sedan und €35 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Kundu | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kundu ze stałą ceną za cały pojazd. Trasa ma około 16 km i zwykle zajmuje około 22 minut.",
+          "h1": "Transfer z lotniska Antalya do Kundu — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kundu ze stałą ceną za cały pojazd. Trasa ma około 16 km i zwykle zajmuje około 22 minut.",
+          "local": "Kundu jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Kundu?",
+              "Zwykle około 22 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Kundu od lotniska Antalya?",
+              "Przybliżona odległość wynosi 16 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Kundu?",
+              "Obecnie od €27 za Standard Sedan i €35 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Kundu | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kundu по фиксированной общей цене за автомобиль. Маршрут составляет около 16 км и обычно занимает примерно 22 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Kundu — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kundu по фиксированной общей цене за автомобиль. Маршрут составляет около 16 км и обычно занимает примерно 22 минут.",
+          "local": "Kundu входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Kundu?",
+              "Обычно около 22 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Kundu?",
+              "Приблизительное расстояние составляет 16 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Kundu?",
+              "Сейчас от €27 за Standard Sedan и €35 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Kundu Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Kundu voor een vaste totaalprijs per voertuig. De route is ongeveer 16 km en duurt normaal circa 22 minuten.",
+          "h1": "Antalya Airport naar Kundu Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Kundu voor een vaste totaalprijs per voertuig. De route is ongeveer 16 km en duurt normaal circa 22 minuten.",
+          "local": "Kundu maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Kundu?",
+              "Normaal ongeveer 22 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Kundu van Antalya Airport?",
+              "De geschatte afstand is 16 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Kundu?",
+              "Momenteel vanaf €27 voor een Standard Sedan en €35 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
       "id": "belek",
       "origin": "Antalya Airport (AYT)",
       "destination": "Belek / Kadriye",
@@ -388,6 +555,173 @@ window.AYTRideCatalog = {
             [
               "Kan ik een retourtransfer naar Antalya Airport boeken?",
               "Ja. Kies retour in het formulier en voeg de datum en ophaaltijd bij uw hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "kadriye",
+      "destination": "Kadriye",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Kadriye",
+      "distanceKm": 30,
+      "durationMin": 32,
+      "image": "/assets/routes/belek-kadriye.jpg",
+      "prices": {
+        "standard-sedan": 40,
+        "vip-van": 50
+      },
+      "slugs": {
+        "en": "antalya-airport-to-kadriye-transfer",
+        "de": "flughafen-antalya-kadriye-transfer",
+        "pl": "transfer-lotnisko-antalya-kadriye",
+        "ru": "transfer-aeroport-antaliya-kadriye",
+        "nl": "antalya-airport-kadriye-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Kadriye Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Kadriye with a fixed total vehicle price. The route is approximately 30 km and typically takes around 32 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Kadriye Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Kadriye with a fixed total vehicle price. The route is approximately 30 km and typically takes around 32 minutes, depending on traffic and your exact hotel.",
+          "local": "Kadriye is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Kadriye?",
+              "The journey is typically around 32 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Kadriye from Antalya Airport?",
+              "The approximate route distance is 30 km."
+            ],
+            [
+              "How much is a private transfer to Kadriye?",
+              "The current route price is from €40 for a Standard Sedan and €50 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Kadriye Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kadriye zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 30 km und dauert normalerweise rund 32 Minuten.",
+          "h1": "Flughafen Antalya nach Kadriye Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kadriye zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 30 km und dauert normalerweise rund 32 Minuten.",
+          "local": "Kadriye gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Kadriye?",
+              "Die Fahrt dauert normalerweise rund 32 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Kadriye vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 30 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Kadriye?",
+              "Aktuell ab €40 für einen Standard Sedan und €50 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Kadriye | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kadriye ze stałą ceną za cały pojazd. Trasa ma około 30 km i zwykle zajmuje około 32 minut.",
+          "h1": "Transfer z lotniska Antalya do Kadriye — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kadriye ze stałą ceną za cały pojazd. Trasa ma około 30 km i zwykle zajmuje około 32 minut.",
+          "local": "Kadriye jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Kadriye?",
+              "Zwykle około 32 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Kadriye od lotniska Antalya?",
+              "Przybliżona odległość wynosi 30 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Kadriye?",
+              "Obecnie od €40 za Standard Sedan i €50 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Kadriye | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kadriye по фиксированной общей цене за автомобиль. Маршрут составляет около 30 км и обычно занимает примерно 32 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Kadriye — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kadriye по фиксированной общей цене за автомобиль. Маршрут составляет около 30 км и обычно занимает примерно 32 минут.",
+          "local": "Kadriye входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Kadriye?",
+              "Обычно около 32 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Kadriye?",
+              "Приблизительное расстояние составляет 30 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Kadriye?",
+              "Сейчас от €40 за Standard Sedan и €50 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Kadriye Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Kadriye voor een vaste totaalprijs per voertuig. De route is ongeveer 30 km en duurt normaal circa 32 minuten.",
+          "h1": "Antalya Airport naar Kadriye Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Kadriye voor een vaste totaalprijs per voertuig. De route is ongeveer 30 km en duurt normaal circa 32 minuten.",
+          "local": "Kadriye maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Kadriye?",
+              "Normaal ongeveer 32 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Kadriye van Antalya Airport?",
+              "De geschatte afstand is 30 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Kadriye?",
+              "Momenteel vanaf €40 voor een Standard Sedan en €50 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
             ]
           ]
         }
@@ -562,6 +896,841 @@ window.AYTRideCatalog = {
       }
     },
     {
+      "id": "tekirova",
+      "destination": "Tekirova",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Tekirova",
+      "distanceKm": 75,
+      "durationMin": 85,
+      "image": "/assets/routes/kemer.jpg",
+      "prices": {
+        "standard-sedan": 57,
+        "vip-van": 70
+      },
+      "slugs": {
+        "en": "antalya-airport-to-tekirova-transfer",
+        "de": "flughafen-antalya-tekirova-transfer",
+        "pl": "transfer-lotnisko-antalya-tekirova",
+        "ru": "transfer-aeroport-antaliya-tekirova",
+        "nl": "antalya-airport-tekirova-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Tekirova Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Tekirova with a fixed total vehicle price. The route is approximately 75 km and typically takes around 85 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Tekirova Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Tekirova with a fixed total vehicle price. The route is approximately 75 km and typically takes around 85 minutes, depending on traffic and your exact hotel.",
+          "local": "Tekirova is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Tekirova?",
+              "The journey is typically around 85 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Tekirova from Antalya Airport?",
+              "The approximate route distance is 75 km."
+            ],
+            [
+              "How much is a private transfer to Tekirova?",
+              "The current route price is from €57 for a Standard Sedan and €70 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Tekirova Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Tekirova zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 75 km und dauert normalerweise rund 85 Minuten.",
+          "h1": "Flughafen Antalya nach Tekirova Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Tekirova zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 75 km und dauert normalerweise rund 85 Minuten.",
+          "local": "Tekirova gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Tekirova?",
+              "Die Fahrt dauert normalerweise rund 85 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Tekirova vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 75 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Tekirova?",
+              "Aktuell ab €57 für einen Standard Sedan und €70 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Tekirova | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Tekirova ze stałą ceną za cały pojazd. Trasa ma około 75 km i zwykle zajmuje około 85 minut.",
+          "h1": "Transfer z lotniska Antalya do Tekirova — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Tekirova ze stałą ceną za cały pojazd. Trasa ma około 75 km i zwykle zajmuje około 85 minut.",
+          "local": "Tekirova jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Tekirova?",
+              "Zwykle około 85 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Tekirova od lotniska Antalya?",
+              "Przybliżona odległość wynosi 75 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Tekirova?",
+              "Obecnie od €57 za Standard Sedan i €70 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Tekirova | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Tekirova по фиксированной общей цене за автомобиль. Маршрут составляет около 75 км и обычно занимает примерно 85 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Tekirova — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Tekirova по фиксированной общей цене за автомобиль. Маршрут составляет около 75 км и обычно занимает примерно 85 минут.",
+          "local": "Tekirova входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Tekirova?",
+              "Обычно около 85 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Tekirova?",
+              "Приблизительное расстояние составляет 75 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Tekirova?",
+              "Сейчас от €57 за Standard Sedan и €70 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Tekirova Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Tekirova voor een vaste totaalprijs per voertuig. De route is ongeveer 75 km en duurt normaal circa 85 minuten.",
+          "h1": "Antalya Airport naar Tekirova Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Tekirova voor een vaste totaalprijs per voertuig. De route is ongeveer 75 km en duurt normaal circa 85 minuten.",
+          "local": "Tekirova maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Tekirova?",
+              "Normaal ongeveer 85 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Tekirova van Antalya Airport?",
+              "De geschatte afstand is 75 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Tekirova?",
+              "Momenteel vanaf €57 voor een Standard Sedan en €70 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "camyuva",
+      "destination": "Çamyuva",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Çamyuva",
+      "distanceKm": 64,
+      "durationMin": 72,
+      "image": "/assets/routes/kemer.jpg",
+      "prices": {
+        "standard-sedan": 57,
+        "vip-van": 70
+      },
+      "slugs": {
+        "en": "antalya-airport-to-camyuva-transfer",
+        "de": "flughafen-antalya-camyuva-transfer",
+        "pl": "transfer-lotnisko-antalya-camyuva",
+        "ru": "transfer-aeroport-antaliya-camyuva",
+        "nl": "antalya-airport-camyuva-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Çamyuva Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Çamyuva with a fixed total vehicle price. The route is approximately 64 km and typically takes around 72 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Çamyuva Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Çamyuva with a fixed total vehicle price. The route is approximately 64 km and typically takes around 72 minutes, depending on traffic and your exact hotel.",
+          "local": "Çamyuva is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Çamyuva?",
+              "The journey is typically around 72 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Çamyuva from Antalya Airport?",
+              "The approximate route distance is 64 km."
+            ],
+            [
+              "How much is a private transfer to Çamyuva?",
+              "The current route price is from €57 for a Standard Sedan and €70 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Çamyuva Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Çamyuva zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 64 km und dauert normalerweise rund 72 Minuten.",
+          "h1": "Flughafen Antalya nach Çamyuva Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Çamyuva zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 64 km und dauert normalerweise rund 72 Minuten.",
+          "local": "Çamyuva gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Çamyuva?",
+              "Die Fahrt dauert normalerweise rund 72 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Çamyuva vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 64 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Çamyuva?",
+              "Aktuell ab €57 für einen Standard Sedan und €70 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Çamyuva | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Çamyuva ze stałą ceną za cały pojazd. Trasa ma około 64 km i zwykle zajmuje około 72 minut.",
+          "h1": "Transfer z lotniska Antalya do Çamyuva — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Çamyuva ze stałą ceną za cały pojazd. Trasa ma około 64 km i zwykle zajmuje około 72 minut.",
+          "local": "Çamyuva jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Çamyuva?",
+              "Zwykle około 72 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Çamyuva od lotniska Antalya?",
+              "Przybliżona odległość wynosi 64 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Çamyuva?",
+              "Obecnie od €57 za Standard Sedan i €70 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Çamyuva | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Çamyuva по фиксированной общей цене за автомобиль. Маршрут составляет около 64 км и обычно занимает примерно 72 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Çamyuva — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Çamyuva по фиксированной общей цене за автомобиль. Маршрут составляет около 64 км и обычно занимает примерно 72 минут.",
+          "local": "Çamyuva входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Çamyuva?",
+              "Обычно около 72 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Çamyuva?",
+              "Приблизительное расстояние составляет 64 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Çamyuva?",
+              "Сейчас от €57 за Standard Sedan и €70 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Çamyuva Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Çamyuva voor een vaste totaalprijs per voertuig. De route is ongeveer 64 km en duurt normaal circa 72 minuten.",
+          "h1": "Antalya Airport naar Çamyuva Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Çamyuva voor een vaste totaalprijs per voertuig. De route is ongeveer 64 km en duurt normaal circa 72 minuten.",
+          "local": "Çamyuva maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Çamyuva?",
+              "Normaal ongeveer 72 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Çamyuva van Antalya Airport?",
+              "De geschatte afstand is 64 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Çamyuva?",
+              "Momenteel vanaf €57 voor een Standard Sedan en €70 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "kiris",
+      "destination": "Kiriş",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Kiriş",
+      "distanceKm": 61,
+      "durationMin": 70,
+      "image": "/assets/routes/kemer.jpg",
+      "prices": {
+        "standard-sedan": 57,
+        "vip-van": 70
+      },
+      "slugs": {
+        "en": "antalya-airport-to-kiris-transfer",
+        "de": "flughafen-antalya-kiris-transfer",
+        "pl": "transfer-lotnisko-antalya-kiris",
+        "ru": "transfer-aeroport-antaliya-kiris",
+        "nl": "antalya-airport-kiris-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Kiriş Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Kiriş with a fixed total vehicle price. The route is approximately 61 km and typically takes around 70 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Kiriş Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Kiriş with a fixed total vehicle price. The route is approximately 61 km and typically takes around 70 minutes, depending on traffic and your exact hotel.",
+          "local": "Kiriş is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Kiriş?",
+              "The journey is typically around 70 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Kiriş from Antalya Airport?",
+              "The approximate route distance is 61 km."
+            ],
+            [
+              "How much is a private transfer to Kiriş?",
+              "The current route price is from €57 for a Standard Sedan and €70 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Kiriş Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kiriş zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 61 km und dauert normalerweise rund 70 Minuten.",
+          "h1": "Flughafen Antalya nach Kiriş Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Kiriş zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 61 km und dauert normalerweise rund 70 Minuten.",
+          "local": "Kiriş gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Kiriş?",
+              "Die Fahrt dauert normalerweise rund 70 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Kiriş vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 61 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Kiriş?",
+              "Aktuell ab €57 für einen Standard Sedan und €70 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Kiriş | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kiriş ze stałą ceną za cały pojazd. Trasa ma około 61 km i zwykle zajmuje około 70 minut.",
+          "h1": "Transfer z lotniska Antalya do Kiriş — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Kiriş ze stałą ceną za cały pojazd. Trasa ma około 61 km i zwykle zajmuje około 70 minut.",
+          "local": "Kiriş jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Kiriş?",
+              "Zwykle około 70 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Kiriş od lotniska Antalya?",
+              "Przybliżona odległość wynosi 61 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Kiriş?",
+              "Obecnie od €57 za Standard Sedan i €70 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Kiriş | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kiriş по фиксированной общей цене за автомобиль. Маршрут составляет около 61 км и обычно занимает примерно 70 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Kiriş — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Kiriş по фиксированной общей цене за автомобиль. Маршрут составляет около 61 км и обычно занимает примерно 70 минут.",
+          "local": "Kiriş входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Kiriş?",
+              "Обычно около 70 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Kiriş?",
+              "Приблизительное расстояние составляет 61 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Kiriş?",
+              "Сейчас от €57 за Standard Sedan и €70 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Kiriş Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Kiriş voor een vaste totaalprijs per voertuig. De route is ongeveer 61 km en duurt normaal circa 70 minuten.",
+          "h1": "Antalya Airport naar Kiriş Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Kiriş voor een vaste totaalprijs per voertuig. De route is ongeveer 61 km en duurt normaal circa 70 minuten.",
+          "local": "Kiriş maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Kiriş?",
+              "Normaal ongeveer 70 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Kiriş van Antalya Airport?",
+              "De geschatte afstand is 61 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Kiriş?",
+              "Momenteel vanaf €57 voor een Standard Sedan en €70 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "goynuk",
+      "destination": "Göynük",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Göynük",
+      "distanceKm": 50,
+      "durationMin": 55,
+      "image": "/assets/routes/kemer.jpg",
+      "prices": {
+        "standard-sedan": 57,
+        "vip-van": 70
+      },
+      "slugs": {
+        "en": "antalya-airport-to-goynuk-transfer",
+        "de": "flughafen-antalya-goynuk-transfer",
+        "pl": "transfer-lotnisko-antalya-goynuk",
+        "ru": "transfer-aeroport-antaliya-goynuk",
+        "nl": "antalya-airport-goynuk-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Göynük Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Göynük with a fixed total vehicle price. The route is approximately 50 km and typically takes around 55 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Göynük Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Göynük with a fixed total vehicle price. The route is approximately 50 km and typically takes around 55 minutes, depending on traffic and your exact hotel.",
+          "local": "Göynük is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Göynük?",
+              "The journey is typically around 55 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Göynük from Antalya Airport?",
+              "The approximate route distance is 50 km."
+            ],
+            [
+              "How much is a private transfer to Göynük?",
+              "The current route price is from €57 for a Standard Sedan and €70 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Göynük Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Göynük zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 50 km und dauert normalerweise rund 55 Minuten.",
+          "h1": "Flughafen Antalya nach Göynük Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Göynük zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 50 km und dauert normalerweise rund 55 Minuten.",
+          "local": "Göynük gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Göynük?",
+              "Die Fahrt dauert normalerweise rund 55 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Göynük vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 50 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Göynük?",
+              "Aktuell ab €57 für einen Standard Sedan und €70 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Göynük | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Göynük ze stałą ceną za cały pojazd. Trasa ma około 50 km i zwykle zajmuje około 55 minut.",
+          "h1": "Transfer z lotniska Antalya do Göynük — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Göynük ze stałą ceną za cały pojazd. Trasa ma około 50 km i zwykle zajmuje około 55 minut.",
+          "local": "Göynük jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Göynük?",
+              "Zwykle około 55 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Göynük od lotniska Antalya?",
+              "Przybliżona odległość wynosi 50 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Göynük?",
+              "Obecnie od €57 za Standard Sedan i €70 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Göynük | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Göynük по фиксированной общей цене за автомобиль. Маршрут составляет около 50 км и обычно занимает примерно 55 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Göynük — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Göynük по фиксированной общей цене за автомобиль. Маршрут составляет около 50 км и обычно занимает примерно 55 минут.",
+          "local": "Göynük входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Göynük?",
+              "Обычно около 55 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Göynük?",
+              "Приблизительное расстояние составляет 50 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Göynük?",
+              "Сейчас от €57 за Standard Sedan и €70 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Göynük Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Göynük voor een vaste totaalprijs per voertuig. De route is ongeveer 50 km en duurt normaal circa 55 minuten.",
+          "h1": "Antalya Airport naar Göynük Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Göynük voor een vaste totaalprijs per voertuig. De route is ongeveer 50 km en duurt normaal circa 55 minuten.",
+          "local": "Göynük maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Göynük?",
+              "Normaal ongeveer 55 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Göynük van Antalya Airport?",
+              "De geschatte afstand is 50 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Göynük?",
+              "Momenteel vanaf €57 voor een Standard Sedan en €70 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "beldibi",
+      "destination": "Beldibi",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Beldibi",
+      "distanceKm": 43,
+      "durationMin": 50,
+      "image": "/assets/routes/kemer.jpg",
+      "prices": {
+        "standard-sedan": 57,
+        "vip-van": 70
+      },
+      "slugs": {
+        "en": "antalya-airport-to-beldibi-transfer",
+        "de": "flughafen-antalya-beldibi-transfer",
+        "pl": "transfer-lotnisko-antalya-beldibi",
+        "ru": "transfer-aeroport-antaliya-beldibi",
+        "nl": "antalya-airport-beldibi-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Beldibi Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Beldibi with a fixed total vehicle price. The route is approximately 43 km and typically takes around 50 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Beldibi Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Beldibi with a fixed total vehicle price. The route is approximately 43 km and typically takes around 50 minutes, depending on traffic and your exact hotel.",
+          "local": "Beldibi is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Beldibi?",
+              "The journey is typically around 50 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Beldibi from Antalya Airport?",
+              "The approximate route distance is 43 km."
+            ],
+            [
+              "How much is a private transfer to Beldibi?",
+              "The current route price is from €57 for a Standard Sedan and €70 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Beldibi Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Beldibi zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 43 km und dauert normalerweise rund 50 Minuten.",
+          "h1": "Flughafen Antalya nach Beldibi Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Beldibi zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 43 km und dauert normalerweise rund 50 Minuten.",
+          "local": "Beldibi gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Beldibi?",
+              "Die Fahrt dauert normalerweise rund 50 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Beldibi vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 43 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Beldibi?",
+              "Aktuell ab €57 für einen Standard Sedan und €70 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Beldibi | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Beldibi ze stałą ceną za cały pojazd. Trasa ma około 43 km i zwykle zajmuje około 50 minut.",
+          "h1": "Transfer z lotniska Antalya do Beldibi — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Beldibi ze stałą ceną za cały pojazd. Trasa ma około 43 km i zwykle zajmuje około 50 minut.",
+          "local": "Beldibi jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Beldibi?",
+              "Zwykle około 50 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Beldibi od lotniska Antalya?",
+              "Przybliżona odległość wynosi 43 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Beldibi?",
+              "Obecnie od €57 za Standard Sedan i €70 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Beldibi | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Beldibi по фиксированной общей цене за автомобиль. Маршрут составляет около 43 км и обычно занимает примерно 50 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Beldibi — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Beldibi по фиксированной общей цене за автомобиль. Маршрут составляет около 43 км и обычно занимает примерно 50 минут.",
+          "local": "Beldibi входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Beldibi?",
+              "Обычно около 50 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Beldibi?",
+              "Приблизительное расстояние составляет 43 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Beldibi?",
+              "Сейчас от €57 за Standard Sedan и €70 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Beldibi Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Beldibi voor een vaste totaalprijs per voertuig. De route is ongeveer 43 km en duurt normaal circa 50 minuten.",
+          "h1": "Antalya Airport naar Beldibi Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Beldibi voor een vaste totaalprijs per voertuig. De route is ongeveer 43 km en duurt normaal circa 50 minuten.",
+          "local": "Beldibi maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Beldibi?",
+              "Normaal ongeveer 50 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Beldibi van Antalya Airport?",
+              "De geschatte afstand is 43 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Beldibi?",
+              "Momenteel vanaf €57 voor een Standard Sedan en €70 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
       "id": "side",
       "origin": "Antalya Airport (AYT)",
       "destination": "Side / Manavgat",
@@ -724,6 +1893,340 @@ window.AYTRideCatalog = {
             [
               "Kan ik een retourtransfer naar Antalya Airport boeken?",
               "Ja. Kies retour in het formulier en voeg de datum en ophaaltijd bij uw hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "manavgat",
+      "destination": "Manavgat",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Manavgat",
+      "distanceKm": 70,
+      "durationMin": 65,
+      "image": "/assets/routes/side-manavgat.jpg",
+      "prices": {
+        "standard-sedan": 63,
+        "vip-van": 75
+      },
+      "slugs": {
+        "en": "antalya-airport-to-manavgat-transfer",
+        "de": "flughafen-antalya-manavgat-transfer",
+        "pl": "transfer-lotnisko-antalya-manavgat",
+        "ru": "transfer-aeroport-antaliya-manavgat",
+        "nl": "antalya-airport-manavgat-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Manavgat Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Manavgat with a fixed total vehicle price. The route is approximately 70 km and typically takes around 65 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Manavgat Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Manavgat with a fixed total vehicle price. The route is approximately 70 km and typically takes around 65 minutes, depending on traffic and your exact hotel.",
+          "local": "Manavgat is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Manavgat?",
+              "The journey is typically around 65 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Manavgat from Antalya Airport?",
+              "The approximate route distance is 70 km."
+            ],
+            [
+              "How much is a private transfer to Manavgat?",
+              "The current route price is from €63 for a Standard Sedan and €75 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Manavgat Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Manavgat zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 70 km und dauert normalerweise rund 65 Minuten.",
+          "h1": "Flughafen Antalya nach Manavgat Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Manavgat zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 70 km und dauert normalerweise rund 65 Minuten.",
+          "local": "Manavgat gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Manavgat?",
+              "Die Fahrt dauert normalerweise rund 65 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Manavgat vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 70 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Manavgat?",
+              "Aktuell ab €63 für einen Standard Sedan und €75 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Manavgat | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Manavgat ze stałą ceną za cały pojazd. Trasa ma około 70 km i zwykle zajmuje około 65 minut.",
+          "h1": "Transfer z lotniska Antalya do Manavgat — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Manavgat ze stałą ceną za cały pojazd. Trasa ma około 70 km i zwykle zajmuje około 65 minut.",
+          "local": "Manavgat jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Manavgat?",
+              "Zwykle około 65 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Manavgat od lotniska Antalya?",
+              "Przybliżona odległość wynosi 70 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Manavgat?",
+              "Obecnie od €63 za Standard Sedan i €75 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Manavgat | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Manavgat по фиксированной общей цене за автомобиль. Маршрут составляет около 70 км и обычно занимает примерно 65 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Manavgat — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Manavgat по фиксированной общей цене за автомобиль. Маршрут составляет около 70 км и обычно занимает примерно 65 минут.",
+          "local": "Manavgat входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Manavgat?",
+              "Обычно около 65 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Manavgat?",
+              "Приблизительное расстояние составляет 70 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Manavgat?",
+              "Сейчас от €63 за Standard Sedan и €75 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Manavgat Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Manavgat voor een vaste totaalprijs per voertuig. De route is ongeveer 70 km en duurt normaal circa 65 minuten.",
+          "h1": "Antalya Airport naar Manavgat Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Manavgat voor een vaste totaalprijs per voertuig. De route is ongeveer 70 km en duurt normaal circa 65 minuten.",
+          "local": "Manavgat maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Manavgat?",
+              "Normaal ongeveer 65 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Manavgat van Antalya Airport?",
+              "De geschatte afstand is 70 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Manavgat?",
+              "Momenteel vanaf €63 voor een Standard Sedan en €75 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "colakli",
+      "destination": "Çolaklı",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Çolaklı",
+      "distanceKm": 55,
+      "durationMin": 50,
+      "image": "/assets/routes/side-manavgat.jpg",
+      "prices": {
+        "standard-sedan": 63,
+        "vip-van": 75
+      },
+      "slugs": {
+        "en": "antalya-airport-to-colakli-transfer",
+        "de": "flughafen-antalya-colakli-transfer",
+        "pl": "transfer-lotnisko-antalya-colakli",
+        "ru": "transfer-aeroport-antaliya-colakli",
+        "nl": "antalya-airport-colakli-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Çolaklı Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Çolaklı with a fixed total vehicle price. The route is approximately 55 km and typically takes around 50 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Çolaklı Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Çolaklı with a fixed total vehicle price. The route is approximately 55 km and typically takes around 50 minutes, depending on traffic and your exact hotel.",
+          "local": "Çolaklı is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Çolaklı?",
+              "The journey is typically around 50 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Çolaklı from Antalya Airport?",
+              "The approximate route distance is 55 km."
+            ],
+            [
+              "How much is a private transfer to Çolaklı?",
+              "The current route price is from €63 for a Standard Sedan and €75 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Çolaklı Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Çolaklı zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 55 km und dauert normalerweise rund 50 Minuten.",
+          "h1": "Flughafen Antalya nach Çolaklı Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Çolaklı zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 55 km und dauert normalerweise rund 50 Minuten.",
+          "local": "Çolaklı gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Çolaklı?",
+              "Die Fahrt dauert normalerweise rund 50 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Çolaklı vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 55 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Çolaklı?",
+              "Aktuell ab €63 für einen Standard Sedan und €75 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Çolaklı | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Çolaklı ze stałą ceną za cały pojazd. Trasa ma około 55 km i zwykle zajmuje około 50 minut.",
+          "h1": "Transfer z lotniska Antalya do Çolaklı — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Çolaklı ze stałą ceną za cały pojazd. Trasa ma około 55 km i zwykle zajmuje około 50 minut.",
+          "local": "Çolaklı jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Çolaklı?",
+              "Zwykle około 50 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Çolaklı od lotniska Antalya?",
+              "Przybliżona odległość wynosi 55 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Çolaklı?",
+              "Obecnie od €63 za Standard Sedan i €75 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Çolaklı | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Çolaklı по фиксированной общей цене за автомобиль. Маршрут составляет около 55 км и обычно занимает примерно 50 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Çolaklı — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Çolaklı по фиксированной общей цене за автомобиль. Маршрут составляет около 55 км и обычно занимает примерно 50 минут.",
+          "local": "Çolaklı входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Çolaklı?",
+              "Обычно около 50 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Çolaklı?",
+              "Приблизительное расстояние составляет 55 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Çolaklı?",
+              "Сейчас от €63 за Standard Sedan и €75 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Çolaklı Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Çolaklı voor een vaste totaalprijs per voertuig. De route is ongeveer 55 km en duurt normaal circa 50 minuten.",
+          "h1": "Antalya Airport naar Çolaklı Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Çolaklı voor een vaste totaalprijs per voertuig. De route is ongeveer 55 km en duurt normaal circa 50 minuten.",
+          "local": "Çolaklı maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Çolaklı?",
+              "Normaal ongeveer 50 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Çolaklı van Antalya Airport?",
+              "De geschatte afstand is 55 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Çolaklı?",
+              "Momenteel vanaf €63 voor een Standard Sedan en €75 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
             ]
           ]
         }
@@ -1148,6 +2651,841 @@ window.AYTRideCatalog = {
             [
               "Kan ik een retourtransfer naar Antalya Airport boeken?",
               "Ja. Kies retour in het formulier en voeg de datum en ophaaltijd bij uw hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "mahmutlar",
+      "destination": "Mahmutlar",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Mahmutlar",
+      "distanceKm": 135,
+      "durationMin": 130,
+      "image": "/assets/routes/alanya.jpg",
+      "prices": {
+        "standard-sedan": 105,
+        "vip-van": 115
+      },
+      "slugs": {
+        "en": "antalya-airport-to-mahmutlar-transfer",
+        "de": "flughafen-antalya-mahmutlar-transfer",
+        "pl": "transfer-lotnisko-antalya-mahmutlar",
+        "ru": "transfer-aeroport-antaliya-mahmutlar",
+        "nl": "antalya-airport-mahmutlar-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Mahmutlar Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Mahmutlar with a fixed total vehicle price. The route is approximately 135 km and typically takes around 130 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Mahmutlar Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Mahmutlar with a fixed total vehicle price. The route is approximately 135 km and typically takes around 130 minutes, depending on traffic and your exact hotel.",
+          "local": "Mahmutlar is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Mahmutlar?",
+              "The journey is typically around 130 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Mahmutlar from Antalya Airport?",
+              "The approximate route distance is 135 km."
+            ],
+            [
+              "How much is a private transfer to Mahmutlar?",
+              "The current route price is from €105 for a Standard Sedan and €115 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Mahmutlar Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Mahmutlar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 135 km und dauert normalerweise rund 130 Minuten.",
+          "h1": "Flughafen Antalya nach Mahmutlar Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Mahmutlar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 135 km und dauert normalerweise rund 130 Minuten.",
+          "local": "Mahmutlar gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Mahmutlar?",
+              "Die Fahrt dauert normalerweise rund 130 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Mahmutlar vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 135 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Mahmutlar?",
+              "Aktuell ab €105 für einen Standard Sedan und €115 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Mahmutlar | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Mahmutlar ze stałą ceną za cały pojazd. Trasa ma około 135 km i zwykle zajmuje około 130 minut.",
+          "h1": "Transfer z lotniska Antalya do Mahmutlar — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Mahmutlar ze stałą ceną za cały pojazd. Trasa ma około 135 km i zwykle zajmuje około 130 minut.",
+          "local": "Mahmutlar jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Mahmutlar?",
+              "Zwykle około 130 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Mahmutlar od lotniska Antalya?",
+              "Przybliżona odległość wynosi 135 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Mahmutlar?",
+              "Obecnie od €105 za Standard Sedan i €115 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Mahmutlar | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Mahmutlar по фиксированной общей цене за автомобиль. Маршрут составляет около 135 км и обычно занимает примерно 130 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Mahmutlar — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Mahmutlar по фиксированной общей цене за автомобиль. Маршрут составляет около 135 км и обычно занимает примерно 130 минут.",
+          "local": "Mahmutlar входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Mahmutlar?",
+              "Обычно около 130 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Mahmutlar?",
+              "Приблизительное расстояние составляет 135 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Mahmutlar?",
+              "Сейчас от €105 за Standard Sedan и €115 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Mahmutlar Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Mahmutlar voor een vaste totaalprijs per voertuig. De route is ongeveer 135 km en duurt normaal circa 130 minuten.",
+          "h1": "Antalya Airport naar Mahmutlar Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Mahmutlar voor een vaste totaalprijs per voertuig. De route is ongeveer 135 km en duurt normaal circa 130 minuten.",
+          "local": "Mahmutlar maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Mahmutlar?",
+              "Normaal ongeveer 130 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Mahmutlar van Antalya Airport?",
+              "De geschatte afstand is 135 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Mahmutlar?",
+              "Momenteel vanaf €105 voor een Standard Sedan en €115 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "konakli",
+      "destination": "Konaklı",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Konaklı",
+      "distanceKm": 115,
+      "durationMin": 110,
+      "image": "/assets/routes/alanya.jpg",
+      "prices": {
+        "standard-sedan": 105,
+        "vip-van": 115
+      },
+      "slugs": {
+        "en": "antalya-airport-to-konakli-transfer",
+        "de": "flughafen-antalya-konakli-transfer",
+        "pl": "transfer-lotnisko-antalya-konakli",
+        "ru": "transfer-aeroport-antaliya-konakli",
+        "nl": "antalya-airport-konakli-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Konaklı Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Konaklı with a fixed total vehicle price. The route is approximately 115 km and typically takes around 110 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Konaklı Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Konaklı with a fixed total vehicle price. The route is approximately 115 km and typically takes around 110 minutes, depending on traffic and your exact hotel.",
+          "local": "Konaklı is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Konaklı?",
+              "The journey is typically around 110 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Konaklı from Antalya Airport?",
+              "The approximate route distance is 115 km."
+            ],
+            [
+              "How much is a private transfer to Konaklı?",
+              "The current route price is from €105 for a Standard Sedan and €115 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Konaklı Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Konaklı zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 115 km und dauert normalerweise rund 110 Minuten.",
+          "h1": "Flughafen Antalya nach Konaklı Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Konaklı zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 115 km und dauert normalerweise rund 110 Minuten.",
+          "local": "Konaklı gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Konaklı?",
+              "Die Fahrt dauert normalerweise rund 110 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Konaklı vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 115 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Konaklı?",
+              "Aktuell ab €105 für einen Standard Sedan und €115 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Konaklı | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Konaklı ze stałą ceną za cały pojazd. Trasa ma około 115 km i zwykle zajmuje około 110 minut.",
+          "h1": "Transfer z lotniska Antalya do Konaklı — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Konaklı ze stałą ceną za cały pojazd. Trasa ma około 115 km i zwykle zajmuje około 110 minut.",
+          "local": "Konaklı jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Konaklı?",
+              "Zwykle około 110 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Konaklı od lotniska Antalya?",
+              "Przybliżona odległość wynosi 115 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Konaklı?",
+              "Obecnie od €105 za Standard Sedan i €115 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Konaklı | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Konaklı по фиксированной общей цене за автомобиль. Маршрут составляет около 115 км и обычно занимает примерно 110 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Konaklı — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Konaklı по фиксированной общей цене за автомобиль. Маршрут составляет около 115 км и обычно занимает примерно 110 минут.",
+          "local": "Konaklı входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Konaklı?",
+              "Обычно около 110 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Konaklı?",
+              "Приблизительное расстояние составляет 115 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Konaklı?",
+              "Сейчас от €105 за Standard Sedan и €115 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Konaklı Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Konaklı voor een vaste totaalprijs per voertuig. De route is ongeveer 115 km en duurt normaal circa 110 minuten.",
+          "h1": "Antalya Airport naar Konaklı Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Konaklı voor een vaste totaalprijs per voertuig. De route is ongeveer 115 km en duurt normaal circa 110 minuten.",
+          "local": "Konaklı maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Konaklı?",
+              "Normaal ongeveer 110 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Konaklı van Antalya Airport?",
+              "De geschatte afstand is 115 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Konaklı?",
+              "Momenteel vanaf €105 voor een Standard Sedan en €115 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "turkler",
+      "destination": "Türkler",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Türkler",
+      "distanceKm": 110,
+      "durationMin": 105,
+      "image": "/assets/routes/alanya.jpg",
+      "prices": {
+        "standard-sedan": 105,
+        "vip-van": 115
+      },
+      "slugs": {
+        "en": "antalya-airport-to-turkler-transfer",
+        "de": "flughafen-antalya-turkler-transfer",
+        "pl": "transfer-lotnisko-antalya-turkler",
+        "ru": "transfer-aeroport-antaliya-turkler",
+        "nl": "antalya-airport-turkler-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Türkler Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Türkler with a fixed total vehicle price. The route is approximately 110 km and typically takes around 105 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Türkler Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Türkler with a fixed total vehicle price. The route is approximately 110 km and typically takes around 105 minutes, depending on traffic and your exact hotel.",
+          "local": "Türkler is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Türkler?",
+              "The journey is typically around 105 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Türkler from Antalya Airport?",
+              "The approximate route distance is 110 km."
+            ],
+            [
+              "How much is a private transfer to Türkler?",
+              "The current route price is from €105 for a Standard Sedan and €115 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Türkler Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Türkler zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 110 km und dauert normalerweise rund 105 Minuten.",
+          "h1": "Flughafen Antalya nach Türkler Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Türkler zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 110 km und dauert normalerweise rund 105 Minuten.",
+          "local": "Türkler gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Türkler?",
+              "Die Fahrt dauert normalerweise rund 105 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Türkler vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 110 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Türkler?",
+              "Aktuell ab €105 für einen Standard Sedan und €115 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Türkler | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Türkler ze stałą ceną za cały pojazd. Trasa ma około 110 km i zwykle zajmuje około 105 minut.",
+          "h1": "Transfer z lotniska Antalya do Türkler — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Türkler ze stałą ceną za cały pojazd. Trasa ma około 110 km i zwykle zajmuje około 105 minut.",
+          "local": "Türkler jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Türkler?",
+              "Zwykle około 105 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Türkler od lotniska Antalya?",
+              "Przybliżona odległość wynosi 110 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Türkler?",
+              "Obecnie od €105 za Standard Sedan i €115 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Türkler | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Türkler по фиксированной общей цене за автомобиль. Маршрут составляет около 110 км и обычно занимает примерно 105 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Türkler — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Türkler по фиксированной общей цене за автомобиль. Маршрут составляет около 110 км и обычно занимает примерно 105 минут.",
+          "local": "Türkler входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Türkler?",
+              "Обычно около 105 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Türkler?",
+              "Приблизительное расстояние составляет 110 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Türkler?",
+              "Сейчас от €105 за Standard Sedan и €115 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Türkler Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Türkler voor een vaste totaalprijs per voertuig. De route is ongeveer 110 km en duurt normaal circa 105 minuten.",
+          "h1": "Antalya Airport naar Türkler Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Türkler voor een vaste totaalprijs per voertuig. De route is ongeveer 110 km en duurt normaal circa 105 minuten.",
+          "local": "Türkler maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Türkler?",
+              "Normaal ongeveer 105 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Türkler van Antalya Airport?",
+              "De geschatte afstand is 110 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Türkler?",
+              "Momenteel vanaf €105 voor een Standard Sedan en €115 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "avsallar",
+      "destination": "Avsallar",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Avsallar",
+      "distanceKm": 105,
+      "durationMin": 100,
+      "image": "/assets/routes/alanya.jpg",
+      "prices": {
+        "standard-sedan": 105,
+        "vip-van": 115
+      },
+      "slugs": {
+        "en": "antalya-airport-to-avsallar-transfer",
+        "de": "flughafen-antalya-avsallar-transfer",
+        "pl": "transfer-lotnisko-antalya-avsallar",
+        "ru": "transfer-aeroport-antaliya-avsallar",
+        "nl": "antalya-airport-avsallar-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Avsallar Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Avsallar with a fixed total vehicle price. The route is approximately 105 km and typically takes around 100 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Avsallar Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Avsallar with a fixed total vehicle price. The route is approximately 105 km and typically takes around 100 minutes, depending on traffic and your exact hotel.",
+          "local": "Avsallar is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Avsallar?",
+              "The journey is typically around 100 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Avsallar from Antalya Airport?",
+              "The approximate route distance is 105 km."
+            ],
+            [
+              "How much is a private transfer to Avsallar?",
+              "The current route price is from €105 for a Standard Sedan and €115 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Avsallar Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Avsallar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 105 km und dauert normalerweise rund 100 Minuten.",
+          "h1": "Flughafen Antalya nach Avsallar Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Avsallar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 105 km und dauert normalerweise rund 100 Minuten.",
+          "local": "Avsallar gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Avsallar?",
+              "Die Fahrt dauert normalerweise rund 100 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Avsallar vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 105 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Avsallar?",
+              "Aktuell ab €105 für einen Standard Sedan und €115 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Avsallar | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Avsallar ze stałą ceną za cały pojazd. Trasa ma około 105 km i zwykle zajmuje około 100 minut.",
+          "h1": "Transfer z lotniska Antalya do Avsallar — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Avsallar ze stałą ceną za cały pojazd. Trasa ma około 105 km i zwykle zajmuje około 100 minut.",
+          "local": "Avsallar jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Avsallar?",
+              "Zwykle około 100 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Avsallar od lotniska Antalya?",
+              "Przybliżona odległość wynosi 105 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Avsallar?",
+              "Obecnie od €105 za Standard Sedan i €115 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Avsallar | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Avsallar по фиксированной общей цене за автомобиль. Маршрут составляет около 105 км и обычно занимает примерно 100 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Avsallar — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Avsallar по фиксированной общей цене за автомобиль. Маршрут составляет около 105 км и обычно занимает примерно 100 минут.",
+          "local": "Avsallar входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Avsallar?",
+              "Обычно около 100 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Avsallar?",
+              "Приблизительное расстояние составляет 105 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Avsallar?",
+              "Сейчас от €105 за Standard Sedan и €115 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Avsallar Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Avsallar voor een vaste totaalprijs per voertuig. De route is ongeveer 105 km en duurt normaal circa 100 minuten.",
+          "h1": "Antalya Airport naar Avsallar Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Avsallar voor een vaste totaalprijs per voertuig. De route is ongeveer 105 km en duurt normaal circa 100 minuten.",
+          "local": "Avsallar maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Avsallar?",
+              "Normaal ongeveer 100 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Avsallar van Antalya Airport?",
+              "De geschatte afstand is 105 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Avsallar?",
+              "Momenteel vanaf €105 voor een Standard Sedan en €115 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "okurcalar",
+      "destination": "Okurcalar",
+      "fromLabel": "Antalya Airport (AYT)",
+      "toLabel": "Okurcalar",
+      "distanceKm": 95,
+      "durationMin": 90,
+      "image": "/assets/routes/alanya.jpg",
+      "prices": {
+        "standard-sedan": 105,
+        "vip-van": 115
+      },
+      "slugs": {
+        "en": "antalya-airport-to-okurcalar-transfer",
+        "de": "flughafen-antalya-okurcalar-transfer",
+        "pl": "transfer-lotnisko-antalya-okurcalar",
+        "ru": "transfer-aeroport-antaliya-okurcalar",
+        "nl": "antalya-airport-okurcalar-transfer"
+      },
+      "content": {
+        "en": {
+          "title": "Antalya Airport to Okurcalar Transfer | Price, Distance & Time | AYT Ride",
+          "description": "Book a private transfer from Antalya Airport (AYT) to Okurcalar with a fixed total vehicle price. The route is approximately 95 km and typically takes around 90 minutes, depending on traffic and your exact hotel.",
+          "h1": "Antalya Airport to Okurcalar Transfer — Price, Distance & Transfer Time",
+          "intro": "Book a private transfer from Antalya Airport (AYT) to Okurcalar with a fixed total vehicle price. The route is approximately 95 km and typically takes around 90 minutes, depending on traffic and your exact hotel.",
+          "local": "Okurcalar is served as part of AYT Ride's Antalya resort transfer network. Enter the exact hotel or accommodation so pickup, vehicle and route details can be confirmed.",
+          "faq": [
+            [
+              "How long is the transfer from Antalya Airport to Okurcalar?",
+              "The journey is typically around 90 minutes, depending on traffic and the exact hotel."
+            ],
+            [
+              "How far is Okurcalar from Antalya Airport?",
+              "The approximate route distance is 95 km."
+            ],
+            [
+              "How much is a private transfer to Okurcalar?",
+              "The current route price is from €105 for a Standard Sedan and €115 for a VIP Van, as a total vehicle price."
+            ],
+            [
+              "Is the price per person?",
+              "No. The displayed price is for the selected vehicle, not per passenger."
+            ],
+            [
+              "Can I book a return transfer?",
+              "Yes. Add a return journey and provide the hotel pickup date and time."
+            ]
+          ]
+        },
+        "de": {
+          "title": "Flughafen Antalya nach Okurcalar Transfer | Preis, Entfernung & Fahrzeit | AYT Ride",
+          "description": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Okurcalar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 95 km und dauert normalerweise rund 90 Minuten.",
+          "h1": "Flughafen Antalya nach Okurcalar Transfer — Preis, Entfernung & Fahrzeit",
+          "intro": "Buchen Sie einen privaten Transfer vom Flughafen Antalya (AYT) nach Okurcalar zum festen Gesamtpreis pro Fahrzeug. Die Strecke beträgt ungefähr 95 km und dauert normalerweise rund 90 Minuten.",
+          "local": "Okurcalar gehört zum Transfernetz von AYT Ride für die Ferienregion Antalya. Geben Sie den genauen Hotelnamen an, damit Abholung, Fahrzeug und Route bestätigt werden können.",
+          "faq": [
+            [
+              "Wie lange dauert der Transfer vom Flughafen Antalya nach Okurcalar?",
+              "Die Fahrt dauert normalerweise rund 90 Minuten, abhängig von Verkehr und Hotel."
+            ],
+            [
+              "Wie weit ist Okurcalar vom Flughafen Antalya entfernt?",
+              "Die ungefähre Entfernung beträgt 95 km."
+            ],
+            [
+              "Was kostet ein Privattransfer nach Okurcalar?",
+              "Aktuell ab €105 für einen Standard Sedan und €115 für einen VIP Van, jeweils als Gesamtpreis pro Fahrzeug."
+            ],
+            [
+              "Ist der Preis pro Person?",
+              "Nein. Der angezeigte Preis gilt für das ausgewählte Fahrzeug."
+            ],
+            [
+              "Kann ich eine Rückfahrt buchen?",
+              "Ja. Fügen Sie die Rückfahrt mit Datum und Abholzeit am Hotel hinzu."
+            ]
+          ]
+        },
+        "pl": {
+          "title": "Transfer z lotniska Antalya do Okurcalar | Cena, odległość i czas | AYT Ride",
+          "description": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Okurcalar ze stałą ceną za cały pojazd. Trasa ma około 95 km i zwykle zajmuje około 90 minut.",
+          "h1": "Transfer z lotniska Antalya do Okurcalar — cena, odległość i czas",
+          "intro": "Zarezerwuj prywatny transfer z lotniska Antalya (AYT) do Okurcalar ze stałą ceną za cały pojazd. Trasa ma około 95 km i zwykle zajmuje około 90 minut.",
+          "local": "Okurcalar jest obsługiwane w sieci transferowej AYT Ride. Wpisz dokładną nazwę hotelu, aby potwierdzić odbiór, pojazd i trasę.",
+          "faq": [
+            [
+              "Ile trwa transfer z lotniska Antalya do Okurcalar?",
+              "Zwykle około 90 minut, zależnie od ruchu i hotelu."
+            ],
+            [
+              "Jak daleko jest Okurcalar od lotniska Antalya?",
+              "Przybliżona odległość wynosi 95 km."
+            ],
+            [
+              "Ile kosztuje prywatny transfer do Okurcalar?",
+              "Obecnie od €105 za Standard Sedan i €115 za VIP Van, jako łączna cena za pojazd."
+            ],
+            [
+              "Czy cena jest za osobę?",
+              "Nie. Cena dotyczy wybranego pojazdu."
+            ],
+            [
+              "Czy mogę zarezerwować powrót?",
+              "Tak. Dodaj przejazd powrotny oraz datę i godzinę odbioru."
+            ]
+          ]
+        },
+        "ru": {
+          "title": "Трансфер аэропорт Анталья — Okurcalar | Цена, расстояние и время | AYT Ride",
+          "description": "Закажите частный трансфер из аэропорта Анталья (AYT) в Okurcalar по фиксированной общей цене за автомобиль. Маршрут составляет около 95 км и обычно занимает примерно 90 минут.",
+          "h1": "Трансфер из аэропорта Анталья в Okurcalar — цена, расстояние и время",
+          "intro": "Закажите частный трансфер из аэропорта Анталья (AYT) в Okurcalar по фиксированной общей цене за автомобиль. Маршрут составляет около 95 км и обычно занимает примерно 90 минут.",
+          "local": "Okurcalar входит в сеть курортных трансферов AYT Ride. Укажите точное название отеля, чтобы подтвердить встречу, автомобиль и маршрут.",
+          "faq": [
+            [
+              "Сколько ехать из аэропорта Анталья в Okurcalar?",
+              "Обычно около 90 минут, в зависимости от трафика и отеля."
+            ],
+            [
+              "Какое расстояние до Okurcalar?",
+              "Приблизительное расстояние составляет 95 км."
+            ],
+            [
+              "Сколько стоит частный трансфер в Okurcalar?",
+              "Сейчас от €105 за Standard Sedan и €115 за VIP Van, как общая цена за автомобиль."
+            ],
+            [
+              "Цена указана за человека?",
+              "Нет. Цена указана за выбранный автомобиль."
+            ],
+            [
+              "Можно заказать обратный трансфер?",
+              "Да. Добавьте обратную поездку, дату и время выезда из отеля."
+            ]
+          ]
+        },
+        "nl": {
+          "title": "Antalya Airport naar Okurcalar Transfer | Prijs, afstand & reistijd | AYT Ride",
+          "description": "Boek een privétransfer van Antalya Airport (AYT) naar Okurcalar voor een vaste totaalprijs per voertuig. De route is ongeveer 95 km en duurt normaal circa 90 minuten.",
+          "h1": "Antalya Airport naar Okurcalar Transfer — prijs, afstand & reistijd",
+          "intro": "Boek een privétransfer van Antalya Airport (AYT) naar Okurcalar voor een vaste totaalprijs per voertuig. De route is ongeveer 95 km en duurt normaal circa 90 minuten.",
+          "local": "Okurcalar maakt deel uit van het resorttransfernetwerk van AYT Ride. Vul de volledige hotelnaam in zodat ophalen, voertuig en route kunnen worden bevestigd.",
+          "faq": [
+            [
+              "Hoe lang duurt de transfer van Antalya Airport naar Okurcalar?",
+              "Normaal ongeveer 90 minuten, afhankelijk van verkeer en hotel."
+            ],
+            [
+              "Hoe ver is Okurcalar van Antalya Airport?",
+              "De geschatte afstand is 95 km."
+            ],
+            [
+              "Wat kost een privétransfer naar Okurcalar?",
+              "Momenteel vanaf €105 voor een Standard Sedan en €115 voor een VIP Van, als totaalprijs per voertuig."
+            ],
+            [
+              "Is de prijs per persoon?",
+              "Nee. De prijs geldt voor het gekozen voertuig."
+            ],
+            [
+              "Kan ik een retourtransfer boeken?",
+              "Ja. Voeg de retourrit, datum en ophaaltijd bij het hotel toe."
             ]
           ]
         }
