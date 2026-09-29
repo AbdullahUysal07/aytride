@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260929-longtail-seo-v1";
+const buildStamp = "20260929-booking-audit-v2";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -313,6 +313,43 @@ function write(file, content) {
   const target = path.join(root, file);
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, content.trimStart(), "utf8");
+}
+
+function ensureCommercialHubAlternates() {
+  const groups = [
+    {
+      en: "/antalya-airport-transfer-prices/",
+      de: "/de/flughafen-antalya-transfer-preise/",
+      pl: "/pl/ceny-transferow-lotnisko-antalya/",
+      ru: "/ru/ceny-transfera-aeroport-antaliya/",
+      nl: "/nl/antalya-airport-transfer-prijzen/"
+    },
+    {
+      en: "/antalya-airport-taxi-vs-private-transfer/",
+      de: "/de/flughafen-antalya-taxi-oder-privattransfer/",
+      pl: "/pl/taksowka-czy-prywatny-transfer-antalya/",
+      ru: "/ru/taksi-ili-chastnyy-transfer-aeroport-antaliya/",
+      nl: "/nl/antalya-airport-taxi-of-prive-transfer/"
+    }
+  ];
+
+  for (const group of groups) {
+    const tags = [
+      ...Object.entries(group).map(([language, url]) => `  <link rel="alternate" hreflang="${language}" href="${catalog.baseUrl}${url}">`),
+      `  <link rel="alternate" hreflang="x-default" href="${catalog.baseUrl}${group.en}">`
+    ].join("\n");
+
+    for (const url of Object.values(group)) {
+      const file = path.join(root, url.replace(/^\//, ""), "index.html");
+      if (!fs.existsSync(file)) throw new Error(`Missing commercial hub: ${url}`);
+      let html = fs.readFileSync(file, "utf8");
+      if (html.includes("hreflang=")) continue;
+      const canonical = `<link rel="canonical" href="${catalog.baseUrl}${url}">`;
+      if (!html.includes(canonical)) throw new Error(`Commercial hub canonical mismatch: ${url}`);
+      html = html.replace(canonical, `${canonical}\n${tags}`);
+      fs.writeFileSync(file, html, "utf8");
+    }
+  }
 }
 
 function escapeHtml(value) {
@@ -1301,6 +1338,8 @@ commercialRoutes.forEach((route) => {
     write(`${p}index.html`, routePage(route, language));
   });
 });
+
+ensureCommercialHubAlternates();
 
 write("booking-confirmation/index.html", confirmationPage("en"));
 write("blog/index.html", blogIndexPage());

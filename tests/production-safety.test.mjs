@@ -32,3 +32,9 @@ test("whatsapp booking message avoids emojis that can render as question marks",
   assert.match(bookingMessage, /\*Route details\*/);
   assert.match(bookingMessage, /\*Price and payment\*/);
 });
+
+test("return trip controls resolve the booking form before reading return fields", () => {
+  const returnControls = app.slice(app.indexOf("function initTripButtons"), app.indexOf("function initBooking"));
+  assert.match(returnControls, /const e = els\(\);/);
+  assert.match(returnControls, /e\.returnDate/);
+});

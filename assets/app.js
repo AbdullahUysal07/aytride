@@ -761,6 +761,7 @@
   }
 
   function initTripButtons() {
+    const e = els();
     document.querySelectorAll("[data-trip]").forEach((button) => {
       button.addEventListener("click", () => {
         state.tripType = button.dataset.trip;
