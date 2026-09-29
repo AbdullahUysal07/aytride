@@ -390,7 +390,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "belek",
@@ -725,7 +727,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "kemer",
@@ -1060,7 +1064,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "camyuva",
@@ -1227,7 +1233,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "kiris",
@@ -1394,7 +1402,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "goynuk",
@@ -1561,7 +1571,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "beldibi",
@@ -1728,7 +1740,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "side",
@@ -2063,7 +2077,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "colakli",
@@ -2230,7 +2246,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "kumkoy",
@@ -2821,7 +2839,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "konakli",
@@ -2988,7 +3008,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "turkler",
@@ -3155,7 +3177,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "avsallar",
@@ -3322,7 +3346,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "okurcalar",
@@ -3489,7 +3515,9 @@
             ]
           ]
         }
-      }
+      },
+      "origin": "Antalya Airport (AYT)",
+      "available": true
     },
     {
       "id": "oldtown",
