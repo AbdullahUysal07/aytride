@@ -343,10 +343,14 @@ function ensureCommercialHubAlternates() {
       const file = path.join(root, url.replace(/^\//, ""), "index.html");
       if (!fs.existsSync(file)) throw new Error(`Missing commercial hub: ${url}`);
       let html = fs.readFileSync(file, "utf8");
-      if (html.includes("hreflang=")) continue;
       const canonical = `<link rel="canonical" href="${catalog.baseUrl}${url}">`;
       if (!html.includes(canonical)) throw new Error(`Commercial hub canonical mismatch: ${url}`);
-      html = html.replace(canonical, `${canonical}\n${tags}`);
+      if (!html.includes("hreflang=")) html = html.replace(canonical, `${canonical}\n${tags}`);
+      if (!html.includes('rel="icon"')) html = html.replace("</head>", `  <link rel="icon" type="image/svg+xml" href="${favicon()}">\n</head>`);
+      html = html
+        .replace(/\/assets\/site\.css(?:\?v=[^"']+)?/g, `/assets/site.css?v=${buildStamp}`)
+        .replace(/\/assets\/catalog\.js(?:\?v=[^"']+)?/g, `/assets/catalog.js?v=${buildStamp}`)
+        .replace(/\/assets\/app\.js(?:\?v=[^"']+)?/g, `/assets/app.js?v=${buildStamp}`);
       fs.writeFileSync(file, html, "utf8");
     }
   }
