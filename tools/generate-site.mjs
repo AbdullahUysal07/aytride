@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260929-seo-hubs-v1";
+const buildStamp = "20260929-longtail-seo-v1";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -943,6 +943,17 @@ function routeArticleCopy(language) {
   return content[language] || content.en;
 }
 
+function routeConversionBlocks(language) {
+  const t = {
+    en:{trust:"Why book a private AYT Ride transfer?",items:[["Fixed route price","See the total vehicle price for covered routes before booking."],["Flight details included","Add your flight number so the pickup request is planned around your arrival."],["Direct hotel transfer","Travel directly to the hotel or accommodation in your booking."],["WhatsApp confirmation","Route and pickup details are confirmed before the ride."]],how:"How your airport transfer works",steps:["Choose your route, date, passengers and vehicle.","Send the booking request with flight and hotel details.","Receive route and pickup confirmation.","Meet the driver and travel directly to your destination."]},
+    de:{trust:"Warum einen privaten AYT Ride Transfer buchen?",items:[["Fester Routenpreis","Für abgedeckte Routen sehen Sie vor der Buchung den Gesamtpreis pro Fahrzeug."],["Flugdaten angeben","Fügen Sie die Flugnummer hinzu, damit die Abholung zur Ankunft geplant werden kann."],["Direkt zum Hotel","Fahren Sie direkt zum Hotel oder zur Unterkunft aus Ihrer Buchung."],["WhatsApp-Bestätigung","Route und Abholdetails werden vor der Fahrt bestätigt."]],how:"So funktioniert Ihr Flughafentransfer",steps:["Route, Datum, Personen und Fahrzeug wählen.","Anfrage mit Flug- und Hoteldaten senden.","Route und Abholung bestätigen lassen.","Fahrer treffen und direkt zum Ziel fahren."]},
+    pl:{trust:"Dlaczego prywatny transfer AYT Ride?",items:[["Stała cena trasy","Na obsługiwanych trasach widzisz łączną cenę pojazdu przed rezerwacją."],["Dane lotu","Dodaj numer lotu, aby odbiór można było zaplanować względem przylotu."],["Bezpośrednio do hotelu","Przejazd prowadzi bezpośrednio do hotelu lub miejsca zakwaterowania."],["Potwierdzenie WhatsApp","Trasa i szczegóły odbioru są potwierdzane przed przejazdem."]],how:"Jak działa transfer z lotniska",steps:["Wybierz trasę, datę, pasażerów i pojazd.","Wyślij rezerwację z danymi lotu i hotelu.","Odbierz potwierdzenie trasy i odbioru.","Spotkaj kierowcę i jedź bezpośrednio do celu."]},
+    ru:{trust:"Почему частный трансфер AYT Ride?",items:[["Фиксированная цена маршрута","Для доступных маршрутов общая цена автомобиля видна до бронирования."],["Данные рейса","Добавьте номер рейса, чтобы встречу можно было спланировать по времени прилёта."],["Прямо до отеля","Поездка выполняется напрямую до отеля или места проживания из заявки."],["Подтверждение в WhatsApp","Маршрут и детали встречи подтверждаются до поездки."]],how:"Как проходит трансфер из аэропорта",steps:["Выберите маршрут, дату, пассажиров и автомобиль.","Отправьте заявку с рейсом и отелем.","Получите подтверждение маршрута и встречи.","Встретьте водителя и отправляйтесь прямо к месту назначения."]},
+    nl:{trust:"Waarom een privétransfer van AYT Ride?",items:[["Vaste routeprijs","Voor beschikbare routes ziet u vóór het boeken de totaalprijs per voertuig."],["Vluchtgegevens","Voeg uw vluchtnummer toe zodat de ophaalaanvraag rond aankomst kan worden gepland."],["Direct naar het hotel","Reis rechtstreeks naar het hotel of de accommodatie in uw boeking."],["WhatsApp-bevestiging","Route en ophaaldetails worden vóór de rit bevestigd."]],how:"Zo werkt uw luchthaventransfer",steps:["Kies route, datum, passagiers en voertuig.","Stuur de aanvraag met vlucht- en hotelgegevens.","Ontvang bevestiging van route en ophalen.","Ontmoet de chauffeur en reis rechtstreeks naar uw bestemming."]}
+  }[language];
+  return `<section><h2>${escapeHtml(t.trust)}</h2><div class="promise-grid">${t.items.map(([h,p])=>`<article><div class="promise-copy"><h3>${escapeHtml(h)}</h3><p>${escapeHtml(p)}</p></div></article>`).join("")}</div><h2>${escapeHtml(t.how)}</h2><ol>${t.steps.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ol></section>`;
+}
+
 function routeSeoHubLinks(language) {
   const links = {
     en: [["/antalya-airport-transfer-prices/","Antalya Airport transfer prices 2026"],["/antalya-airport-taxi-vs-private-transfer/","Taxi vs private transfer"]],
@@ -1017,6 +1028,7 @@ ${header(language)}
         <p>${article.paymentP}</p>
         <h2>${article.changesH}</h2>
         <p>${article.changesP}</p>
+        ${routeConversionBlocks(language)}
         <h2>${article.faqH}</h2>
         <div class="faq-grid single">
           ${page.faq.map(([question, answer]) => `<details><summary>${escapeHtml(question)}</summary><p>${escapeHtml(answer)}</p></details>`).join("")}
