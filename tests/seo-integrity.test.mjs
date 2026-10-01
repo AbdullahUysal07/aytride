@@ -55,6 +55,25 @@ test("route page schema prices match the public catalog", () => {
   }
 });
 
+test("route search snippets are concise and booking UI is excluded from snippets", () => {
+  const routes = catalog.routes.filter((route) => route.slugs?.en && route.available && !route.quoteOnly);
+  for (const route of routes) {
+    for (const language of routeLanguagesFor(route)) {
+      const html = read(routePath(route, language));
+      const title = html.match(/<title>([^<]+)<\/title>/)?.[1] || "";
+      const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1] || "";
+      assert.ok(title.length <= 70, `${route.id} ${language} title is too long: ${title.length}`);
+      assert.ok(description.length >= 110 && description.length <= 180, `${route.id} ${language} description length: ${description.length}`);
+      assert.match(html, /class="booking-card"[^>]+data-nosnippet/);
+    }
+  }
+});
+
+test("low-value utility pages are not indexable", () => {
+  assert.match(read("booking-confirmation/index.html"), /<meta name="robots" content="noindex,follow">/);
+  assert.match(read("blog/article/index.html"), /<meta name="robots" content="noindex,follow">/);
+});
+
 test("public pages do not contain old unsafe booking patterns", () => {
   const files = listFiles().filter((file) => {
     if (file.startsWith("server/") || file.startsWith("tests/")) return false;
@@ -122,7 +141,7 @@ test("Kumkoy and Evrenseki routes are available and localized in every site lang
 
     for (const language of routeLanguages) {
       const html = read(routePath(route, language));
-      assert.match(html, /<meta name="robots" content="index,follow">/);
+      assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">/);
       assert.match(html, /rel="canonical"/);
       assert.match(html, /hreflang="x-default"/);
     }

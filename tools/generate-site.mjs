@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20260929-quote-layout-v3";
+const buildStamp = "20261001-search-snippets-v4";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -316,6 +316,13 @@ function write(file, content) {
 }
 
 function ensureCommercialHubAlternates() {
+  const searchTitles = {
+    "/antalya-airport-transfer-prices/": "Antalya Airport Transfer Prices 2026 | AYT Ride",
+    "/antalya-airport-taxi-vs-private-transfer/": "Antalya Airport Taxi vs Private Transfer | AYT Ride",
+    "/de/flughafen-antalya-transfer-preise/": "Flughafen Antalya Transfer Preise 2026 | AYT Ride",
+    "/nl/antalya-airport-transfer-prijzen/": "Antalya Airport transfer prijzen 2026 | AYT Ride",
+    "/ru/ceny-transfera-aeroport-antaliya/": "Цены на трансфер из аэропорта Антальи 2026 | AYT Ride"
+  };
   const groups = [
     {
       en: "/antalya-airport-transfer-prices/",
@@ -348,6 +355,7 @@ function ensureCommercialHubAlternates() {
       if (!html.includes("hreflang=")) html = html.replace(canonical, `${canonical}\n${tags}`);
       if (!html.includes('rel="icon"')) html = html.replace("</head>", `  <link rel="icon" type="image/svg+xml" href="${favicon()}">\n</head>`);
       html = html
+        .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(searchTitles[url] || html.match(/<title>([^<]*)<\/title>/)?.[1] || "AYT Ride")}</title>`)
         .replace(/\/assets\/site\.css(?:\?v=[^"']+)?/g, `/assets/site.css?v=${buildStamp}`)
         .replace(/\/assets\/catalog\.js(?:\?v=[^"']+)?/g, `/assets/catalog.js?v=${buildStamp}`)
         .replace(/\/assets\/app\.js(?:\?v=[^"']+)?/g, `/assets/app.js?v=${buildStamp}`);
@@ -367,6 +375,35 @@ function escapeHtml(value) {
 
 function money(value) {
   return `€${Number(value).toFixed(0)}`;
+}
+
+function routeSearchSnippet(route, language) {
+  const destination = route.destination;
+  const sedan = money(route.prices["standard-sedan"]);
+  const vip = money(route.prices["vip-van"]);
+  const snippets = {
+    en: {
+      title: `Antalya Airport to ${destination} Transfer | AYT Ride`,
+      description: `Private Antalya Airport to ${destination} transfer: ${route.distanceKm} km, about ${route.durationMin} min. Sedan ${sedan}, VIP Van ${vip} total per vehicle. Pay after the ride.`
+    },
+    de: {
+      title: `Antalya Flughafen – ${destination} Transfer | AYT Ride`,
+      description: `Privater Transfer vom Flughafen Antalya nach ${destination}: ${route.distanceKm} km, ca. ${route.durationMin} Min. Sedan ${sedan}, VIP Van ${vip} pro Fahrzeug. Zahlung nach der Fahrt.`
+    },
+    pl: {
+      title: `Lotnisko Antalya – ${destination} transfer | AYT Ride`,
+      description: `Prywatny transfer z lotniska Antalya do ${destination}: ${route.distanceKm} km, około ${route.durationMin} min. Sedan ${sedan}, VIP Van ${vip} za pojazd. Płatność po przejeździe.`
+    },
+    ru: {
+      title: `Анталья – ${destination}: трансфер из аэропорта | AYT Ride`,
+      description: `Частный трансфер из аэропорта Антальи в ${destination}: ${route.distanceKm} км, около ${route.durationMin} мин. Sedan ${sedan}, VIP Van ${vip} за автомобиль. Оплата после поездки.`
+    },
+    nl: {
+      title: `Antalya Airport – ${destination} transfer | AYT Ride`,
+      description: `Privétransfer van Antalya Airport naar ${destination}: ${route.distanceKm} km, circa ${route.durationMin} min. Sedan ${sedan}, VIP Van ${vip} per voertuig. Betalen na de rit.`
+    }
+  };
+  return snippets[language] || snippets.en;
 }
 
 function heroTitleMarkup(title) {
@@ -556,7 +593,7 @@ function bookingForm(language, routeId = "") {
   const places = [...new Set(catalog.routes.flatMap((item) => [item.origin || "Antalya Airport (AYT)", item.destination]).filter(Boolean))];
   const options = (selected) => places.map((place) => `<option value="${escapeHtml(place)}"${place === selected ? " selected" : ""}>${escapeHtml(place)}</option>`).join("");
   return `
-    <section class="booking-card" id="booking" aria-labelledby="bookingTitle">
+    <section class="booking-card" id="booking" aria-labelledby="bookingTitle" data-nosnippet>
       <div class="booking-card-head">
         <div>
           <p class="mini-label">${l.getPrice}</p>
@@ -756,7 +793,7 @@ function homePage(language) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(l.homeTitle)}</title>
   <meta name="description" content="${escapeHtml(l.homeDescription)}">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
   <meta property="og:title" content="${escapeHtml(l.homeTitle)}">
   <meta property="og:description" content="${escapeHtml(l.homeDescription)}">
   <meta property="og:type" content="website">
@@ -1015,16 +1052,17 @@ function routePage(route, language) {
   const url = `${catalog.baseUrl}${routePath(route, language)}`;
   const sedan = route.prices["standard-sedan"];
   const vip = route.prices["vip-van"];
+  const snippet = routeSearchSnippet(route, language);
   return `<!doctype html>
 <html lang="${language}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(page.title)}</title>
-  <meta name="description" content="${escapeHtml(page.description)}">
-  <meta name="robots" content="index,follow">
-  <meta property="og:title" content="${escapeHtml(page.title)}">
-  <meta property="og:description" content="${escapeHtml(page.description)}">
+  <title>${escapeHtml(snippet.title)}</title>
+  <meta name="description" content="${escapeHtml(snippet.description)}">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <meta property="og:title" content="${escapeHtml(snippet.title)}">
+  <meta property="og:description" content="${escapeHtml(snippet.description)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${url}">
   <meta property="og:locale" content="${l.locale}">
@@ -1216,7 +1254,7 @@ function blogArticlePage() {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Antalya Transfer Article - AYT Ride</title>
   <meta name="description" content="AYT Ride Antalya Airport transfer article.">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="noindex,follow">
   <link rel="canonical" href="${catalog.baseUrl}/blog/article/">
   <link rel="icon" type="image/svg+xml" href="${favicon()}">
   <link rel="stylesheet" href="/assets/site.css?v=${buildStamp}">

@@ -65,8 +65,8 @@ test("commercial intent hubs declare all language counterparts", () => {
       for (const language of languages) assert.ok(html.includes(`hreflang="${language}"`), `${file} missing ${language} alternate`);
       assert.match(html, /hreflang="x-default"/);
       assert.match(html, /rel="icon"[^>]+\/favicon\.svg/);
-      assert.match(html, /site\.css\?v=20260929-quote-layout-v3/);
-      assert.match(html, /app\.js\?v=20260929-quote-layout-v3/);
+      assert.match(html, /site\.css\?v=20261001-search-snippets-v4/);
+      assert.match(html, /app\.js\?v=20261001-search-snippets-v4/);
     }
   }
 });
