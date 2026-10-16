@@ -5,7 +5,7 @@ import { defaultBlogPosts } from "../server/blog-posts.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(root, "data/public-catalog.json"), "utf8"));
-const buildStamp = "20261001-search-snippets-v4";
+const buildStamp = "20261016-seo-content-v1";
 const buildDate = new Date().toISOString().slice(0, 10);
 
 const languages = {
@@ -379,15 +379,16 @@ function money(value) {
 
 function routeSearchSnippet(route, language) {
   const destination = route.destination;
+  const shortDestination = route.id === "lara" ? "Lara Beach" : destination.split(" / ")[0];
   const sedan = money(route.prices["standard-sedan"]);
   const vip = money(route.prices["vip-van"]);
   const snippets = {
     en: {
-      title: `Antalya Airport to ${destination} Transfer | AYT Ride`,
+      title: `Antalya Airport to ${shortDestination}: ${route.durationMin} Min, From ${sedan} | AYT Ride`,
       description: `Private Antalya Airport to ${destination} transfer: ${route.distanceKm} km, about ${route.durationMin} min. Sedan ${sedan}, VIP Van ${vip} total per vehicle. Pay after the ride.`
     },
     de: {
-      title: `Antalya Flughafen – ${destination} Transfer | AYT Ride`,
+      title: `Antalya Flughafen nach ${shortDestination}: ${route.durationMin} Min, ab ${sedan} | AYT Ride`,
       description: `Privater Transfer vom Flughafen Antalya nach ${destination}: ${route.distanceKm} km, ca. ${route.durationMin} Min. Sedan ${sedan}, VIP Van ${vip} pro Fahrzeug. Zahlung nach der Fahrt.`
     },
     pl: {
@@ -556,6 +557,11 @@ function header(language) {
 
 function footer(language) {
   const l = languages[language];
+  const priorityRouteLinks = ["lara", "belek", "kemer", "side", "alanya"]
+    .map((id) => commercialRoutes.find((route) => route.id === id))
+    .filter((route) => route && routePath(route, language))
+    .map((route) => `<a href="${routePath(route, language)}">${escapeHtml(route.destination.split(" / ")[0])}</a>`)
+    .join("");
   return `
   <footer class="footer">
     <div class="shell footer-grid">
@@ -564,6 +570,7 @@ function footer(language) {
         <p>${l.footer}</p>
       </div>
       <div>
+        ${priorityRouteLinks}
         <a href="mailto:${catalog.business.bookingEmail}">${catalog.business.bookingEmail}</a>
         <a href="https://wa.me/${catalog.business.whatsapp}" target="_blank" rel="noopener">WhatsApp ${catalog.business.displayWhatsapp}</a>
         <a href="/about/">About</a>
@@ -1209,7 +1216,46 @@ function blogCard(post) {
     "belek-golf-transfer": "/assets/routes/belek-kadriye.jpg"
   };
   const image = images[post.slug] || "/assets/ayt-ride-transfer.jpg";
-  return `<a class="post-card" href="/blog/article/?slug=${encodeURIComponent(post.slug)}"><span class="post-card-media"><img src="${image}" alt="" loading="lazy"></span><span class="post-card-body"><span class="post-kicker">${escapeHtml(post.kicker)}</span><strong>${escapeHtml(post.title)}</strong><small>${escapeHtml(post.description)}</small><span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")} <b aria-hidden="true">→</b></span></span></a>`;
+  return `<a class="post-card" href="/blog/${encodeURIComponent(post.slug)}/"><span class="post-card-media"><img src="${image}" alt="" loading="lazy"></span><span class="post-card-body"><span class="post-kicker">${escapeHtml(post.kicker)}</span><strong>${escapeHtml(post.title)}</strong><small>${escapeHtml(post.description)}</small><span class="post-meta">${escapeHtml(post.metaLabel || "AYT Ride guide")} <b aria-hidden="true">→</b></span></span></a>`;
+}
+
+function airportTransferGuideBody() {
+  const routeIds = ["lara", "belek", "kemer", "side", "alanya"];
+  const routes = routeIds.map((id) => commercialRoutes.find((route) => route.id === id)).filter(Boolean);
+  const rows = routes.map((route) => {
+    const label = route.id === "lara" ? "Lara Beach / Kundu" : route.destination;
+    return `<tr>
+      <th><a href="${routePath(route, "en")}">${escapeHtml(label)}</a></th>
+      <td>${route.distanceKm} km</td>
+      <td>About ${route.durationMin} min</td>
+      <td>From ${money(route.prices["standard-sedan"])}</td>
+      <td>From ${money(route.prices["vip-van"])}</td>
+    </tr>`;
+  }).join("");
+
+  return `
+      <h2>Antalya Airport transfer times at a glance</h2>
+      <p>Antalya Airport (AYT) serves resorts spread along a long coastline, so transfer times vary considerably. Lara Beach is close to the airport, while Alanya is around two hours away. The table below compares the main routes using the current AYT Ride fixed total price per vehicle.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Destination</th><th>Distance</th><th>Transfer time</th><th>Standard Sedan</th><th>VIP Van</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <p>Distances and journey times are approximate. Traffic, the arrival terminal and the exact hotel location can change the final driving time. The displayed fare is the total route price for the selected vehicle, not a per-passenger price.</p>
+      <h2>Which Antalya Airport transfer is right for your hotel?</h2>
+      <p><a href="/antalya-airport-to-lara-transfer/"><strong>Lara Beach and Kundu</strong></a> are the closest major resort areas and normally take about 20 minutes. <a href="/antalya-airport-to-belek-transfer/"><strong>Belek and Kadriye</strong></a> are popular for resort and golf travel and take around 35 minutes.</p>
+      <p><a href="/antalya-airport-to-side-transfer/"><strong>Side and Manavgat</strong></a> are approximately 65 km from the airport and usually take around 60 minutes. <a href="/antalya-airport-to-kemer-transfer/"><strong>Kemer</strong></a> is reached by the coastal road west of Antalya and normally takes about 65 minutes. <a href="/antalya-airport-to-alanya-transfer/"><strong>Alanya</strong></a> is the longest of these main routes at approximately 125 km and around 120 minutes.</p>
+      <h2>What can change the journey time?</h2>
+      <p>Summer traffic, evening arrivals and busy hotel check-in periods may add time. A hotel advertised under a resort name can also be in a nearby district: Side bookings may actually be in Kumkoy, Evrenseki, Colakli or Sorgun, while Kemer bookings may be in Beldibi, Goynuk, Kiris, Camyuva or Tekirova. Add the exact hotel name so the route can be confirmed correctly.</p>
+      <h2>Airport pickup information to prepare</h2>
+      <p>Keep the flight number, arrival date and time, lead passenger name, reachable WhatsApp number, passenger count, suitcase count and exact hotel ready. The flight number helps the transfer team identify the planned arrival, while the hotel name prevents confusion between neighbouring resort areas.</p>
+      <h2>Choosing between a sedan and VIP van</h2>
+      <p>The Standard Sedan is intended for up to 3 passengers and 3 suitcases. The VIP Van fits up to 6 passengers and 6 suitcases and is usually the more practical choice for families, larger groups, golf bags, pushchairs or additional luggage. Child seats can be requested before the vehicle is confirmed.</p>
+      <h2>Fixed price and payment</h2>
+      <p>Covered routes show a fixed total price before the booking request is sent. AYT Ride does not require an online card payment in the initial booking flow. Payment is made after the ride unless a different arrangement is confirmed directly with the passenger.</p>
+      <h2>Booking an Antalya Airport transfer</h2>
+      <p>Open the matching destination page to review the current distance, estimated journey time, vehicle capacity and route price. Then enter the flight and hotel details in the booking form. The completed request is sent by WhatsApp for availability and pickup confirmation.</p>`.trim();
 }
 
 function blogIndexPage() {
@@ -1312,7 +1358,9 @@ ${header("en")}
       <p class="mini-label">${post.kicker}</p>
       <h1>${post.title}</h1>
       <p>${post.description}</p>
-      ${post.body.map(([heading, body]) => `<h2>${heading}</h2><p>${body}</p>`).join("")}
+      ${post.slug === "antalya-airport-transfer-guide"
+        ? airportTransferGuideBody()
+        : post.body.map(([heading, body]) => `<h2>${heading}</h2><p>${body}</p>`).join("")}
       <h2>Book with route details</h2>
       <p>Use the AYT Ride booking form to choose the route, vehicle, date, passenger count and luggage count. The request opens on WhatsApp with a clear booking summary.</p>
       <p><a class="primary-btn" href="/#booking">Check transfer price</a></p>

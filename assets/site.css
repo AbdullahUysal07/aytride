@@ -1696,6 +1696,7 @@ details p {
 }
 
 .article {
+  min-width: 0;
   max-width: 820px;
   margin: 0 auto;
   padding: 28px;
@@ -1703,6 +1704,7 @@ details p {
 
 .article h1 {
   font-size: clamp(2rem, 4vw, 3.35rem);
+  overflow-wrap: anywhere;
 }
 
 .article h2 {
@@ -1717,6 +1719,40 @@ details p {
 
 .article ul {
   padding-left: 22px;
+}
+
+.article .table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  -webkit-overflow-scrolling: touch;
+}
+
+.article .table-wrap table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.article .table-wrap th,
+.article .table-wrap td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.article .table-wrap thead th {
+  color: var(--navy);
+  background: #f4f8fb;
+  font-size: .88rem;
+}
+
+.article .table-wrap tbody tr:last-child > * {
+  border-bottom: 0;
 }
 
 .admin-section {
@@ -3169,6 +3205,7 @@ pre {
   }
 
   .article {
+    width: 100%;
     padding: 20px;
   }
 }

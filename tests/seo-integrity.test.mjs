@@ -74,6 +74,24 @@ test("low-value utility pages are not indexable", () => {
   assert.match(read("blog/article/index.html"), /<meta name="robots" content="noindex,follow">/);
 });
 
+test("blog cards link directly to indexable static articles", () => {
+  for (const page of ["index.html", "blog/index.html"]) {
+    const html = read(page);
+    assert.doesNotMatch(html, /\/blog\/article\/\?slug=/, `${page} links to the noindex article shell`);
+    assert.match(html, /href="\/blog\/antalya-airport-transfer-guide\/"/);
+  }
+});
+
+test("airport transfer guide compares priority routes with current catalog prices", () => {
+  const html = read("blog/antalya-airport-transfer-guide/index.html");
+  for (const routeId of ["lara", "belek", "kemer", "side", "alanya"]) {
+    const route = catalog.routes.find((item) => item.id === routeId);
+    assert.ok(route, `missing catalog route: ${routeId}`);
+    assert.match(html, new RegExp(`href="/${route.slugs.en}/"`));
+    assert.match(html, new RegExp(`From €${route.prices["standard-sedan"]}`));
+  }
+});
+
 test("public pages do not contain old unsafe booking patterns", () => {
   const files = listFiles().filter((file) => {
     if (file.startsWith("server/") || file.startsWith("tests/")) return false;

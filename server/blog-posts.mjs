@@ -1,10 +1,10 @@
 export const defaultBlogPosts = [
   {
     slug: "antalya-airport-transfer-guide",
-    kicker: "Airport guide",
-    title: "Antalya Airport transfer guide for first-time visitors",
-    description: "How to plan an Antalya Airport private transfer, pickup time, flight number, luggage, hotel details and pay-on-arrival expectations.",
-    metaLabel: "AYT guide",
+    kicker: "Transfer times and prices",
+    title: "Antalya Airport Transfer Times, Distances and Prices 2026",
+    description: "Compare Antalya Airport transfer times, distances and fixed vehicle prices for Lara Beach, Belek, Kemer, Side and Alanya.",
+    metaLabel: "Route comparison",
     body: [
       ["What to prepare before landing", "Keep your flight number, hotel name, hotel block and WhatsApp number ready before requesting a transfer. These details help the operator confirm the meeting point clearly."],
       ["Why a private transfer helps", "A private vehicle is useful when you travel with family, luggage or a late arrival. The route and vehicle choice are agreed before pickup."],
